@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kaggle Modularize"
+  short_description: "Split large notebooks into modules, merge back for Kaggle"
+  default_prompt: "Split this large notebook into modules and merge back"

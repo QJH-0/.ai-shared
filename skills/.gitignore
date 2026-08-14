@@ -1,0 +1,37 @@
+﻿# SkillsHub .gitignore
+
+# Windows system files
+desktop.ini
+Thumbs.db
+
+# macOS system files
+.DS_Store
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Personal metadata
+_user_meta.json
+_bm_skillid_migration.json
+
+# Internal system skills (not for upload)
+.system/
+
+# Git repositories inside skills (keep local, exclude from upload)
+# Note: .git/ directories inside individual skills are excluded
+# via their own .gitignore or by not staging them
+*/.git/
+*/*/.git/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Backup files
+*.bak
+*.tmp
+~$*

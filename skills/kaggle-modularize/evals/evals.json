@@ -1,0 +1,29 @@
+{
+  "skill_name": "kaggle-modularize",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我的 Kaggle notebook 太长了，有 1200 行，能不能拆分成模块方便维护？最后还是要合成一个 ipynb 上传。",
+      "expected_output": "将 notebook 拆分为 config.py, data.py, model.py, train.py 等模块，并提供 build_nb.py 或 merge_modules.py 合并脚本生成单文件 .ipynb。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I have a large .ipynb notebook for Kaggle training. Split it into Python modules and give me a merge script to combine them back.",
+      "expected_output": "Python package with separate modules (config, data, model, train, etc.) plus a merge script that produces a single Kaggle-ready .ipynb.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "把这个超长的训练脚本拆分组合一下，方便开发但最后能合成一个 ipynb。",
+      "expected_output": "识别 notebook 中的逻辑分区（配置、数据、模型、训练），拆分为独立 .py 模块，用 merge_modules.py 合并为单文件 notebook。",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "Merge my Python modules in my_package/ back into a single Kaggle notebook.",
+      "expected_output": "运行 merge_modules.py --pkg-dir my_package/ -o output.ipynb，生成包含所有模块代码的单文件 notebook。",
+      "files": []
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "skill_name": "kaggle-notebookify",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "把 `docs/kaggle_binary_student_kd_guide.md` 转成 Kaggle 可直接上传的 `.ipynb`。代码块变 code cells，技术说明保留成 markdown cells。",
+      "expected_output": "生成一个可上传的 notebook 文件，包含可执行 code cells 和保留后的技术说明 markdown cells。",
+      "files": [
+        "docs/kaggle_binary_student_kd_guide.md"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "把单个 Markdown notebook 草稿转成 `.ipynb`，但去掉参考来源和跨文档导航，只保留技术说明和代码。",
+      "expected_output": "生成 notebook，并默认丢弃 references 一类的说明段落。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "将一个 `.md` 教程文档变成 Kaggle notebook。Python fence 变成 code cells，shell fence 要能在 Kaggle 中运行。",
+      "expected_output": "shell fenced blocks 被保留为可执行 notebook code cells，而不是单纯文本。",
+      "files": []
+    }
+  ]
+}
