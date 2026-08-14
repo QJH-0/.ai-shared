@@ -1,0 +1,2 @@
+# .ai-shared
+ai-config
