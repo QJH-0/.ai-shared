@@ -9,6 +9,13 @@ skills/web-access/
 # 兜底：任何嵌套 .git 目录内容都不入库
 **/.git/
 
+# 本地缓存 / 迁移标记 / 临时文件
+*.disable_to_model_invocation_migration.json
+*.tmp
+*.bak
+__pycache__/
+*.pyc
+
 # web-access skill 本地用户配置（按 skill 设计不入库，可能含本地偏好）
 config.env
 
@@ -16,3 +23,6 @@ config.env
 .DS_Store
 Thumbs.db
 desktop.ini
+*.swp
+*.swo
+*~
