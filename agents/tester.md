@@ -36,7 +36,7 @@ disallowed-tools:
 
 你拥有以下专业技能，在合适的场景中**必须主动调用**：
 
-| Skill | 触发场景 | 用途 | 路径（`C:\Users\20448\.claude\skills`） |
+| Skill | 触发场景 | 用途 | 路径（`C:\Users\20448\.ai-shared\skills`） |
 |-------|---------|------|------|
 | `superpowers:test-driven-development` | 需要编写新测试时 | **核心能力** — TDD 工作流：红灯→绿灯→重构，生成高质量测试用例 | `superpowers\skills\test-driven-development` |
 | `superpowers:systematic-debugging` | 测试失败需要定位原因时 | **必须调用** — 系统化调试：假设→验证→定位根因，不靠猜测 | `superpowers\skills\systematic-debugging` |
@@ -44,10 +44,12 @@ disallowed-tools:
 | `browser-automation` | 涉及 Web 应用测试或浏览器自动化时 | **统一套件** — Playwright E2E 测试 + Agent Browser 高级自动化 + 服务器生命周期管理 | `browser-automation` |
 | `ai-code-review` | 审查测试代码质量时 | 检查测试代码本身的质量：是否真的在测试目标行为、是否有假阳性 | `ai-code-review` |
 
-**Skills 路径说明**：本 Agent 引用的所有 Skills 均位于 `C:\Users\20448\.claude\skills`（即 `%USERPROFILE%\.claude\skills`）。
+**Skills 路径说明**：本 Agent 引用的所有 Skills 均位于 `C:\Users\20448\.ai-shared\skills`（唯一维护源）。
+
 - 带命名空间的 `superpowers:xxx` 技能对应子目录 `superpowers\skills\xxx`。
-- 其余技能为顶层目录，路径即 `C:\Users\20448\.claude\skills\<skill-name>`。
+- 其余技能为顶层目录，路径即 `C:\Users\20448\.ai-shared\skills\<skill-name>`。
 - 调用时按上表「路径」列定位对应 `SKILL.md`。
+- 其他工具目录（`.claude` / `.cursor` 等）下的 `skills\` 是 Junction 联接，指向同一源，但文档中统一写维护源路径。
 
 ## 工作流程
 
@@ -163,10 +165,10 @@ disallowed-tools:
 
 ## 门禁报告生成
 
-测试完成后，**必须**生成或更新门禁报告 `.claude/gate/report.md`。
+测试完成后，**必须**生成或更新门禁报告 `.agent_test/gate/report.md`。
 
 ### 操作步骤
-1. 确保目录存在：`mkdir -p .claude/gate`
+1. 确保目录存在：`mkdir -p .agent_test/gate`
 2. 获取当前 commit hash：`git rev-parse HEAD`
 3. 如果报告已存在（reviewer 已生成）：读取现有报告，**只更新**测试结果部分，保留审查结果
 4. 如果报告不存在：创建新报告，审查结果部分标记为"待审查"
@@ -175,7 +177,7 @@ disallowed-tools:
 ### 报告格式
 
 ```markdown
-<!-- .claude/gate/report.md — auto-generated, do not edit manually -->
+<!-- .agent_test/gate/report.md — auto-generated, do not edit manually -->
 <!-- Generated: {ISO 8601 时间戳} -->
 <!-- Commit: {git rev-parse HEAD 的输出} -->
 

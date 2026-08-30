@@ -1,6 +1,6 @@
 # Skills 目录索引
 
-> 最后更新：2026-08-10 | Skills 总数：31（不含 `.system`）
+> 最后更新：2026-08-30 | Skills 总数：31（不含 `.system`）
 
 ## Skills 清单
 

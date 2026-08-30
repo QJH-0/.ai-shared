@@ -4,6 +4,9 @@ Use the wrapper script and snapshot often.
 Assume `PWCLI` is set and `pwcli` is an alias for `"$PWCLI"`.
 In this repo, run commands from `output/playwright/<label>/` to keep artifacts contained.
 
+> **Note**: Since Playwright v1.62.0, the CLI is built into the main `playwright` package.
+> You can also use `npx playwright cli` directly instead of the wrapper script.
+
 ## Standard interaction loop
 
 ```bash
@@ -87,6 +90,18 @@ Minimal example:
   }
 }
 ```
+
+## New in Playwright v1.60–v1.62
+
+Key features that may be useful in CLI workflows:
+
+- **AbortSignal support** (v1.62): Most operations accept a `signal` option to cancel long-running actions.
+- **WebP screenshots** (v1.62): `screenshot` can now output `.webp` format for smaller file sizes.
+- **`scroll` option** (v1.62): Actions accept `scroll: "none"` to opt out of automatic scroll-into-view.
+- **`locator.drop()`** (v1.60): Simulate drag-and-drop of files or clipboard data onto an element.
+- **Aria snapshots with boxes** (v1.60): `ariaSnapshot()` can append bounding box info as `[box=x,y,width,height]`.
+- **WebAuthn passkeys** (v1.61): Virtual authenticator for testing passkey flows without hardware.
+- **WebStorage API** (v1.61): Read/write `localStorage` / `sessionStorage` via page methods.
 
 ## Troubleshooting
 

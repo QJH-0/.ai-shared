@@ -1,14 +1,17 @@
 # Playwright CLI Reference
 
-Use the wrapper script unless the CLI is already installed globally:
+Use the wrapper script unless Playwright is already installed globally:
 
 ```bash
-export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
-export PWCLI="$CODEX_HOME/skills/playwright/scripts/playwright_cli.sh"
+export PWCLI="$HOME/.ai-shared/skills/browser-automation/playwright/scripts/playwright_cli.sh"
 "$PWCLI" --help
 ```
 
-User-scoped skills install under `$CODEX_HOME/skills` (default: `~/.codex/skills`).
+Or use `npx playwright cli` directly (requires Playwright v1.62.0+):
+
+```bash
+npx playwright cli --help
+```
 
 Optional convenience alias:
 

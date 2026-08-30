@@ -16,7 +16,10 @@ for arg in "$@"; do
   esac
 done
 
-cmd=(npx --yes --package @playwright/cli playwright-cli)
+# Since Playwright v1.62.0 (2026-07-24), playwright-cli is bundled in the
+# main `playwright` package and invoked via `npx playwright cli`.
+# The standalone @playwright/cli package (last version 0.1.18) is deprecated.
+cmd=(npx --yes playwright cli)
 if [[ "${has_session_flag}" != "true" && -n "${PLAYWRIGHT_CLI_SESSION:-}" ]]; then
   cmd+=(--session "${PLAYWRIGHT_CLI_SESSION}")
 fi

@@ -1,13 +1,15 @@
 ---
 name: "playwright"
-description: "Use when the task requires automating a real browser from the terminal (navigation, form filling, snapshots, screenshots, data extraction, UI-flow debugging) via `playwright-cli` or the bundled wrapper script."
+description: "Use when the task requires automating a real browser from the terminal (navigation, form filling, snapshots, screenshots, data extraction, UI-flow debugging) via `npx playwright cli` or the bundled wrapper script."
 ---
 
 
 # Playwright CLI Skill
 
-Drive a real browser from the terminal using `playwright-cli`. Prefer the bundled wrapper script so the CLI works even when it is not globally installed.
+Drive a real browser from the terminal using `playwright cli`. Prefer the bundled wrapper script so the CLI works even when Playwright is not globally installed.
 Treat this skill as CLI-first automation. Do not pivot to `@playwright/test` unless the user explicitly asks for test files.
+
+> **Playwright v1.62.0+ change**: Since v1.62.0 (2026-07-24), `playwright-cli` is bundled in the main `playwright` package and invoked via `npx playwright cli`. The standalone `@playwright/cli` package (last version 0.1.18) is deprecated. This skill has been updated to use the new built-in CLI.
 
 ## Prerequisite check (required)
 
@@ -25,20 +27,24 @@ node --version
 npm --version
 
 # If missing, install Node.js/npm, then:
-npm install -g @playwright/cli@latest
-playwright-cli --help
+npx playwright cli --help
 ```
 
-Once `npx` is present, proceed with the wrapper script. A global install of `playwright-cli` is optional.
+Once `npx` is present, proceed with the wrapper script. A global install of `playwright` is optional — the wrapper uses `npx` to run it on demand.
 
 ## Skill path (set once)
 
-```bash
-export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
-export PWCLI="$CODEX_HOME/skills/playwright/scripts/playwright_cli.sh"
-```
+The wrapper script location depends on which AI tool's skills directory you are using. All paths below point to the same file via Junction:
 
-User-scoped skills install under `$CODEX_HOME/skills` (default: `~/.codex/skills`).
+```bash
+# Generic (recommended — works across all AI tools)
+export PWCLI="$HOME/.ai-shared/skills/browser-automation/playwright/scripts/playwright_cli.sh"
+
+# Or tool-specific (all Junction → same source):
+# Claude:    $HOME/.claude/skills/browser-automation/playwright/scripts/playwright_cli.sh
+# Codex:     $HOME/.codex/skills/browser-automation/playwright/scripts/playwright_cli.sh
+# Cursor:    $HOME/.cursor/skills/browser-automation/playwright/scripts/playwright_cli.sh
+```
 
 ## Quick start
 
@@ -56,8 +62,14 @@ Use the wrapper script:
 If the user prefers a global install, this is also valid:
 
 ```bash
-npm install -g @playwright/cli@latest
-playwright-cli --help
+npm install -g playwright@latest
+playwright cli --help
+```
+
+You can also use `npx` directly without the wrapper:
+
+```bash
+npx playwright cli --help
 ```
 
 ## Core workflow
@@ -121,7 +133,7 @@ Refs can go stale. When a command fails due to a missing ref, snapshot again.
 
 ## Wrapper script
 
-The wrapper script uses `npx --package @playwright/cli playwright-cli` so the CLI can run without a global install:
+The wrapper script uses `npx --yes playwright cli` so the CLI can run without a global install:
 
 ```bash
 "$PWCLI" --help

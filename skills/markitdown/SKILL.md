@@ -11,18 +11,18 @@ Use this skill when a file or URL needs to be converted into Markdown for downst
 
 The local MarkItDown source repo is at:
 
-`C:\Users\20448\.cursor\markitdown`
+`C:\Users\20448\.ai-shared\skills\markitdown`
 
 The Python package lives at:
 
-`C:\Users\20448\.cursor\markitdown\packages\markitdown`
+`C:\Users\20448\.ai-shared\skills\markitdown\packages\markitdown`
 
 ## Quick Use
 
 Install from local source:
 
 ```powershell
-pip install -e "C:\Users\20448\.cursor\markitdown\packages\markitdown[all]"
+pip install -e "C:\Users\20448\.ai-shared\skills\markitdown\packages\markitdown[all]"
 ```
 
 Convert a file:

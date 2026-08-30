@@ -36,7 +36,7 @@ description: >-
 6. **对比选型类**：考察技术视野与方案决策能力
 7. **延伸深挖类**：考察架构思维与技术上限
 
-> **项目结合提问约束（必须遵守）**：上述七个维度中，**大部分维度的提问应结合简历中该技术点的项目使用场景来设计**，而非脱离项目单独问八股。面试官最喜欢的问法是「你项目里用了 XXX，为什么这么选？遇到什么问题？怎么解决的？」而非「说一下 XXX 的原理」。具体规则见下方「项目结合提问约束」章节。
+> **项目结合提问约束（必须遵守）**：上述七个维度中，**大部分维度的提问应结合简历中该技术点的项目使用场景即具体业务来设计**，而非脱离项目单独问八股。面试官最喜欢的问法是「你项目里用了 XXX，为什么这么选？遇到什么问题？怎么解决的？」而非「说一下 XXX 的原理」。具体规则见下方「项目结合提问约束」章节。
 
 ## 工作流程
 
@@ -60,51 +60,6 @@ description: >-
 4. **版本演进标注**：当某技术点在版本间有重大变化（如 API 变更、架构重构）时，应在「底层原理层」或「故障调优层」明确标注版本差异，如「JDK8 vs JDK17 中 ConcurrentHashMap 的实现差异」。
 5. **代码示例版本对齐**：所有代码片段必须与该技术点最新稳定版的 API 一致。若涉及不同版本写法差异，应在注释中标注 `// 旧版 (≤x.x)` 和 `// 新版 (≥x.x)`。
 6. **已废弃技术显式标记**：对于被广泛使用但已废弃的内容（如 ES HLRC、Vue2、LangChain 0.x），必须在提及相关内容时标注 `[已废弃]`，并指出推荐替代方案。
-
-### 版本基准线表（联网核查于 2026-08-28）
-
-> 以下版本通过 PyPI、Maven Central、npm、GitHub Releases 联网核查确认。技能执行时若发现版本已更新，应以更新的版本为准。
-
-| 技术点 | 最新稳定版 | 禁止使用的过时版本/写法 | 关键迁移提醒 |
-|---|---|---|---|
-| **LangChain (Python)** | 1.3.18 (1.x) | 0.1.x 的单体 `langchain` 包导入路径（如 `from langchain.chains import...`、`from langchain.embeddings import...`） | 1.x 起包拆分为 `langchain-core`/`langchain-community`/`langchain-openai` 等，大量旧 API 已移至 `langchain-community` 或废弃；推荐使用 LCEL（LangChain Expression Language）替代旧 Chain 类 |
-| **LangGraph (Python)** | 1.2.11 (1.x) | 0.x 系列的 API 写法 | 1.x 起 `StateGraph`、`add_node`、条件边等 API 稳定，旧版 0.x 的部分签名已变更 |
-| **FastAPI** | 0.141.1 | — | 注意 `lifespan` 替代了 `on_event`（已标记废弃） |
-| **PyMilvus** | 3.0.1 | 2.x 的旧客户端 API | 3.x 起推荐使用 Milvus Client 统一 API（`MilvusClient`），旧的 `connections.connect` + `Collection` 写法仍兼容但不推荐 |
-| **Milvus Server** | 3.0.0 | 2.x | 3.0 起支持全文搜索、原生稀疏向量等新特性 |
-| **Neo4j Python Driver** | 6.2.0 | 4.x/5.x 驱动 API | 6.x 起部分 API 签名变更 |
-| **MCP Protocol Spec** | 2026-07-28 (latest) | 2024-11-05 草案 | 协议已正式版本化，不再使用早期草案日期版本 |
-| **MCP Python SDK** | 2.1.1 | 0.x / 1.x | 2.x 起工具定义、传输层 API 有变更 |
-| **Spring Boot** | 4.1.1 (官网最新) | 2.x（已 EOL） | 3.x 起需 JDK 17+，`javax.*` 包全部迁移至 `jakarta.*`；4.x 进一步移除了部分废弃 API |
-| **Spring Cloud** | 2025.1.3 (对应 Boot 4.x) | 2020.0.x / 2021.0.x / 2022.0.x（均已 EOL） | Release Train 必须与 Spring Boot 大版本对齐 |
-| **Spring Cloud OpenFeign** | 4.3.0 | — | — |
-| **Spring Cloud Alibaba** | 2023.0.3.3 | 2.2.x / 2021.x（已过时） | 版本号需与 Spring Cloud Release Train 对齐 |
-| **Spring Integration** | 6.3.11 | 5.x（已过时） | 6.x 对应 Spring Framework 6.x / Boot 3.x+ |
-| **MyBatis-Plus** | 3.5.7 | 3.4.x 及以下 | 3.5.x 起 `mybatis-plus-spring-boot3-starter` 用于 Boot 3.x+，旧 `mybatis-plus-boot-starter` 仅适用于 Boot 2.x |
-| **Elasticsearch (Server)** | 9.5.2 | 7.x 及以下 | 8.x 起默认安全认证开启、`RestHighLevelClient` 废弃 |
-| **ES Java Client (新)** | 8.17.8 (`co.elastic.clients:elasticsearch-java`) | `RestHighLevelClient` [已废弃] | 8.x 起必须使用 `ElasticsearchClient`（新 Java Client），HLRC 已不再维护 |
-| **Redis Server** | 8.10.1 | 6.x 及以下 | 7.x 起支持 Functions（替代 Lua）、多部分 AOF；8.x 起内置向量搜索 |
-| **Jedis** | 6.0.0 | 3.x / 4.x | 5.x 起统一连接池 API，不再区分 Jedis/JedisCluster 分裂写法 |
-| **Lettuce** | 6.7.1.RELEASE | 5.x | — |
-| **Redisson** | 3.50.0 | 3.20 以下 | — |
-| **Quartz** | 2.5.0 | 2.3.x 及以下 | — |
-| **Vue** | 3.5.42 | Vue 2 [已 EOL] | Vue 2 已于 2023-12-31 EOL，内容必须基于 Vue 3 Composition API |
-| **ECharts** | 6.1.0 | 4.x 及以下 | 5.x 起支持 Tree-shaking、暗色主题；6.x 起架构升级 |
-| **Docker** | 29.7.2 | — | — |
-| **RabbitMQ** | 4.3.5 | 3.8（已 EOL） | 4.x 起默认 Stream 模式增强、Quorum Queue 成默认推荐 |
-
-### 快速迭代技术的高风险区（重点排查）
-
-以下技术因版本迭代快、API 变更大，是知识库中最容易出现旧版本内容的高风险区，生成时必须逐项排查：
-
-- **LangChain / LangGraph**：0.x → 1.x 跨版本 API 重构，旧 `Chain` 类、旧导入路径全部失效
-- **Elasticsearch**：7.x → 8.x/9.x 客户端迁移（HLRC 废弃）、安全认证默认开启
-- **Spring Boot / Spring Cloud**：2.x → 3.x/4.x `javax` → `jakarta` 迁移、JDK 基线提升
-- **MyBatis-Plus**：Boot 2.x 用 `mybatis-plus-boot-starter`，Boot 3.x+ 必须用 `mybatis-plus-spring-boot3-starter`
-- **Milvus / PyMilvus**：2.x → 3.x API 变更，推荐 `MilvusClient` 统一入口
-- **MCP Protocol**：从草案到正式版本化，SDK 经历 0.x → 1.x → 2.x 多次重大变更
-- **Vue**：Vue 2 已 EOL，所有内容必须基于 Vue 3
-- **Redis**：6.x → 7.x/8.x 新增 Functions、多部分 AOF、向量搜索等特性
 
 ## 输出规范
 
@@ -192,7 +147,6 @@ description: >-
 - **大部分提问须结合简历项目场景**（见「项目结合提问约束」），纯八股仅限项目未涉及的技术点或概念理解/核心原理维度
 - 底层原理层和延伸深挖类问题应体现行业经典考点和高频深度问题
 - 输出语言：中文
-- **版本时效性**：所有 API 示例、配置写法、原理描述必须基于该技术点当前最新稳定版（见「版本时效性约束规则」）。严禁使用已废弃版本的导入路径、类名或方法。涉及重大版本变更的，应标注版本差异。已废弃技术须标注 `[已废弃]` 并给出替代方案
 
 ## 使用示例
 

@@ -201,7 +201,64 @@ context、progress、bugs 仅保留当前有效信息；changelog 按时间累�
 
 ---
 
-## 十、元规则
+## 十、Agents 与 Skills 路径声明
+
+### 唯一维护源
+
+所有 agents 角色定义文件和 skills 技能文件的**唯一维护源**为：
+
+    C:\Users\20448\.ai-shared\
+
+- `agents\` → 角色定义目录（analyst / coder / researcher / reviewer / tester）
+- `skills\` → 技能库目录（37+ 个 skill）
+
+### 分发机制
+
+`.ai-shared` 通过 Windows 硬链接（HardLink）和目录联接（Junction）将内容透明分发到 7 个 AI 工具配置目录（`.claude` / `.codex` / `.cursor` / `.qoder` / `.workbuddy` / `.catpawai` / `.agents`）。各工具目录下的 `agents\` 和 `skills\` 是联接，读写穿透到源目录。
+
+### 路径引用规则
+
+- agent 文件中引用 skill 路径时，**必须**写 `C:\Users\20448\.ai-shared\skills\<skill-name>`
+- 带命名空间的 `superpowers:xxx` 技能对应子目录 `C:\Users\20448\.ai-shared\skills\superpowers\skills\xxx`
+- 不得在 agent 文件中写入 `.claude\skills` 或其他工具目录路径——这些是分发副本，不是维护源
+- 完整链接清单和分发状态见 `HARDLINK_INVENTORY.md`
+
+### Agent 协作模型
+
+| 角色 | 职责 | 写权限 | 核心能力 |
+|------|------|--------|---------|
+| **analyst** | 需求分析、方案设计、任务拆解 | ❌ 只读 | brainstorming、writing-plans、multi-agent、mermaid-master、deep-research、frontend-design |
+| **coder** | 编码实现、TDD、调试、自审 | ✅ 代码文件 | TDD、systematic-debugging、verification、ai-code-review、git-commit、frontend-design |
+| **researcher** | 代码库研究、架构分析、文档生成 | ❌ 只读 | repo-wiki、mermaid-master、deep-research、markitdown、web-access |
+| **reviewer** | 代码审查、安全审计、门禁报告 | ⚠️ 仅 gate 报告 | ai-code-review、systematic-debugging、verification |
+| **tester** | 测试编写与执行、E2E 验证、门禁报告 | ✅ 测试文件 + gate 报告 | TDD、systematic-debugging、verification、browser-automation、ai-code-review |
+
+### 协作流程
+
+```
+用户需求
+  │
+  ├─ analyst → 分析需求、设计方案、拆解任务
+  │     └─ (如需调研) researcher → 代码库/外部技术调研
+  │
+  ├─ coder → 按方案实现代码（TDD 驱动）
+  │
+  ├─ reviewer → 审查代码质量与安全
+  ├─ tester → 编写/执行测试、E2E 验证
+  │     └─ reviewer + tester 共同维护门禁报告
+  │
+  └─ 交付：所有检查通过后方可合并
+```
+
+### 门禁机制
+
+- tester 和 reviewer 分别生成测试结果和审查结果，共同维护 `.agent_test/gate/report.md`
+- `GATE_STATUS` 取两者中最严格的状态（任一 FAILED → 总体 FAILED）
+- coder 在 `git commit` 前必须检查门禁状态
+
+---
+
+## 十一、元规则
 
 - 同类问题重复出现时，将对应经验固化到本文件
 - 流程反复出现时，优先升级为独立 skill、hook 或子代理，而非继续堆叠本文件内容

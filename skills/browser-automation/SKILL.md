@@ -7,8 +7,9 @@ description: >
   Electron: "操作VS Code"、"自动化Slack"、"控制桌面应用"。
   合并自: playwright, agent-browser, webapp-testing
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
   category: browser-automation
+  playwright_min_version: "1.62.0"
 triggers:
   - 浏览器
   - browser
@@ -45,18 +46,27 @@ triggers:
 
 CLI-first 浏览器自动化，支持导航、表单填写、截图、数据提取。
 
+> **v1.62.0+ 变更**：Playwright 已将 `playwright-cli` 内置到主包中，通过 `npx playwright cli` 调用。旧的独立包 `@playwright/cli`（最后版本 0.1.18）已废弃。
+
 **前置检查：**
 ```bash
 command -v npx >/dev/null 2>&1  # 确保 npx 可用
 ```
 
-**核心命令：**
+**核心命令（通过 wrapper 脚本）：**
 ```bash
-export PWCLI="playwright/scripts/playwright_cli.sh"
+export PWCLI="$HOME/.ai-shared/skills/browser-automation/playwright/scripts/playwright_cli.sh"
 $PWCLI navigate <url>          # 导航到页面
 $PWCLI screenshot <url> <out>  # 截图
 $PWCLI fill <selector> <value> # 填写表单
 $PWCLI click <selector>        # 点击元素
+```
+
+**或直接用 npx（无需 wrapper）：**
+```bash
+npx playwright cli open <url>
+npx playwright cli screenshot
+npx playwright cli click e3
 ```
 
 ---

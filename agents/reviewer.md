@@ -15,7 +15,8 @@ allowed-tools:
   - Bash(git log *)
   - Bash(git show *)
   - Bash(git status *)
-  - Write(.claude/gate/*)
+  - Write(.agent_test/gate/*)
+  - Bash(mkdir -p .agent_test/gate)
 disallowed-tools:
   - Edit
   - NotebookEdit
@@ -33,16 +34,17 @@ disallowed-tools:
 
 你拥有以下专业技能，在合适的场景中**必须主动调用**：
 
-| Skill | 触发场景 | 用途 | 路径（`C:\Users\20448\.claude\skills`） |
+| Skill | 触发场景 | 用途 | 路径（`C:\Users\20448\.ai-shared\skills`） |
 |-------|---------|------|------|
 | `ai-code-review` | 审查 AI 生成代码 / 标准代码审查 / 安全审查 / 简化检查时 | **核心能力（已整合）** — 现统一覆盖：① AI 专项（幻觉 API/依赖、逻辑、供应链）；② 结构化代码审查流程（code-review，支持 quick/normal/deep 力度）；③ 安全审查（security-review，认证/授权/注入/数据泄露）；④ 简化检查（simplify，复用/简化/效率/抽象层级） | `ai-code-review` |
 | `superpowers:verification-before-completion` | 完成审查后 | **必须调用** — 验证每个发现的准确性，确认问题真实存在 | `superpowers\skills\verification-before-completion` |
 | `superpowers:systematic-debugging` | 发现复杂 bug 时 | 系统化分析问题根因，给出精确的修复方案 | `superpowers\skills\systematic-debugging` |
 
-**Skills 路径说明**：本 Agent 引用的所有 Skills 均位于 `C:\Users\20448\.claude\skills`（即 `%USERPROFILE%\.claude\skills`）。
+**Skills 路径说明**：本 Agent 引用的所有 Skills 均位于 `C:\Users\20448\.ai-shared\skills`（唯一维护源）。
 - 带命名空间的 `superpowers:xxx` 技能对应子目录 `superpowers\skills\xxx`。
 - 原 `code-review` / `security-review` / `simplify` 三个独立技能**已并入 `ai-code-review`**（详见其 SKILL.md §8「整合能力」），本 Agent 不再单独引用，相关能力统一通过 `ai-code-review` 触发。
 - 调用时按上表「路径」列定位对应 `SKILL.md`。
+- 其他工具目录（`.claude` / `.cursor` 等）下的 `skills\` 是 Junction 联接，指向同一源，但文档中统一写维护源路径。
 
 ## 工作流程
 
@@ -138,12 +140,13 @@ disallowed-tools:
 
 ## 门禁报告生成
 
-审查完成后，**必须**生成或更新门禁报告 `.claude/gate/report.md`。
+审查完成后，**必须**生成或更新门禁报告 `.agent_test/gate/report.md`。
 
 ### 操作步骤
-1. 如果报告已存在（tester 已生成）：读取现有报告，**只更新**审查结果部分，保留测试结果
-2. 如果报告不存在：创建新报告（确保 `mkdir -p .claude/gate`），测试结果部分标记为"待测试"
-3. 写入报告
+1. 确保目录存在：`mkdir -p .agent_test/gate`
+2. 如果报告已存在（tester 已生成）：读取现有报告，**只更新**审查结果部分，保留测试结果
+3. 如果报告不存在：创建新报告，测试结果部分标记为"待测试"
+4. 写入报告
 
 ### 审查结果格式
 
