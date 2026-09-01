@@ -85,14 +85,24 @@ python skills/kaggle-modularize/scripts/merge_modules.py \
 What the merge script does:
 1. Reads each `.py` module in the specified order
 2. Strips `from __future__` imports (redundant in notebook context)
-3. Strips relative imports (`from .xxx import ...`) — all names are in the same namespace
+3. Strips relative imports (`from .xxx import ...`) — all names are in the same namespace. Handles multi-line parenthesized imports (`from .quant import (A, B,\n C, D)`) by paren-depth tracking, so continuation lines are never orphaned
 4. Inserts module separator comments
 5. Wraps everything into a single code cell
 6. Adds optional `%%bash` install cell and entry-point cells
 
+> Regression guard: run `python scripts/test_merge_modules.py` after editing
+> `merge_modules.py` (covers the orphaned-continuation-line IndentationError bug).
+
 ### Phase 3: Verify
 
 After merge, verify:
+- **Merged code cell parses as valid Python** (MANDATORY — catches orphaned import
+  continuation lines, mixed indentation, and merge-boundary corruption):
+  ```bash
+  python -c "import json,ast; nb=json.load(open('merged.ipynb',encoding='utf-8')); \
+      src=nb['cells'][2]['source']; code=src if isinstance(src,str) else ''.join(src); \
+      ast.parse(code); print('Syntax OK')"
+  ```
 - All key class/function definitions present (grep check)
 - No residual `from .` relative imports
 - Notebook JSON is valid (`nbformat == 4`)

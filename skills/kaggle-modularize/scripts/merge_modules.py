@@ -35,18 +35,37 @@ def read_module(filepath: Path) -> str:
 
 
 def resolve_imports(content: str) -> str:
-    """Strip relative imports — all names are in the same namespace after merge."""
+    """Strip relative imports — all names are in the same namespace after merge.
+
+    Handles both single-line and multi-line parenthesized imports:
+        from .config import cfg, DEVICE          # single-line
+        from .quant import (A, B, C,             # multi-line start
+                            D, E, F,             # continuation
+                            G)                   # closing paren
+    """
     lines = content.split("\n")
     result = []
+    in_multiline_import = False
+    paren_depth = 0
     for line in lines:
-        # from .module import ...
+        # Multi-line paren import MUST be checked before single-line match,
+        # because "from .quant import (A, B" also matches the single-line regex.
+        if re.match(r"^\s*from\s+\.([\w]+)\s+import\s+\(.*$", line):
+            paren_depth = line.count("(") - line.count(")")
+            if paren_depth > 0:
+                in_multiline_import = True
+            continue
+        # Inside multi-line import: skip continuation lines until parens close
+        if in_multiline_import:
+            paren_depth += line.count("(") - line.count(")")
+            if paren_depth <= 0:
+                in_multiline_import = False
+            continue
+        # from .module import ... (single-line, no parens)
         if re.match(r"^\s*from\s+\.([\w]+)\s+import\s+.*$", line):
             continue
         # from . import xxx
         if re.match(r"^\s*from\s+\.\s+import\s+.*$", line):
-            continue
-        # from .module import (multi-line start)
-        if re.match(r"^\s*from\s+\.([\w]+)\s+import\s+\(.*$", line):
             continue
         result.append(line)
     return "\n".join(result)

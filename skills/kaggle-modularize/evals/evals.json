@@ -22,7 +22,19 @@
     {
       "id": 4,
       "prompt": "Merge my Python modules in my_package/ back into a single Kaggle notebook.",
-      "expected_output": "运行 merge_modules.py --pkg-dir my_package/ -o output.ipynb，生成包含所有模块代码的单文件 notebook。",
+      "expected_output": "运行 merge_modules.py --pkg-dir my_package/ -o output.ipynb，生成包含所有模块代码的单文件 notebook。合并后必须用 ast.parse 验证代码 cell 语法合法。",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "合并后的 notebook 在 Kaggle 上报 IndentationError: unindent does not match any outer indentation level，指向 CheckpointManager 附近，但源模块语法正常。怎么回事？",
+      "expected_output": "诊断为 resolve_imports 只剥离了多行括号导入的第一行，孤立了带缩进的续行（如 'TernaryWeightQuantizer, MultiBasisBinarizer,'）。修复：多行括号导入检测必须先于单行正则匹配，并用括号深度计数跳过全部续行。验证：对合并后代码跑 ast.parse 必须返回 Syntax OK。",
+      "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "模块里有很多多行括号导入（from .quant import (A, B, 后续行续写 C, D)），合并后会不会出问题？",
+      "expected_output": "不会。merge_modules.py 的 resolve_imports 用括号深度追踪完整剥离多行括号导入，不会孤立续行；可用 scripts/test_merge_modules.py 回归测试验证。",
       "files": []
     }
   ]
