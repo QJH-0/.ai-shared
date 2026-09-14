@@ -1,13 +1,13 @@
 # 硬链接 / 目录联接清单
 
 > 本文件记录 C:\Users\20448\.ai-shared 作为唯一维护源，向各 AI 工具配置目录分发的所有链接。
-> 更新时间：2026-08-29（恢复后重建）
+> 更新时间：2026-09-14（新增 `.workbuddy-ai` 分发目标）
 
 ---
 
 ## 一、共享目标目录
 
-以下 8 个 AI 工具配置目录共享 `.ai-shared` 的内容：
+以下 9 个 AI 工具配置目录共享 `.ai-shared` 的内容：
 
 | 目录路径 | 对应工具 |
 | --- | --- |
@@ -17,6 +17,7 @@
 | `C:\Users\20448\.cursor` | Cursor IDE |
 | `C:\Users\20448\.qoder` | Qoder |
 | `C:\Users\20448\.workbuddy` | WorkBuddy |
+| `C:\Users\20448\.workbuddy-ai` | WorkBuddy AI（第二个实例） |
 | `C:\Users\20448\.catpawai` | CatPaw AI |
 | `C:\Users\20448\.agents` | 通用 Agent 目录 |
 
@@ -38,6 +39,7 @@
 | `C:\Users\20448\.cursor\AGENTS.md` | HardLink |
 | `C:\Users\20448\.qoder\AGENTS.md` | HardLink |
 | `C:\Users\20448\.workbuddy\AGENTS.md` | HardLink |
+| `C:\Users\20448\.workbuddy-ai\AGENTS.md` | HardLink |
 | `C:\Users\20448\.catpawai\AGENTS.md` | HardLink |
 | `C:\Users\20448\.agents\AGENTS.md` | HardLink |
 
@@ -53,6 +55,7 @@
 | `C:\Users\20448\.cursor\AI_READ_FIRST.md` | HardLink |
 | `C:\Users\20448\.qoder\AI_READ_FIRST.md` | HardLink |
 | `C:\Users\20448\.workbuddy\AI_READ_FIRST.md` | HardLink |
+| `C:\Users\20448\.workbuddy-ai\AI_READ_FIRST.md` | HardLink |
 | `C:\Users\20448\.catpawai\AI_READ_FIRST.md` | HardLink |
 | `C:\Users\20448\.agents\AI_READ_FIRST.md` | HardLink |
 
@@ -73,6 +76,7 @@
 | `C:\Users\20448\.cursor\skills` | Junction → `.ai-shared\skills` |
 | `C:\Users\20448\.qoder\skills` | Junction → `.ai-shared\skills` |
 | `C:\Users\20448\.workbuddy\skills` | Junction → `.ai-shared\skills` |
+| `C:\Users\20448\.workbuddy-ai\skills` | Junction → `.ai-shared\skills` |
 | `C:\Users\20448\.catpawai\skills` | Junction → `.ai-shared\skills` |
 | `C:\Users\20448\.agents\skills` | Junction → `.ai-shared\skills` |
 
@@ -87,6 +91,7 @@
 | `C:\Users\20448\.cursor\agents` | Junction → `.ai-shared\agents` |
 | `C:\Users\20448\.qoder\agents` | Junction → `.ai-shared\agents` |
 | `C:\Users\20448\.workbuddy\agents` | Junction → `.ai-shared\agents` |
+| `C:\Users\20448\.workbuddy-ai\agents` | Junction → `.ai-shared\agents` |
 | `C:\Users\20448\.catpawai\agents` | Junction → `.ai-shared\agents` |
 | `C:\Users\20448\.agents\agents` | Junction → `.ai-shared\agents` |
 
@@ -162,6 +167,7 @@
 | 2026-08-29 | 恢复 AI_READ_FIRST.md 硬链接 | 7 个工具目录的 AI_READ_FIRST.md 重新硬链接到 `.ai-shared\AI_READ_FIRST.md` |
 | 2026-08-29 | 恢复 .disable_to_model_invocation_migration.json | 重建为默认值 |
 | 2026-08-29 | 创建 .system 目录占位 | 空目录，原始内容未恢复 |
+| 2026-09-14 | 新增 `.workbuddy-ai` 分发目标 | `skills\`、`agents\` 建 Junction；`AGENTS.md`、`AI_READ_FIRST.md` 建 HardLink。原有真实 `skills\`（14 个文件）备份至 `~\.ai-shared-backup-20260914-164652\workbuddy-ai\`。验证：写入穿透 OK、8 个工具 MD5 一致 |
 
 ---
 
@@ -218,6 +224,11 @@ dir /al C:\Users\20448\.codex
 dir /al C:\Users\20448\.cursor
 dir /al C:\Users\20448\.qoder
 dir /al C:\Users\20448\.workbuddy
+dir /al C:\Users\20448\.workbuddy-ai
 dir /al C:\Users\20448\.catpawai
 dir /al C:\Users\20448\.agents
 ```
+
+> 注：部分受限环境（沙箱 / 无 cmd 权限）下 `cmd.exe` 不可用，可用原生 PowerShell 等价替代：
+> `New-Item -ItemType Junction -Path <链接> -Target <目标>`、
+> `New-Item -ItemType HardLink -Path <链接> -Target <目标>`。

@@ -5,6 +5,9 @@ $tools = @(
     @{ Name = "cursor";   Path = "C:\Users\20448\.cursor" }
     @{ Name = "qoder";    Path = "C:\Users\20448\.qoder" }
     @{ Name = "workbuddy"; Path = "C:\Users\20448\.workbuddy" }
+    @{ Name = "workbuddy-ai"; Path = "C:\Users\20448\.workbuddy-ai" }
+    @{ Name = "catpawai";  Path = "C:\Users\20448\.catpawai" }
+    @{ Name = "agents";    Path = "C:\Users\20448\.agents" }
 )
 
 Write-Host "=== Junction Verification ===" -ForegroundColor Cyan

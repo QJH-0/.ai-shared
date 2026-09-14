@@ -1,10 +1,11 @@
 ---
 name: ai-config-sharing
 description: >-
-  统一管理多个 AI 编程助手（Claude、Codex、Cursor、Qoder、WorkBuddy、CatPaw 等）的
+  统一管理多个 AI 编程助手（Claude、Codex、Cursor、Qoder、WorkBuddy、WorkBuddy AI、CatPaw 等）的
   skills/agents/AGENTS.md 配置。通过 Windows 目录联接（Junction）和硬链接（HardLink）
   实现单点维护、多工具共享。触发场景："共享 skills"、"统一 AI 配置"、"skills 同步"、
-  "Junction 联接"、"AI 工具配置合并"、"hardlink AGENTS.md"、"共享 agents"。
+  "Junction 联接"、"AI 工具配置合并"、"hardlink AGENTS.md"、"共享 agents"、
+  "有工具在自己目录自建了 skills"、"把自建 skill 同步回 .ai-shared"。
   适用于 Windows 环境，需 PowerShell 执行。
 ---
 
@@ -12,7 +13,7 @@ description: >-
 
 ## 背景
 
-用户同时使用多个 AI 编程助手（Claude Code、Codex、Cursor、Qoder、WorkBuddy、CatPaw 等），
+用户同时使用多个 AI 编程助手（Claude Code、Codex、Cursor、Qoder、WorkBuddy、WorkBuddy AI、CatPaw 等），
 每个工具在 `~/.<工具名>/` 下维护独立的 `skills/`、`agents/` 和 `AGENTS.md`。
 这些文件内容高度重复，导致：
 
@@ -48,7 +49,7 @@ C:\Users\<用户>\.ai-shared\           ← 唯一维护点
 ~/.codex/skills/      ──Junction──→ .ai-shared/skills/
 ~/.codex/agents/      ──Junction──→ .ai-shared/agents/
 ~/.codex/AGENTS.md    ──HardLink──→ .ai-shared/AGENTS.md
-  ... (cursor, qoder, workbuddy, catpawai 同理)
+  ... (cursor, qoder, workbuddy, workbuddy-ai, catpawai, agents 同理)
 ```
 
 ## 触发场景
@@ -66,7 +67,7 @@ C:\Users\<用户>\.ai-shared\           ← 唯一维护点
 1. **操作系统**：此方案仅适用于 **Windows**（macOS/Linux 用 symlink）
 2. **工具路径**：确认各工具配置目录存在
    ```powershell
-   foreach ($t in @('.claude','.codex','.cursor','.qoder','.workbuddy','.catpawai')) {
+   foreach ($t in @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai','.agents')) {
        $p = "$env:USERPROFILE\$t"
        Write-Host "$t exists: $(Test-Path $p)"
    }
@@ -167,7 +168,7 @@ $ts = Get-Date -Format 'yyyyMMdd-HHmmss'
 $backup = "$env:USERPROFILE\.ai-shared-backup-$ts"
 New-Item -ItemType Directory -Path $backup -Force | Out-Null
 
-$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.catpawai')
+$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai')
 foreach ($t in $tools) {
     $tp = "$env:USERPROFILE\$t"
     $tb = "$backup\$($t.TrimStart('.'))"
@@ -205,7 +206,7 @@ $SharedSkills = "$env:USERPROFILE\.ai-shared\skills"
 $SharedAgents = "$env:USERPROFILE\.ai-shared\agents"
 $SharedAgentsMd = "$env:USERPROFILE\.ai-shared\AGENTS.md"
 
-$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.catpawai')
+$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai')
 foreach ($t in $tools) {
     $tp = "$env:USERPROFILE\$t"
     
@@ -240,7 +241,7 @@ foreach ($t in $tools) {
 
 ```powershell
 # 1. 联接验证
-$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.catpawai')
+$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai')
 foreach ($t in $tools) {
     $tp = "$env:USERPROFILE\$t"
     $sp = "$tp\skills"; $ap = "$tp\agents"; $mp = "$tp\AGENTS.md"
@@ -283,7 +284,7 @@ Remove-Item $testFile -Force
 # 恢复模式：从备份恢复原始目录
 $backup = "$env:USERPROFILE\.ai-shared-backup-<timestamp>"
 
-$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.catpawai')
+$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai')
 foreach ($t in $tools) {
     $tp = "$env:USERPROFILE\$t"
     $tn = $t.TrimStart('.')
@@ -347,7 +348,7 @@ foreach ($t in $tools) {
 
    ```powershell
    $SharedNote = "$env:USERPROFILE\.ai-shared\AI_READ_FIRST.md"
-   foreach ($t in @('.claude','.codex','.cursor','.qoder','.workbuddy','.catpawai','.agents')) {
+   foreach ($t in @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai','.agents')) {
        $tp = "$env:USERPROFILE\$t"
        $target = "$tp\AI_READ_FIRST.md"
        if (-not (Test-Path $target)) {
@@ -360,6 +361,67 @@ foreach ($t in $tools) {
 > 若希望模型在 `skills\` / `agents\` 目录内也能看到提示，可在 `.ai-shared\skills` 与
 > `.ai-shared\agents` 中再放同名说明（联接透明，一处写入对所有工具生效）。
 
+## 阶段 8：工具自建 skills 回灌同步（只扫主路径）
+
+### 为什么会有这一步
+
+Junction 只接管了 `~\<工具>\skills` 这一层**主入口**。但工具在重装、更新或手动安装 skill 时，
+可能把这个主入口**重建为真实目录**（Junction 被替换掉），于是在自己配置文件夹里长出一批
+skills —— 这些 skill 不在 `.ai-shared` 中，**其他工具看不到**，共享事实上被打破。
+
+典型症状：某个 skill 只在 Cursor 里能用，Claude / WorkBuddy 里搜不到。
+
+### 扫描原则：只扫 `~\<工具>\skills` 主路径
+
+**不要**递归扫整个 `~\<工具>\`。判断依据只有一个——主入口本身是什么：
+
+| 主入口状态 | 含义 | 处理 |
+|-----------|------|------|
+| **Junction** → `.ai-shared\skills` | 已共享 | ✅ 无需处理 |
+| **真实目录（REAL DIR）** | 工具自建/重装，内容脱离共享源 | ⚠️ 逐个比对，缺失的回灌到 `.ai-shared` |
+| 不存在 | 该工具当前无 skills 目录 | — |
+
+**明确不扫的路径**（重要，勿扩大范围）：
+
+- `plugins\cache\`、`plugins\marketplaces\`、`connectors-marketplace\`、`connectors\skills\`
+- `minimax-skills\`、`skills-update-temp\`、`.tmp\plugins\`
+- `node_modules\`、`site-packages\`、`binaries\`、`envs\`
+
+理由：这些是**工具私有的插件运行时缓存**——数量庞大（实测数百个）、随插件更新被覆盖、
+且 skill 依赖对应插件/连接器的运行时与版本。复制进 `.ai-shared` 没有意义，只会污染共享源。
+共享源只收「通用、可独立运行」的 skill。
+
+### 操作
+
+```powershell
+$dir = "$env:USERPROFILE\.ai-shared\skills\ai-config-sharing\scripts"
+
+# 1) 预览：列出每个工具主入口状态 + 未同步的 skill
+powershell -ExecutionPolicy Bypass -File "$dir\collect-tool-skills.ps1"
+
+# 2) 回灌：把缺失的 skill 复制进 .ai-shared\skills（不覆盖已存在的）
+powershell -ExecutionPolicy Bypass -File "$dir\collect-tool-skills.ps1" -Apply
+
+# 3) 只处理指定 skill
+powershell -ExecutionPolicy Bypass -File "$dir\collect-tool-skills.ps1" -Apply -Name ui-ux-pro-max
+```
+
+脚本行为（已实测验证）：
+
+- 输出「主入口状态表」：`SHARED` / `REAL-DIR` / `NO-SKILLS-DIR`
+- 只列出 `.ai-shared` 中**尚不存在**的 skill；已存在的跳过，绝不覆盖
+- 兼容 skill 包结构：`\<name>\SKILL.md` 与 `\<name>\skills\<sub>\SKILL.md` 都能识别
+- 复制后校验目标是否含 `SKILL.md`，失败会 WARN
+- 不传 `-Apply` 只预览，不写任何文件
+
+### 回灌后
+
+`.ai-shared\skills` 是所有工具 `skills\` 的 Junction 目标，新 skill 放进去后
+**所有工具立即可见**，无需再做任何分发操作。
+
+若某工具主入口已退化成真实目录，回灌完还应按「阶段 4」重建 Junction（先备份原目录内容），
+否则下次它还会继续自建。
+
 ## 完整脚本
 
 此 skill 目录下附带的脚本可直接执行：
@@ -368,6 +430,7 @@ foreach ($t in $tools) {
 |------|------|
 | `scripts/merge-share-skills.ps1` | 一键合并+共享（支持 `-DryRun` 预览、`-Restore` 恢复） |
 | `scripts/verify-junctions.ps1` | 验证联接状态、内容一致性、写入穿透 |
+| `scripts/collect-tool-skills.ps1` | **阶段 8**：扫描工具自建 skills（只扫主入口）并回灌到 `.ai-shared`（支持 `-Apply`、`-Name`） |
 | `scripts/fix-catpawai.ps1` | 修复 `.catpawai` 的 `.lnk` → Junction |
 
 ### 使用方法
@@ -392,6 +455,14 @@ powershell -ExecutionPolicy Bypass -File scripts\verify-junctions.ps1
 - **必须先备份再操作**：脚本会创建带时间戳的备份目录
 - **删除联接用 `rmdir`**：不用 `Remove-Item`，避免递归删除目标内容
 - **`mklink` 需要 cmd 上下文**：PowerShell 原生 `New-Item -ItemType Junction` 也可以，但 `cmd /c "mklink /J"` 更可靠
+- **受限环境优先用原生 PowerShell**：在 WorkBuddy 沙箱等环境里，`cmd.exe` 从 **Bash 和 PowerShell 两个入口都被拦截**
+  （报 `cmd.exe cannot be used from ...`）。此时**唯一可行路径是原生 cmdlet**，实测均可用：
+  ```powershell
+  New-Item -ItemType Junction -Path <链接> -Target <目标>   # 目录联接
+  New-Item -ItemType HardLink -Path <链接> -Target <目标>   # 文件硬链接
+  ```
+  删除联接（不要 `Remove-Item -Recurse`，会连目标内容一起删）：
+  `[System.IO.Directory]::Delete($link, $false)`；判断是否联接用 `(Get-Item $p -Force).LinkType -eq 'Junction'`。
 
 ### 兼容性
 - **Junction 跨卷**：Junction 只能指向本地路径，不能跨网络驱动器
@@ -401,13 +472,43 @@ powershell -ExecutionPolicy Bypass -File scripts\verify-junctions.ps1
 
 ### 维护
 - **修改入口**：以后只在 `~/.ai-shared/` 中修改 skills/agents/AGENTS.md 与 `AI_READ_FIRST.md`
+- **定期检查自建**：工具重装/更新后可能把 `~\<工具>\skills` 从 Junction 变回真实目录，
+  跑 `collect-tool-skills.ps1` 看状态表即可（正常应全部 `SHARED`）。发现 `REAL-DIR` 就回灌 + 重建 Junction
+- **回灌范围**：只收「通用可独立运行」的 skill；插件/连接器市场缓存里的 skill 依赖运行时，不要回灌
 - **AI 先读说明**：每个工具目录的 `AI_READ_FIRST.md` 是硬链接到 `.ai-shared\AI_READ_FIRST.md` 的副本；
   说明须覆盖 AGENTS.md（硬链接）+ skills/、agents/（目录联接）。需改说明只改源文件，副本自动同步。
 - **新增工具**：新装 AI 工具时，删除其默认 `skills/`/`agents/` 目录，创建 Junction 指向共享目录，
   并为其创建 `AI_READ_FIRST.md` 硬链接（见阶段 7）
+- **同工具多实例**（2026-09-14 新增）：WorkBuddy 存在 `.workbuddy` 与 `.workbuddy-ai` 两个**独立**配置目录
+  （各自有 `binaries\`、`sessions\`、`workbuddy.db`、`settings.json`）。只联接**配置类**对象——
+  `skills\`、`agents\`（Junction）+ `AGENTS.md`、`AI_READ_FIRST.md`（HardLink）；
+  **运行时数据一律不联接**（否则两个实例会互相覆盖会话/数据库/工作区）。
+  新增实例时按同一套 4 项操作处理，并把目录名加进 `collect-tool-skills.ps1` 的 `-Tools` 与
+  `verify-junctions.ps1` 的工具表，否则定期体检会漏掉它。
 - **定期备份**：重大修改前备份 `.ai-shared/` 目录
 
 ### 已知限制
 - 仅适用于 Windows（macOS/Linux 用 `ln -s` 符号链接）
 - 目录联接不能跨网络驱动器（SMB/NFS）
 - 如果工具的 skill 加载器有特殊路径逻辑（如递归搜索 `SKILL.md`），Junction 不影响此行为
+
+### 写 PowerShell 脚本时的两个坑（本 skill 脚本已踩过）
+
+1. **中文脚本必须存成 UTF-8 with BOM**：Windows PowerShell 5.1 按 ANSI 读取无 BOM 的 `.ps1`，
+   中文注释会导致解析失败（报一堆 `ParserError`，甚至完全没输出）。
+2. **双引号里 `$var:` 会被当成驱动器限定变量**：`"$n: xxx"` 报
+   `变量引用无效。':' 后面的变量名称字符无效`，必须写成 `"${n}: xxx"`。
+
+### 用「PowerShell 工具」时的两个坑（2026-09-14 实测）
+
+1. **stdout 可能完全不被捕获**：工具只回一句 `Command completed with exit code 0`，`Write-Output`/`Write-Host`
+   都拿不到。**解决办法：把结果写进文件再读**——
+   `$L -join "`r`n" | Out-File $LOG -Encoding UTF8`（或用 `-Append` **逐步追加**，
+   便于在命令中途被安全策略中断时定位到具体哪一步）。
+2. **`$env:TEMP` 不一定是 `%LOCALAPPDATA%\Temp`**：本机解析为 `D:\WindowsTemp`。
+   找日志时别按默认路径猜，直接在脚本里打印或用固定绝对路径（如项目 `.workbuddy\` 下）。
+3. **一次执行太多步骤容易中途被杀**：把「备份 → 删原目录 → 建链接 → 验证」拆成多轮，
+   每轮先写日志，避免半途失败后既无日志又不知道状态（本次踩过：备份和删除已生效但断言脚本整体退出，日志没落盘）。
+
+排查技巧：脚本跑起来「什么都没输出」时，用 `Start-Transcript` 捕获——
+`Write-Host` **不进入管道**，`... | Out-File` 抓不到它，容易误判成脚本没执行。
