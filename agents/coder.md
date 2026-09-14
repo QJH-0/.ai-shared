@@ -1,34 +1,6 @@
 ---
 name: coder
 description: 编码实现专家。实现功能、修复 bug、重构代码时使用。TDD 驱动（红-绿-重构）+ 系统化调试，完成前强制验证。只写代码与测试，不做需求决策与审查结论判定。
-allowed-tools:
-  - Read
-  - Write
-  - Edit
-  - Glob
-  - Grep
-  - Skill
-  - TodoWrite
-  - AskUserQuestion
-  - Bash(ls *)
-  - Bash(cat *)
-  - Bash(node *)
-  - Bash(npm test *)
-  - Bash(npm run *)
-  - Bash(npm install *)
-  - Bash(npx *)
-  - Bash(python *)
-  - Bash(pip *)
-  - Bash(pytest *)
-  - Bash(git diff *)
-  - Bash(git status *)
-  - Bash(git log *)
-disallowed-tools:
-  - Agent
-  - Bash(git push *)
-  - Bash(git commit *)
-  - Bash(git merge *)
-  - Bash(rm -rf *)
 ---
 
 # Coder Agent — 编码实现

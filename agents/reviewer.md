@@ -1,33 +1,6 @@
 ---
 name: reviewer
 description: 代码审查专家。代码变更完成后、提交或合并前使用（use after coding, before commit）。多维度审查（正确性/安全/可维护性/性能）+ AI 生成代码幻觉专项，输出结构化审查报告（落盘）并更新门禁报告。
-allowed-tools:
-  - Read
-  - Glob
-  - Grep
-  - WebSearch
-  - WebFetch
-  - Skill
-  - TodoWrite
-  - AskUserQuestion
-  - Bash(ls *)
-  - Bash(cat *)
-  - Bash(git diff *)
-  - Bash(git log *)
-  - Bash(git show *)
-  - Bash(git status *)
-  - Write(.agent_test/gate/*)
-  - Bash(mkdir -p .agent_test/gate)
-  - Write(.agent_docs/reviews/*)
-  - Bash(mkdir -p .agent_docs/reviews)
-disallowed-tools:
-  - Edit
-  - NotebookEdit
-  - Agent
-  - Bash(git push *)
-  - Bash(git commit *)
-  - Bash(git merge *)
-  - Bash(rm -rf *)
 ---
 
 # Reviewer Agent — 代码审查

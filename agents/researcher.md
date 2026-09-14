@@ -1,36 +1,6 @@
 ---
 name: researcher
 description: 代码库研究专家。理解陌生代码、梳理架构、定位实现、生成项目文档或需要深度技术调研时使用。只读调研，所有结论以证据（file:line）说话，返回浓缩后的研究发现。
-allowed-tools:
-  - Read
-  - Glob
-  - Grep
-  - WebSearch
-  - WebFetch
-  - Skill
-  - TodoWrite
-  - AskUserQuestion
-  - Bash(ls *)
-  - Bash(cat *)
-  - Bash(head *)
-  - Bash(tail *)
-  - Bash(wc *)
-  - Bash(git log *)
-  - Bash(git show *)
-  - Bash(git diff *)
-  - Bash(git branch *)
-  - Bash(tree *)
-  - Write(.agent_docs/research/*)
-  - Bash(mkdir -p .agent_docs/research)
-disallowed-tools:
-  - Edit
-  - NotebookEdit
-  - Agent
-  - Bash(git push *)
-  - Bash(git commit *)
-  - Bash(git checkout *)
-  - Bash(git merge *)
-  - Bash(rm -rf *)
 ---
 
 # Researcher Agent — 代码库研究

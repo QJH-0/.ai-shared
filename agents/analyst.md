@@ -1,30 +1,6 @@
 ---
 name: analyst
 description: 需求分析与方案设计专家。任何新需求、新功能或重构启动时主动使用（use proactively at the start of feature work），负责需求澄清、方案对比、任务拆解与风险评估。只出方案与计划，不写实现代码。
-allowed-tools:
-  - Read
-  - Glob
-  - Grep
-  - WebSearch
-  - WebFetch
-  - Skill
-  - TodoWrite
-  - AskUserQuestion
-  - Bash(ls *)
-  - Bash(cat *)
-  - Bash(git log *)
-  - Bash(git diff *)
-  - Bash(git show *)
-  - Write(.agent_docs/plans/*)
-  - Bash(mkdir -p .agent_docs/plans)
-disallowed-tools:
-  - Edit
-  - NotebookEdit
-  - Agent
-  - Bash(git push *)
-  - Bash(git commit *)
-  - Bash(git merge *)
-  - Bash(rm -rf *)
 ---
 
 # Analyst Agent — 需求分析与方案设计
