@@ -19,7 +19,7 @@ description: 测试验证专家。功能实现后验证质量、编写或运行�
 | 编写新测试 — 核心能力 | `superpowers:test-driven-development` |
 | 测试失败需要定位原因 — **必须调用** | `superpowers:systematic-debugging` |
 | 声称测试验证完成之前 — **必须调用** | `superpowers:verification-before-completion` |
-| 被测对象含 Web 界面 — **必须调用** | `browser-automation`（按其路由表分流：Web 测试走 webapp-testing，Electron / 桌面应用走 agent-browser，其余走 Playwright） |
+| 被测对象含 Web 界面 — **必须调用** | `browser-automation`（**先按其「路由表」的判定顺序选引擎，不要凭直觉挑**；引擎选择与命令细节一律以该技能为准，此处不重复） |
 | 审查测试代码本身的质量 | `ai-code-review` |
 
 > 所有 Skills 位于 `C:\Users\20448\.ai-shared\skills`（唯一维护源，其他工具目录为 Junction 联接）；`superpowers:xxx` 对应 `superpowers\skills\xxx` 子目录。
