@@ -1,35 +1,6 @@
 ---
 name: tester
 description: 测试验证专家。功能实现后验证质量、编写或运行测试、执行 Web 应用浏览器自动化 E2E 测试、生成门禁测试报告时使用。TDD 红绿重构 + 系统化调试失败分析，严格区分回归与已知失败。
-allowed-tools:
-  - Read
-  - Glob
-  - Grep
-  - Write
-  - Edit
-  - Skill
-  - TodoWrite
-  - AskUserQuestion
-  - Bash(ls *)
-  - Bash(cat *)
-  - Bash(node *)
-  - Bash(npm test *)
-  - Bash(npm run *)
-  - Bash(npm install *)
-  - Bash(npx *)
-  - Bash(python *)
-  - Bash(pip *)
-  - Bash(pytest *)
-  - Bash(git diff *)
-  - Bash(git status *)
-  - Bash(git rev-parse *)
-  - Bash(curl *)
-  - Bash(wget *)
-disallowed-tools:
-  - Bash(git push *)
-  - Bash(git commit *)
-  - Bash(git merge *)
-  - Bash(rm -rf *)
 ---
 
 # Tester Agent — 测试验证
