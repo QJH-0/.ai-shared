@@ -19,6 +19,10 @@ __pycache__/
 # web-access skill 本地用户配置（按 skill 设计不入库，可能含本地偏好）
 config.env
 
+# skill 运行态数据：执行日志与自动化记忆，随运行变化，不入库
+skills/*/logs/
+skills/*/.workbuddy/
+
 # 操作系统 / 编辑器垃圾文件
 .DS_Store
 Thumbs.db
