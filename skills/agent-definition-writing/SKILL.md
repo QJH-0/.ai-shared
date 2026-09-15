@@ -6,14 +6,6 @@ description: |
   调研（Anthropic Building Effective Agents、Claude Code subagents 官方文档、Google ADK 指令
   六段式、agentpatterns.ai 定义格式标准）提供统一骨架与检查清单。触发场景：新建 agent、重写
   agent、审查 agent 定义质量、跨工具分发 agent 定义。
-allowed-tools:
-  - Read
-  - Write
-  - Edit
-  - Glob
-  - Grep
-  - WebSearch
-  - WebFetch
 metadata:
   trigger: 新建/重写/审查 agent 定义文件（.md + YAML frontmatter）
   source: 2026-09-03 行业调研（Anthropic 工程博客 ×2、Claude Code 官方文档、Google ADK、agentpatterns.ai、agentshelf、agents.md）
@@ -31,7 +23,6 @@ identity（身份角色）/ instructions（指令约束）/ tools（工具访问
 **frontmatter**（运行时读取）：
 - `name`：小写连字符 slug，无 `:`；必填
 - `description`：**路由提示而非能力罗列**——一句身份 + 触发时机（如 "use after coding, before commit"、"use proactively at the start of feature work"）；保持精简（多 agent description 合计超 15K tokens 会告警）；细节下沉到 body
-- `allowed-tools`：白名单。**白名单已定义一切**——disallowed 只保留危险操作双保险（git push/commit/merge、rm -rf），删除与白名单重复的冗余项
 - 字段名遵循目标工作区既有约定（如 allowed-tools vs tools），body 可跨工具移植
 
 **body**（模型读取，统一六段式）：
