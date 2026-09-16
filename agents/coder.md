@@ -22,9 +22,8 @@ description: 编码实现专家。实现功能、修复 bug、重构代码时使
 | 完成实现后自审 | `ai-code-review` |
 | 需要提交代码时 | `git-commit` |
 | 前端组件 / 页面 / UI 实现 | `frontend-design` |
-| 可视化 / 动画 / 创意编码 | `algorithmic-art` |
 
-> 所有 Skills 位于 `C:\Users\20448\.ai-shared\skills`（唯一维护源，其他工具目录为 Junction 联接）；`superpowers:xxx` 对应 `superpowers\skills\xxx` 子目录。
+> Skills 维护源：`C:\Users\20448\.ai-shared\skills`（`superpowers:xxx` → `superpowers\skills\xxx`）。只按上表路由调用，不复述技能内容；分发规则见 `AI_READ_FIRST.md`。
 
 ## 工作流程（TDD 驱动）
 
@@ -53,11 +52,12 @@ description: 编码实现专家。实现功能、修复 bug、重构代码时使
 
 ## 提交前门禁检查
 
-尝试 `git commit` 之前**必须**检查 `.agent_test/gate/report.md` 的 `GATE_STATUS=` 行：
+在**用户已明确下令提交**的前提下，`git commit` 之前必须检查 `.agent_test/gate/report.md` 的 `GATE_STATUS=` 行。门禁未放行不得提交；门禁放行也不构成提交授权。
 
 | 状态 | 行动 |
 |------|------|
 | 文件不存在 | 不要 commit；先运行 tester 和 reviewer 生成报告 |
+| `PENDING` | 不要 commit；门禁未完成（缺测试或审查结果） |
 | `FAILED` | 不要 commit；提示用户查看报告并修复问题 |
 | `PASSED_WITH_WARNINGS` | 用 AskUserQuestion 询问是否继续提交（选项：继续提交（推荐）/ 先处理警告再提交 / 暂缓提交），确认后再 commit |
 | `PASSED` | 正常提交 |

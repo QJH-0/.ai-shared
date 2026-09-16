@@ -20,7 +20,7 @@ description: 代码审查专家。代码变更完成后、提交或合并前使�
 | 完成审查后验证发现真实性 — **必须调用** | `superpowers:verification-before-completion` |
 | 发现复杂 bug 需要根因分析 | `superpowers:systematic-debugging` |
 
-> 所有 Skills 位于 `C:\Users\20448\.ai-shared\skills`（唯一维护源，其他工具目录为 Junction 联接）；`superpowers:xxx` 对应 `superpowers\skills\xxx` 子目录。
+> Skills 维护源：`C:\Users\20448\.ai-shared\skills`（`superpowers:xxx` → `superpowers\skills\xxx`）。只按上表路由调用，不复述技能内容；分发规则见 `AI_READ_FIRST.md`。
 
 ## 工作流程
 
@@ -61,8 +61,8 @@ description: 代码审查专家。代码变更完成后、提交或合并前使�
 
 1. `mkdir -p .agent_test/gate`
 2. 报告已存在（tester 已生成）→ 读取现有报告，**只更新审查结果部分**，保留测试结果
-3. 报告不存在 → 创建新报告，测试结果部分标记"待测试"
-4. 写入报告
+3. 报告不存在 → 创建新报告：写文件头（标题、生成时间、commit hash）与 `GATE_STATUS=` 行，测试结果部分标记"待测试"，审查结果按本节「审查结果格式」
+4. 写入报告，并按 `AGENTS.md`「门禁状态定义」的合并规则更新 `GATE_STATUS`
 
 ### 审查结果格式
 
@@ -71,7 +71,7 @@ description: 代码审查专家。代码变更完成后、提交或合并前使�
 
 | 指标 | 数值 |
 |------|------|
-| 状态 | {PASSED|FAILED} |
+| 状态 | {PASSED|PASSED_WITH_WARNINGS|FAILED} |
 | P0 问题 | {N} |
 | P1 问题 | {N} |
 | P2 问题 | {N} |
@@ -86,15 +86,15 @@ description: 代码审查专家。代码变更完成后、提交或合并前使�
 严重程度：{Critical|Major|Minor} | 置信度：{CONFIRMED|PLAUSIBLE|UNCERTAIN}
 ```
 
-### 门禁状态更新规则
+### 审查结果状态判定（只判定审查这一半）
 
-| 条件 | GATE_STATUS |
+| 条件 | 审查结果状态 |
 |------|-------------|
-| 测试 PASSED 且无 P0/P1 CONFIRMED 问题 | `PASSED` |
-| 测试 PASSED 但有 P1 PLAUSIBLE 问题 | `PASSED_WITH_WARNINGS` |
-| 测试 FAILED 或有 P0 CONFIRMED 问题 | `FAILED` |
+| 有 P0 CONFIRMED | `FAILED` |
+| 无 P0 CONFIRMED，但有 P0 PLAUSIBLE / P1 CONFIRMED / P1 PLAUSIBLE | `PASSED_WITH_WARNINGS` |
+| 仅 P2 / P3 或无问题 | `PASSED` |
 
-更新 `GATE_STATUS` 时综合考虑测试与审查双方结果；与 tester 的协作以**两者中最严格**的为准。
+`GATE_STATUS` 由测试与审查两半合并得出，合并规则见 `AGENTS.md`「门禁状态定义」。
 
 ## 停止条件
 

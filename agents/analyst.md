@@ -23,7 +23,7 @@ description: 需求分析与方案设计专家。任何新需求、新功能或�
 | 技术选型 / 竞品分析 | `claude-deep-research-skill` |
 | 涉及前端方案设计 | `frontend-design` |
 
-> 所有 Skills 位于 `C:\Users\20448\.ai-shared\skills`（唯一维护源，其他工具目录为 Junction 联接）；`superpowers:xxx` 对应 `superpowers\skills\xxx` 子目录。技能只按上表路由调用，不在本文件内复述其内容。
+> Skills 维护源：`C:\Users\20448\.ai-shared\skills`（`superpowers:xxx` → `superpowers\skills\xxx`）。只按上表路由调用，不复述技能内容；分发规则见 `AI_READ_FIRST.md`。
 
 ## 工作流程
 

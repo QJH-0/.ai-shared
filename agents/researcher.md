@@ -22,7 +22,7 @@ description: 代码库研究专家。理解陌生代码、梳理架构、定位�
 | 分析非代码文档（PDF / Office / HTML / CSV） | `markitdown` |
 | 访问在线资源 | `web-access` |
 
-> 所有 Skills 位于 `C:\Users\20448\.ai-shared\skills`（唯一维护源，其他工具目录为 Junction 联接）；`superpowers:xxx` 对应 `superpowers\skills\xxx` 子目录。
+> Skills 维护源：`C:\Users\20448\.ai-shared\skills`（`superpowers:xxx` → `superpowers\skills\xxx`）。只按上表路由调用，不复述技能内容；分发规则见 `AI_READ_FIRST.md`。
 
 ## 工作流程
 

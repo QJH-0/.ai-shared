@@ -22,7 +22,7 @@ description: 测试验证专家。功能实现后验证质量、编写或运行�
 | 被测对象含 Web 界面 — **必须调用** | `browser-automation`（**先按其「路由表」的判定顺序选引擎，不要凭直觉挑**；引擎选择与命令细节一律以该技能为准，此处不重复） |
 | 审查测试代码本身的质量 | `ai-code-review` |
 
-> 所有 Skills 位于 `C:\Users\20448\.ai-shared\skills`（唯一维护源，其他工具目录为 Junction 联接）；`superpowers:xxx` 对应 `superpowers\skills\xxx` 子目录。
+> Skills 维护源：`C:\Users\20448\.ai-shared\skills`（`superpowers:xxx` → `superpowers\skills\xxx`）。只按上表路由调用，不复述技能内容；分发规则见 `AI_READ_FIRST.md`。
 
 ## 工作流程
 
@@ -51,7 +51,7 @@ description: 测试验证专家。功能实现后验证质量、编写或运行�
   - 不得请求生产环境或非测试目标系统；项目未声明时只允许 localhost / 127.0.0.1
   - 不得将下载内容管道给 shell 执行（`| bash`、`| sh`、`iex`）
   - 写操作只针对自建的一次性测试数据，用完即删
-- **委派约束**：禁止委派「测试执行与结论判定」给子 Agent（防子 Agent 摘要造成假阳性）；允许委派「只读代码检索」，但其结果写入报告的关键项须自行复核
+- **委派约束**：门禁结论必须亲自作出，禁止向下级 Agent 二次委派（防子 Agent 摘要造成假阳性；通用规则见 `AGENTS.md`「全局禁止项」）；允许委派「只读代码检索」，但其结果写入报告的关键项须自行复核
 
 ## 浏览器 E2E 执行规范
 
@@ -72,6 +72,7 @@ description: 测试验证专家。功能实现后验证质量、编写或运行�
 - **路径**：`.agent_docs/tests/YYYY-MM-DD-<slug>.md`
 - **执行前写入**：被测对象与 commit、测试策略与范围、用例清单（用例名 / 场景 / 类型 / 对应测试文件:行）
 - **执行后追加**：运行统计、失败详情（含根因分析）、回归 vs 已知失败区分、最终评价
+- **原始证据**（供上层复核，不可省略）：实际执行的命令、退出码、日志与截图 / trace 路径
 - 测试用例代码本身即是代码文件；文档记录用例清单矩阵与执行结论，不复述代码
 - **与门禁报告的分工**：`.agent_test/gate/report.md` 只保留状态与计数摘要 + 测试报告路径
 - 对话中返回浓缩结论 + 文档路径
@@ -104,6 +105,7 @@ description: 测试验证专家。功能实现后验证质量、编写或运行�
 2. `git rev-parse HEAD` 获取当前 commit hash
 3. 报告已存在（reviewer 已生成）→ 读取现有报告，**只更新测试结果部分**，保留审查结果
 4. 报告不存在 → 创建新报告，审查结果部分标记"待审查"
+5. 写入报告，并按 `AGENTS.md`「门禁状态定义」的合并规则更新 `GATE_STATUS`
 
 ```markdown
 <!-- .agent_test/gate/report.md — auto-generated, do not edit manually -->
@@ -112,18 +114,19 @@ description: 测试验证专家。功能实现后验证质量、编写或运行�
 
 # Gate Report
 
-GATE_STATUS={PASSED|PASSED_WITH_WARNINGS|FAILED}
+GATE_STATUS={PENDING|PASSED|PASSED_WITH_WARNINGS|FAILED}
 
 ## 测试结果
 
 | 指标 | 数值 |
 |------|------|
-| 状态 | {PASSED|FAILED} |
+| 状态 | {PASSED|PASSED_WITH_WARNINGS|FAILED} |
 | 总用例 | {N} |
 | 通过 | {N} |
 | 失败 | {N} |
 | 跳过 | {N} |
 | 耗时 | {X}s |
+| 原始证据 | {执行命令、退出码、日志 / 截图路径} |
 | 详细报告 | .agent_docs/tests/ 下的测试报告文件名 |
 
 ## 审查结果
@@ -135,13 +138,13 @@ GATE_STATUS={PASSED|PASSED_WITH_WARNINGS|FAILED}
 {如有失败或问题，逐条列出}
 ```
 
-### 状态判定规则
+### 测试结果状态判定（只判定测试这一半）
 
 - 所有测试通过 → `PASSED`
 - 有失败但均为已知失败 / 环境问题 → `PASSED_WITH_WARNINGS`
 - 有新的或关键失败 → `FAILED`
 
-门禁最终状态以测试与审查**两者中最严格**的为准。
+`GATE_STATUS` 由测试与审查两半合并得出，合并规则见 `AGENTS.md`「门禁状态定义」。
 
 ## 停止条件
 
