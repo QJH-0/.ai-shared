@@ -129,6 +129,42 @@ python "$SCRIPT" --pick-write <record_id> [...] --force   # 跳过去重预检
 
 可复用脚本骨架：`D:\Documents\飞书\ai_cli\_import_paste3.py`（转发文案版，含幂等预检）。
 
+## 模式 F：来源换成 offerjack.cn（Jacky学长校招，2026-09-15 新增）
+
+用户直接给一份「可选公司清单」（粘贴的表格/文字），要求「从 offerjack.cn 找投递链接，没有就网络搜索」时用这条。
+**offerjack 有公开只读接口，不要去爬页面**：
+
+```
+GET https://www.offerjack.cn/api/offer/page
+     ?pageNum=1&pageSize=20&enterpriseName=<公司名>
+```
+
+- 站点是 Vite SPA（`/assets/index-*.js` → 各页 chunk），数据全部走上面这个接口，页面本身抓不到内容。
+- **未登录 `pageSize` 最多 20**，>20 返回 `{"code":401,"msg":"未登录用户每页最多查看20条数据"}`。
+- 必带头（否则偶发 `data:null`）：`Origin: https://www.offerjack.cn`、`Referer: https://www.offerjack.cn/`、`User-Agent: Mozilla/5.0`；
+  仍偶发空响应 → 做 3~5 次重试 + 1.2~1.5s 退避。
+- 支持的过滤参数：`pageNum / pageSize / enterpriseName / position / workLocation / recruitmentBatch / enterpriseNature / industry / graduationYear / updateTime`。
+- 返回记录字段（直接可用）：
+  `enterpriseName / recruitmentBatch / enterpriseNature / industry / workLocation / position /
+   graduationYear / deadline / announcementLink / deliveryAddress / id`
+  → `deliveryAddress` 就是「投递方式」，`announcementLink` 是公告（放备注）。
+- **`enterpriseName` 是子串匹配**：查「京东」会同时命中「京东方」，查「航空工业」会命中一堆子公司。
+  必须按公司名二次过滤，并按公司名挑最匹配的一条（同名会有多条秋招/春招/提前批记录，
+  只取 `recruitmentBatch ∈ {秋招, 秋招提前批, 秋招补录, 校招}` 且 `graduationYear` 含 2027/27届 的那条）。
+- 该站没有的公司（如集团本级的南方电网、中核集团）→ 转 WebSearch 拿官方网申入口
+  （南方电网 `zhaopin.csg.cn`、中核 `hr.cnnc.com.cn`、中国能建 `ceec.iguopin.com/job`）。
+- ⚠️ 用 `head` 截断脚本输出会让脚本在收尾 `json.dump` 前因 BrokenPipe 死掉，落盘文件不生成。
+  要留档就把 stdout 重定向到文件，再分页读。
+
+落表方式与模式 E 相同：自建 `_import_*.py`，ROWS 里手写数据，**必带公司名幂等预检 + 写后回读核对**。
+可复用脚本：`D:\Documents\飞书\ai_cli\_import_oj_2027fall.py`（28 行实例，含预检/核对）。
+
+口径（2026-09-15 与用户确立）：
+- 清单标「已截止」的不导入；表内已有公司不重复建行（但**顶尖人才专项/独立计划**如「快手 K-star」可单独建行）。
+- `投递状态` 统一 `未投递`；`是否需要笔试` 清单没说明的一律**留空不猜**。
+- 截止时间优先级：offerjack 有日期 → offerjack；只有清单有日期 → 清单；都无明确日期 → 留空。
+  两边冲突时把差异写进 `备注`（如「清单标注 9.14 截止；offerjack 显示招满即止，以官网为准」）。
+
 ## 流程说明
 
 脚本内部自动完成四步，无需手工干预：
