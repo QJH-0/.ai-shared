@@ -74,14 +74,25 @@ function buildHeaders(cred) {
   return h;
 }
 
+// 网络抖动（UND_ERR_CONNECT_TIMEOUT / fetch failed）会偶发出现，与令牌无关。
+// 签名为幂等操作，重试安全：请求未到达服务端则补上；已到达则 code=10001 兜底。
+const RETRY = 3;
+const RETRY_DELAY_MS = 2000;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
 async function callApi(url, headers) {
-  try {
-    const resp = await fetch(url, { method: 'POST', headers, signal: AbortSignal.timeout(30000) });
-    const body = await resp.text();
-    return { status: resp.status, body };
-  } catch (e) {
-    return { status: 0, body: '', error: e.message };
+  let lastErr = '';
+  for (let attempt = 1; attempt <= RETRY; attempt++) {
+    try {
+      const resp = await fetch(url, { method: 'POST', headers, signal: AbortSignal.timeout(30000) });
+      const body = await resp.text();
+      return { status: resp.status, body };
+    } catch (e) {
+      lastErr = e.message;
+      if (attempt < RETRY) await sleep(RETRY_DELAY_MS * attempt);
+    }
   }
+  return { status: 0, body: '', error: lastErr };
 }
 
 // ---------- 3. main ----------
