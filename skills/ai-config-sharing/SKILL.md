@@ -89,7 +89,7 @@ C:\Users\<用户>\.ai-shared\           ← 唯一维护点
 
 ```powershell
 # 列出各工具的 skill 名称
-$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy')
+$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai','.agents')
 foreach ($t in $tools) {
     $p = "$env:USERPROFILE\$t\skills"
     if (Test-Path $p) {
@@ -168,7 +168,7 @@ $ts = Get-Date -Format 'yyyyMMdd-HHmmss'
 $backup = "$env:USERPROFILE\.ai-shared-backup-$ts"
 New-Item -ItemType Directory -Path $backup -Force | Out-Null
 
-$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai')
+$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai','.agents')
 foreach ($t in $tools) {
     $tp = "$env:USERPROFILE\$t"
     $tb = "$backup\$($t.TrimStart('.'))"
@@ -206,7 +206,7 @@ $SharedSkills = "$env:USERPROFILE\.ai-shared\skills"
 $SharedAgents = "$env:USERPROFILE\.ai-shared\agents"
 $SharedAgentsMd = "$env:USERPROFILE\.ai-shared\AGENTS.md"
 
-$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai')
+$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai','.agents')
 foreach ($t in $tools) {
     $tp = "$env:USERPROFILE\$t"
     
@@ -241,7 +241,7 @@ foreach ($t in $tools) {
 
 ```powershell
 # 1. 联接验证
-$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai')
+$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai','.agents')
 foreach ($t in $tools) {
     $tp = "$env:USERPROFILE\$t"
     $sp = "$tp\skills"; $ap = "$tp\agents"; $mp = "$tp\AGENTS.md"
@@ -284,7 +284,7 @@ Remove-Item $testFile -Force
 # 恢复模式：从备份恢复原始目录
 $backup = "$env:USERPROFILE\.ai-shared-backup-<timestamp>"
 
-$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai')
+$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai','.agents')
 foreach ($t in $tools) {
     $tp = "$env:USERPROFILE\$t"
     $tn = $t.TrimStart('.')
@@ -421,6 +421,66 @@ powershell -ExecutionPolicy Bypass -File "$dir\collect-tool-skills.ps1" -Apply -
 
 若某工具主入口已退化成真实目录，回灌完还应按「阶段 4」重建 Junction（先备份原目录内容），
 否则下次它还会继续自建。
+
+## 日常维护：改内容后的分发校验
+
+阶段 5 是**安装时**的一次性验证。日常往 `.ai-shared` 里改内容（AGENTS.md、agent 定义、skill）之后，
+只需一次轻量校验确认改动真落到了所有工具目录。三步，约 30 秒。
+
+### 1. 硬链接是否还活着
+
+`Edit` / `Write` 工具对硬链接文件是**就地改写**，不破坏链接（2026-09-17 实测：改完 AGENTS.md 链接数不变）。
+但用「另存为」「删除后新建」「复制覆盖」的方式改写会让硬链接**脱钩**成独立副本——之后改动不再同步。
+
+判据只有一条：**链接数掉到 1 就说明已脱钩**，需按「阶段 4」重建硬链接。
+
+```bash
+ls -la "$HOME/.ai-shared/AGENTS.md"   # 第 2 列即链接数
+```
+
+不要拿链接数去对某个固定数字（NTFS 计数可能含 `$HOME` 之外的引用）。要精确枚举时用 `-samefile`：
+
+```bash
+find "$HOME" -name "AGENTS.md" -samefile "$HOME/.ai-shared/AGENTS.md" | sort
+```
+
+### 2. 内容是否同步到每个目录
+
+`skills/`、`agents/` 是 Junction，改 `.ai-shared` 下的文件后各工具**立即可见**，无需分发动作。
+AGENTS.md 是硬链接，改源文件即同步。用一个本次新增的独有文案 grep 全部目标目录，命中数应一致：
+
+```bash
+for d in .claude .codex .cursor .qoder .workbuddy .workbuddy-ai .catpawai .agents; do
+  printf "%-13s %s\n" "$d" "$(grep -c '<本次新增的独有文案>' "$HOME/$d/AGENTS.md")"
+done
+```
+
+再用 md5 交叉比对，确证读到的是同一份文件而非内容恰好相同的独立副本：
+
+```bash
+md5sum "$HOME/.claude/skills/<skill>/SKILL.md" "$HOME/.ai-shared/skills/<skill>/SKILL.md"
+```
+
+### 3. 分发目标清单是否完整
+
+以 `HARDLINK_INVENTORY.md`「一、共享目标目录」为**唯一权威清单**。若扫出清单之外的工具目录，
+且其 `AGENTS.md` 是链接数 1 的独立副本，说明该工具**从未纳入共享方案，收不到任何更新**——
+这是缺陷而非正常状态，应补做链接，或把它显式登记为「有意豁免」。
+
+```bash
+find "$HOME" -maxdepth 2 -name "AGENTS.md" -not -path "*/node_modules/*" \
+  -exec sh -c 'printf "%-42s link=%s md5=%s\n" "$1" \
+    "$(ls -la "$1" | awk "{print \$2}")" "$(md5sum "$1" | cut -c1-8)"' _ {} \;
+```
+
+### 只改 skill 内容时的特别说明
+
+skill 目录走 Junction，**在任意工具目录下编辑 skill 文件，改的都是 `.ai-shared` 里的同一份**
+（2026-09-17 实测：`~/.workbuddy-ai/skills/ai-config-sharing/SKILL.md` 与
+`~/.ai-shared/skills/ai-config-sharing/SKILL.md` md5 完全一致）。
+
+所以这类改动**不需要「分发」动作，但必须在 `.ai-shared` 提交**才纳入版本管理——
+在工具目录里改完，回到 `.ai-shared` 执行 `git status` 就能看到该文件已变更。
 
 ## 完整脚本
 
