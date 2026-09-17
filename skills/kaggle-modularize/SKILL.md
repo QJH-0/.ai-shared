@@ -20,14 +20,14 @@ Split monolithic notebooks into Python modules for development; merge back into 
 - User wants IDE auto-completion, Git diff clarity, and module-level testing
 - Final deliverable must be a single `.ipynb` uploaded to Kaggle
 
-## Relationship to `kaggle-notebookify`
+## Relationship to `kaggle-notebook-to-cloud-jupyter`
 
 | Skill | Direction | Input | Output |
 |-------|-----------|-------|--------|
-| `kaggle-notebookify` | Markdown → Notebook | `.md` file | `.ipynb` |
+| `kaggle-notebook-to-cloud-jupyter` | Local notebook → Cloud JupyterLab | `.ipynb` + modules | cloud-adapted notebook + upload layout |
 | `kaggle-modularize` | Notebook ↔ Modules | large `.ipynb` or `.py` modules | `.py` package + merged `.ipynb` |
 
-They are complementary: `notebookify` creates notebooks from Markdown drafts; `modularize` manages the engineering lifecycle of existing large notebooks.
+They are complementary: `kaggle-notebook-to-cloud-jupyter` moves a working notebook onto rented cloud GPU infrastructure; `modularize` manages the engineering lifecycle of existing large notebooks.
 
 ## Workflow
 

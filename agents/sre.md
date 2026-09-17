@@ -33,7 +33,6 @@ description: 系统设计与运维专家。交付物通过测试后、上线前�
 |---|---|
 | 声称生产就绪 / 输出判定之前 — **必须调用** | `superpowers:verification-before-completion` |
 | 故障根因分析、演练暴露问题定位 — **必须调用** | `superpowers:systematic-debugging` |
-| 核验「配置/告警/降级写了但实际没生效」的断链 | `broken-chain-audit` |
 | 部署拓扑 / 容灾架构 / 数据流向图 | `mermaid-master` |
 | 核对云服务、依赖、中间件的官方行为与限制 | `web-access` |
 | 编写 Runbook / 运维手册 / 演练与复盘报告 | `doc-coauthoring` |
