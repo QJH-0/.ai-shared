@@ -19,15 +19,16 @@
 
 | 路径 | 内容 |
 | --- | --- |
-| `agents\` | 5 个角色定义文件（analyst / coder / researcher / reviewer / tester，见「Agents 路由表」） |
-| `skills\` | 技能库（37+ skills；`superpowers\skills\` 为命名空间子集） |
-| `AGENTS.md` | 通用 AI 助手行为规范（经硬链接分发） |
+| `agents\` | 6 个角色定义文件（analyst / coder / researcher / reviewer / tester / sre，见「Agents 路由表」） |
+| `agents\standards\` | 生产级标准库（非功能基线 / 系统设计 / 高可用与运维 / 反模式 / 生命周期门禁）；经 `agents\` 目录联接自动分发，无需单独建链接 |
+| `skills\` | 技能库（`superpowers\skills\` 为命名空间子集） |
+| `AGENTS.md` | 通用 AI 助手行为规范 + 生产级质量底线（经硬链接分发） |
 | `AI_READ_FIRST.md` | 本文件 — 分发目录入口说明（经硬链接分发） |
 | `HARDLINK_INVENTORY.md` | 完整链接清单与分发状态 |
 
 ## Agents 路由表
 
-5 个角色定义文件的唯一维护源为 `C:\Users\20448\.ai-shared\agents\`。每个定义文件自带完整的职责边界（CAN/CANNOT）、Skills 路由、工作流程、行为规则、输出格式与停止条件——**本表仅保留路由提示，细节以定义文件为准**：
+6 个角色定义文件的唯一维护源为 `C:\Users\20448\.ai-shared\agents\`。每个定义文件自带完整的职责边界（CAN/CANNOT）、Skills 路由、工作流程、行为规则、输出格式与停止条件——**本表仅保留路由提示，细节以定义文件为准**：
 
 | Agent | 定义文件（绝对路径） | 何时委派（路由提示） | 写权限 |
 | --- | --- | --- | --- |
@@ -36,12 +37,28 @@
 | **researcher** | `C:\Users\20448\.ai-shared\agents\researcher.md` | 理解陌生代码、梳理架构、定位实现、生成项目文档、深度技术调研 | ⚠️ 仅调研报告 |
 | **reviewer** | `C:\Users\20448\.ai-shared\agents\reviewer.md` | 代码变更完成后、提交/合并前——多维度审查 + AI 幻觉专项 + 门禁审查报告 | ⚠️ 门禁 + 审查报告 |
 | **tester** | `C:\Users\20448\.ai-shared\agents\tester.md` | 功能实现后验证质量、编写/运行测试、E2E 测试、门禁测试报告 | ✅ 测试文件 + 测试报告 + 门禁报告 |
+| **sre** | `C:\Users\20448\.ai-shared\agents\sre.md` | 交付物通过测试后、上线前——容量与压测复核、容灾与回滚验证、可观测性与应急核验，独立判定 `RELEASE_GATE` | ⚠️ 仅运维文档 + 门禁报告 |
+
+## 生产级标准库路由
+
+`agents\standards\` 是生产级质量基线的唯一维护源，**所有可度量指标只在该目录定义一次**（`AGENTS.md`「元规则」）。索引与场景路由见 `C:\Users\20448\.ai-shared\agents\standards\README.md`：
+
+| 需要什么 | 读哪份 |
+| --- | --- |
+| 服务分级、SLI/SLO/SLA、RTO/RPO、延迟分位、容量与压测倍数、可观测性字段、安全基线、数据生命周期 | `agents\standards\nfr-baseline.md` |
+| 分层边界、契约与版本、扩展点、缓存 / MQ / 分库分表 / 多租户、探针与弹性 | `agents\standards\system-design.md` |
+| 冗余与故障域、容错参数、容灾备份、发布回滚、告警应急、演练复盘 | `agents\standards\resilience-and-ops.md` |
+| 十条反模式与检测方法 | `agents\standards\anti-patterns.md` |
+| 五阶段 DoR / DoD、生产就绪清单、放行判据 | `agents\standards\lifecycle-gates.md` |
+
+两道门禁：`GATE_STATUS`（提交门禁，tester + reviewer 两半合并）与 `RELEASE_GATE`（上线门禁，sre 独立判定）。取值定义的唯一维护源为 `AGENTS.md`「门禁状态定义」，其他文档只引用不重复定义。
 
 ## Agents 与 Skills 维护规则
 
 ### 路径引用规则
 
 - 引用 agent 定义文件时，**必须**写绝对路径 `C:\Users\20448\.ai-shared\agents\<name>.md`
+- 引用标准库文档时，**必须**写 `C:\Users\20448\.ai-shared\agents\standards\<file>.md`；数值与枚举只在标准库定义一次，其余位置一律引用
 - agent 文件中引用 skill 时，**必须**写维护源路径 `C:\Users\20448\.ai-shared\skills\<skill-name>`
 - 带命名空间的 `superpowers:xxx` 技能对应子目录 `C:\Users\20448\.ai-shared\skills\superpowers\skills\xxx`
 - 不得写入 `.claude\skills`、`.claude\agents` 等工具目录路径——这些是分发副本（联接/硬链接），不是维护源
@@ -51,6 +68,7 @@
 - 一切修改在 `C:\Users\20448\.ai-shared\` 进行，由硬链接 / 目录联接自动分发到所有工具目录
 - 禁止在分发副本目录删除链接后重建（会脱钩成独立副本，改动不再同步）
 - 新增 / 修改 agent 定义时遵循统一六段式骨架：**角色边界（CAN/CANNOT）→ Skills 路由 → 工作流程 → 行为规则 → 输出格式 → 停止条件+失败处理**；`description` 写成「一句身份 + 触发时机」的路由提示；约束用行为级而非工具名级
+- 新增标准库文档时，**必须**同步 `agents\standards\README.md` 的文档路由表，并确认未与其他文档重复定义数值或枚举
 - 完整链接清单和分发状态见 `HARDLINK_INVENTORY.md`
 
 ## 更新规则（务必遵守）

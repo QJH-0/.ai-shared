@@ -99,7 +99,15 @@
 
 ## 四、Skills 目录清单
 
-`.ai-shared\skills\` 下的所有 skill 目录（共 37 个）：
+> ⚠️ **需确认**：本节清单与目录实际状态已不一致（核对时间 2026-09-17）。实测 `skills\` 下有 39 个 skill 目录与 6 个非目录条目。差异如下，**在完成重新盘点前，不得以本节作为 skill 存在性或恢复状态的依据**：
+>
+> - 本节列出但目录中已不存在：`algorithmic-art`、`git-nested-repo-backup`、`kaggle-notebookify`
+> - 目录中存在但本节未收录：`agent-definition-writing`、`broken-chain-audit`、`feishu-job-import`、`git-branch-diff-merge`、`kaggle-notebook-to-cloud-jupyter`、`workbuddy-auto-credits`
+> - 本节将文件 `.disable_to_model_invocation_migration.json` 与其他目录并列计数，实为迁移标记文件；同类文件另有 `.model_invocation_to_override_migration.json`、`.user_invocable_only_to_off_migration.json` 未收录
+>
+> 处置建议：逐目录确认「来源 + 恢复状态」两列后整体替换本节（建议用 `find skills -maxdepth 1 -type d` 的实测结果作为底表）。
+
+`.ai-shared\skills\` 下的所有 skill 目录（共 37 个，**清单待重新盘点**）：
 
 | # | Skill 名称 | 来源 | 恢复状态 |
 | --- | --- | --- | --- |
@@ -155,6 +163,7 @@
 | `C:\Users\20448\.ai-shared\skills\.gitignore` | skills 目录的 git 忽略规则 |
 | `C:\Users\20448\.ai-shared\skills\README.md` | skills 目录说明文件 |
 | `C:\Users\20448\.ai-shared\agents\*.md` | agents 目录下的角色定义文件（通过 Junction 共享，无需单独硬链接） |
+| `C:\Users\20448\.ai-shared\agents\standards\*.md` | 生产级标准库（非功能基线 / 系统设计 / 高可用与运维 / 反模式 / 生命周期门禁）；位于 `agents\` 之下，随 Junction 自动分发，无需单独建链接 |
 
 ---
 

@@ -85,8 +85,9 @@ When the user needs multiple agents:
 
 ## Integration with agent_memory
 
-- Read `agent_memory/context.md`, `progress.md`, `bugs.md` before drafting briefs for non-trivial work.
-- After delegation or phase completion, update `progress.md` (and `bugs.md` if new risks found).
+- Read `agent_memory/context.md`, `progress.md`, `backlog.md` before drafting briefs for non-trivial work.
+- After delegation or phase completion, update `progress.md`; record newly found risks as `type=risk` entries in `backlog.md`, each carrying a named owner and an expiry.
+- Each information type has exactly one home file — other files link to it instead of copying content (see `AGENTS.md`「项目上下文管理」).
 
 ## Example (minimal)
 
