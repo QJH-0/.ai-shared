@@ -5,7 +5,8 @@ description: >-
   skills/agents/AGENTS.md 配置。通过 Windows 目录联接（Junction）和硬链接（HardLink）
   实现单点维护、多工具共享。触发场景："共享 skills"、"统一 AI 配置"、"skills 同步"、
   "Junction 联接"、"AI 工具配置合并"、"hardlink AGENTS.md"、"共享 agents"、
-  "有工具在自己目录自建了 skills"、"把自建 skill 同步回 .ai-shared"。
+  "有工具在自己目录自建了 skills"、"把自建 skill 同步回 .ai-shared"、
+  "按当前状态更新 skills 列表"、"skill 清单盘点"、"花名册对账"、"清理悬空引用"。
   适用于 Windows 环境，需 PowerShell 执行。
 ---
 
@@ -481,6 +482,68 @@ skill 目录走 Junction，**在任意工具目录下编辑 skill 文件，改�
 
 所以这类改动**不需要「分发」动作，但必须在 `.ai-shared` 提交**才纳入版本管理——
 在工具目录里改完，回到 `.ai-shared` 执行 `git status` 就能看到该文件已变更。
+
+## 清单盘点：花名册与实测目录对账
+
+### 为什么必须做
+
+清单文件是**手工维护的副本**，目录才是事实。两者长期不同步时会静默腐烂——2026-09-17 实测：`skills/README.md` 记载 31 个 skill、`HARDLINK_INVENTORY.md` §四 记载 37 个且自标「需确认」，实际为 36 个；同时存在 3 处指向已删除 skill 的悬空引用（`agents/sre.md`、`skills/kaggle-modularize/SKILL.md`）。
+
+### 铁律：花名册只有一个维护源
+
+- 花名册（名称 / 说明 / 来源 / 待恢复项）**只在 `skills/README.md` 维护**
+- `HARDLINK_INVENTORY.md` 只保留**链接治理结论**（数量、来源分布、待恢复项、复核命令），**禁止**复制花名册
+- 同一份清单出现在两个文件即视为缺陷，必须立即删副本改为链接
+
+### 三步对账
+
+```bash
+cd ~/.ai-shared
+
+# 1. 实测底表（以目录为准，排除 .system 与迁移标记文件）
+find skills -maxdepth 1 -mindepth 1 -type d ! -name ".system" -printf "%f\n" | sort > /tmp/dirs.txt
+
+# 2. 从花名册提取（表格行形如 `| 1 | \`skill-name\` | 说明 | 来源 |`）
+grep -oP '^\| \d+ \| `\K[a-z0-9-]+(?=`)' skills/README.md | sort > /tmp/roster.txt
+
+# 3. 对账：无输出即一致；有输出即缺陷
+diff /tmp/roster.txt /tmp/dirs.txt
+```
+
+### 悬空引用清理（易漏，必查）
+
+清单变了**必须**全仓 grep 已消失的 skill 名。漏查会让 agent 路由到不存在的 skill：
+
+```bash
+# 对每个已消失的 skill 名执行；注意排除 .git/、记忆日志与第三方 skill 内部
+for n in <已消失的skill名...>; do
+  grep -rn "$n" --include="*.md" --include="*.json" --include="*.py" . \
+    | grep -v "^./.git/\|^./.workbuddy-ai/memory/\|^./skills/<第三方skill>/"
+done
+```
+
+重点检查范围：
+
+| 位置 | 说明 |
+|------|------|
+| `agents/*.md` 的 **Skills 路由表** | 最高风险：agent 会按表调用，指向不存在的 skill 会直接失效 |
+| 其他 skill 的 `SKILL.md` 交叉引用 | 常见于「Relationship to xxx」类小节 |
+| `HARDLINK_INVENTORY.md` | §六 恢复历史属历史记录，可保留；§四 / §七 必须同步 |
+
+> 删掉引用所属的整块内容（如整个「Relationship to」小节），不要只删一个词——残留的半句话同样是指向不存在 skill 的死引用。
+
+### 来源分类核验
+
+| 判据 | 分类 | 来源取值 |
+|------|------|----------|
+| 目录下存在 `.git` | 独立克隆 | **以 `git remote get-url origin` 实测为准** |
+| 无 `.git` 但被主仓库跟踪 | 主仓库维护 | 主仓库（社区来源已展平者另注） |
+
+> ⚠️ **不要照抄文档里记的 owner/repo**。2026-09-17 实测发现两处记错：`humanizer-zh` 实际为 `op7418/Humanizer-zh`（文档记为 `deedeekong07-alt/...`）、`repo-wiki` 实际为 `devin2255/repo-wiki-skill`（文档记为 `dark4scope/...`）。
+
+### 提交
+
+盘点结果按「清单重建」与「废弃 skill 移除 + 悬空引用清理」拆成两个聚焦提交，便于单独回退。
 
 ## 完整脚本
 
