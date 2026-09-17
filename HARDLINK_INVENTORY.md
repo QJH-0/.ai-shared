@@ -1,7 +1,7 @@
 # 硬链接 / 目录联接清单
 
 > 本文件记录 C:\Users\20448\.ai-shared 作为唯一维护源，向各 AI 工具配置目录分发的所有链接。
-> 更新时间：2026-09-14（新增 `.workbuddy-ai` 分发目标）
+> 更新时间：2026-09-17（重新盘点 skills 清单，花名册移交 `skills\README.md` 维护）
 
 ---
 
@@ -97,57 +97,14 @@
 
 ---
 
-## 四、Skills 目录清单
+## 四、Skills 目录
 
-> ⚠️ **需确认**：本节清单与目录实际状态已不一致（核对时间 2026-09-17）。实测 `skills\` 下有 39 个 skill 目录与 6 个非目录条目。差异如下，**在完成重新盘点前，不得以本节作为 skill 存在性或恢复状态的依据**：
->
-> - 本节列出但目录中已不存在：`algorithmic-art`、`git-nested-repo-backup`、`kaggle-notebookify`
-> - 目录中存在但本节未收录：`agent-definition-writing`、`broken-chain-audit`、`feishu-job-import`、`git-branch-diff-merge`、`kaggle-notebook-to-cloud-jupyter`、`workbuddy-auto-credits`
-> - 本节将文件 `.disable_to_model_invocation_migration.json` 与其他目录并列计数，实为迁移标记文件；同类文件另有 `.model_invocation_to_override_migration.json`、`.user_invocable_only_to_off_migration.json` 未收录
->
-> 处置建议：逐目录确认「来源 + 恢复状态」两列后整体替换本节（建议用 `find skills -maxdepth 1 -type d` 的实测结果作为底表）。
+skill 花名册的**唯一维护源为 `skills\README.md`**（含名称、说明、来源、待恢复项），本节不再重复列举，只记录与链接治理相关的结论。
 
-`.ai-shared\skills\` 下的所有 skill 目录（共 37 个，**清单待重新盘点**）：
-
-| # | Skill 名称 | 来源 | 恢复状态 |
-| --- | --- | --- | --- |
-| 1 | `ai-code-review` | git 跟踪 | ✅ 完整 |
-| 2 | `ai-config-sharing` | git 跟踪 | ✅ 完整 |
-| 3 | `algorithmic-art` | git 跟踪 | ✅ 完整 |
-| 4 | `arxiv-paper-downloader` | git 跟踪 | ✅ 完整 |
-| 5 | `awesome-ai-research-writing` | git 跟踪 | ✅ 完整 |
-| 6 | `browser-automation` | git 跟踪 | ✅ 完整 |
-| 7 | `claude-deep-research-skill` | GitHub 克隆（199-biotechnologies/claude-deep-research-skill） | ✅ 已恢复 |
-| 8 | `doc-coauthoring` | git 跟踪 | ✅ 完整 |
-| 9 | `frontend-design` | git 跟踪 | ✅ 完整 |
-| 10 | `git-commit` | git 跟踪 | ✅ 完整 |
-| 11 | `git-nested-repo-backup` | 原始来源未知 | ⚠️ 占位文件，需手动恢复 |
-| 12 | `humanizer-zh` | GitHub 克隆（op7418/Humanizer-zh） | ✅ 已恢复 |
-| 13 | `kaggle-modularize` | git 跟踪 | ✅ 完整 |
-| 14 | `kaggle-notebookify` | git 跟踪 | ✅ 完整 |
-| 15 | `markitdown` | git 跟踪 | ✅ 完整 |
-| 16 | `mermaid-master` | git 跟踪 | ✅ 完整 |
-| 17 | `model-architecture-diagram` | 原始来源未知 | ⚠️ 占位文件，需手动恢复 |
-| 18 | `morph-ppt` | git 跟踪 | ✅ 完整 |
-| 19 | `morph-ppt-3d` | git 跟踪 | ✅ 完整 |
-| 20 | `multi-agent` | git 跟踪 | ✅ 完整 |
-| 21 | `nature-skills` | GitHub 克隆（Yuan1z0825/nature-skills） | ✅ 已恢复 |
-| 22 | `officecli` | git 跟踪 | ✅ 完整 |
-| 23 | `officecli-academic-paper` | git 跟踪 | ✅ 完整 |
-| 24 | `officecli-data-dashboard` | git 跟踪 | ✅ 完整 |
-| 25 | `officecli-docx` | git 跟踪 | ✅ 完整 |
-| 26 | `officecli-financial-model` | git 跟踪 | ✅ 完整 |
-| 27 | `officecli-pitch-deck` | git 跟踪 | ✅ 完整 |
-| 28 | `officecli-pptx` | git 跟踪 | ✅ 完整 |
-| 29 | `officecli-word-form` | git 跟踪 | ✅ 完整 |
-| 30 | `officecli-xlsx` | git 跟踪 | ✅ 完整 |
-| 31 | `repo-wiki` | GitHub 克隆（devin2255/repo-wiki-skill） | ✅ 已恢复 |
-| 32 | `resume-tech-interview-decompose` | 本地文件（未入 git） | ✅ 完整 |
-| 33 | `skill-creator` | git 跟踪 | ✅ 完整 |
-| 34 | `superpowers` | GitHub 克隆（obra/superpowers） | ✅ 已恢复 |
-| 35 | `web-access` | GitHub 克隆（eze-is/web-access） | ✅ 已恢复 |
-| 36 | `.system` | Codex 内部目录 | ⚠️ 空占位，内容未恢复 |
-| 37 | `.disable_to_model_invocation_migration.json` | Codex 配置 | ⚠️ 重建为默认值 |
+- 实测（2026-09-17）：`skills\` 下有 **36 个 skill 目录** + `.system`（空目录），另有 6 个非目录条目（`.gitignore`、`README.md` 与 4 个迁移标记 JSON）
+- 来源分布：GitHub 克隆 6 个（各带独立 `.git`，由 `.gitignore` 排除）；主仓库跟踪 30 个
+- 待恢复：`model-architecture-diagram`（占位文件，`status: NEEDS_RECOVERY`）
+- 复核命令：`find skills -maxdepth 1 -type d | sort`，与 `skills\README.md` 清单逐行核对
 
 ---
 
@@ -177,6 +134,7 @@
 | 2026-08-29 | 恢复 .disable_to_model_invocation_migration.json | 重建为默认值 |
 | 2026-08-29 | 创建 .system 目录占位 | 空目录，原始内容未恢复 |
 | 2026-09-14 | 新增 `.workbuddy-ai` 分发目标 | `skills\`、`agents\` 建 Junction；`AGENTS.md`、`AI_READ_FIRST.md` 建 HardLink。原有真实 `skills\`（14 个文件）备份至 `~\.ai-shared-backup-20260914-164652\workbuddy-ai\`。验证：写入穿透 OK、8 个工具 MD5 一致 |
+| 2026-09-17 | 重新盘点 skills 清单 | 实测 36 个 skill 目录；移除 `agent-definition-writing`、`broken-chain-audit`（工作区已删除，用户确认按现状处理）；花名册唯一维护源改为 `skills\README.md`，本节仅保留链接治理结论；同步清理 `agents\sre.md` 与 `skills\kaggle-modularize\SKILL.md` 的悬空 skill 引用 |
 
 ---
 
@@ -184,10 +142,9 @@
 
 以下内容无法自动恢复，需要用户手动处理：
 
-1. **`git-nested-repo-backup` skill** — 原始 SKILL.md 内容丢失，当前为占位文件。需要用户提供原始来源或备份。
-2. **`model-architecture-diagram` skill** — 同上，原始内容丢失，当前为占位文件。
-3. **`.system` 目录** — Codex 内部系统 skill 目录，原始内容丢失，当前为空占位目录。
-4. **`.disable_to_model_invocation_migration.json`** — 已重建为默认值，可能与原始内容不同。
+1. **`model-architecture-diagram` skill** — 原始 SKILL.md 内容丢失，当前为占位文件。需要用户提供原始来源或备份。
+2. **`.system` 目录** — Codex 内部系统 skill 目录，原始内容丢失，当前为空目录。
+3. **`.disable_to_model_invocation_migration.json`** — 已重建为默认值，可能与原始内容不同。
 
 ---
 
