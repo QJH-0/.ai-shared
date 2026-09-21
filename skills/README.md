@@ -14,7 +14,7 @@
 | 2 | `ai-config-sharing` | 多 AI 工具 skills/agents/AGENTS.md 配置统一管理（Junction + HardLink 单点维护） | 主仓库 |
 | 3 | `arxiv-paper-downloader` | arXiv 论文批量下载，逐篇用首页标题校验并纠正错误 ID | 主仓库 |
 | 4 | `awesome-ai-research-writing` | 中英双语学术写作工具包：起草、翻译、润色、缩写、扩写、逻辑检查 | 主仓库（社区来源已展平） |
-| 5 | `browser-automation` | 统一浏览器自动化套件：Playwright 网页操作 / E2E 测试 / Electron 桌面探索 | 主仓库（多来源合并） |
+| 5 | `browser-automation` | 统一浏览器自动化套件：Playwright 网页操作 / Web 应用可复跑 E2E 测试（不含 Electron 桌面与真机） | 主仓库（多来源合并） |
 | 6 | `claude-deep-research-skill` | 多源深度研究、引用追踪、证据留存、结构化报告 | GitHub: 199-biotechnologies/claude-deep-research-skill |
 | 7 | `doc-coauthoring` | 文档协作写作工作流：文档、提案、技术规格、决策文档 | 主仓库 |
 | 8 | `feishu-job-import` | 秋招投递管理：飞书岗位汇总表 → 自建投递管理表批量补全 / 新建 | 主仓库 |

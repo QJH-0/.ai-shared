@@ -9,7 +9,7 @@ description: "Use when the task requires automating a real browser from the term
 Drive a real browser from the terminal using `playwright cli`. Prefer the bundled wrapper script so the CLI works even when Playwright is not globally installed.
 Treat this skill as CLI-first automation. Do not pivot to `@playwright/test` unless the user explicitly asks for test files.
 
-> **Playwright v1.62.0+ change**: Since v1.62.0 (2026-07-24), `playwright-cli` is bundled in the main `playwright` package and invoked via `npx playwright cli`. The standalone `@playwright/cli` package (last version 0.1.18) is deprecated. This skill has been updated to use the new built-in CLI.
+> **Playwright v1.62.0+ change**: Since v1.62.0 (2026-07-24), `playwright-cli` is bundled in the main `playwright` package and invoked via `npx playwright cli`. The standalone `@playwright/cli` package is deprecated — never install or reference it, and do not track its version numbers (they change without notice and are irrelevant now). Use the built-in CLI only.
 
 ## Prerequisite check (required)
 
