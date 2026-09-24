@@ -118,6 +118,22 @@
 | `.user_invocable_only_to_off_migration.json` | Codex 迁移标记 |
 | `_bm_skillid_migration.json` | SkillsHub 本地元数据（`skills/.gitignore` 排除） |
 
+## 已知重名与命名不一致（加载说明）
+
+以下情况已逐项核对过，属**预期状态**，不是缺陷。列在此处，避免下次审查重复排查。
+
+| 情况 | 说明 | 处置 |
+|------|------|------|
+| `frontend-design` 重名 | 顶层 `SKILL.md` 是**容器索引**（正文写「This is a skill collection」并列出子技能），`skills/frontend-design/SKILL.md` 才是正文；第三个 `ui-ux-data/` 即 `ui-ux-pro-max` | 保持现状，**加载以顶层为准**；嵌套路径非标准发现路径 |
+| `skill-creator` 重名 | `.system/skill-creator` 与顶层 `skills/skill-creator` 同名 | `.system` 由 Codex 内置、随 Junction 分发且被 `.gitignore` 排除，**不改**；创建 / 改进 / 评测 skill 以顶层为准 |
+| `fireworks-tech-graph` 重名 | 克隆内含上游发布目录 `skills/fireworks-tech-graph/`，与本体重名，重复 140 文件 / 9.0MB | 处置方案未定，见 `.agent_docs/audits/2026-09-24-skills-audit.md` §2.1 |
+| `claude-deep-research-skill` 命名不一致 | 目录名与 frontmatter `name: deep-research` 不一致 | **以目录名 `claude-deep-research-skill` 为准**（`agents/analyst.md`、`agents/researcher.md` 均按此引用）；该 skill 是干净克隆，未改 `name:` 以免 `git pull` 冲突 |
+| `web-access` 触发声明过宽 | 其 description 声称「所有联网操作必须通过此 skill 处理」，与 `browser-automation` 重叠 | 边界已在**主仓库侧**的 `browser-automation` description 中写明（搜索 / 登录态抓取 / 社交媒体 → `web-access`）；`web-access` 是干净克隆，未改动以免 `git pull` 冲突 |
+
+### 已知功能重叠（保留，未合并）
+
+以下重叠已确认，属**有意保留**：`create-skill` 的能力是 `skill-creator` 的真子集，但保留以维持 `create-hook` / `create-rule` / `create-skill` / `create-subagent` 四件套的对称性；`officecli` 基座与 `officecli-docx/xlsx/pptx` 的触发边界已写入各自 description。完整清单与处置建议见 `.agent_docs/audits/2026-09-24-skills-audit.md`。
+
 ## 待恢复项
 
 当前无待恢复项。

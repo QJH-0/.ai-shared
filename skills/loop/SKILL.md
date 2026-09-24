@@ -2,7 +2,7 @@
 name: loop
 description: >-
   Run a prompt or skill in this session on a recurring or variable interval
-  (e.g. /loop 5m /foo).
+  (e.g. /loop 5m /foo). 边界：仅会话内临时循环；需要跨会话持久化的定时任务走 automate。
 disabled-environments:
   - cloud
 ---

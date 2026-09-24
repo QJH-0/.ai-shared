@@ -1,6 +1,6 @@
 ---
 name: code-to-interview-docs
-description: 按最新代码重写项目 README 与简历面试准备文档。当用户说「根据最新代码重写 readme / 简历文档 / 面试准备」「同步项目文档到 D:\01resume」时使用。核心是先用实测数字和源码事实替换过时表述，再重写，避免文档与代码分叉。
+description: 按最新代码重写项目 README 与简历面试准备文档。当用户说「根据最新代码重写 readme / 简历文档 / 面试准备」「同步项目文档到 D:\01resume」时使用。核心是先用实测数字和源码事实替换过时表述，再重写，避免文档与代码分叉。边界：输入是**项目代码**；若输入是简历本身的技术点，用 resume-tech-interview-decompose。
 agent_created: true
 ---
 

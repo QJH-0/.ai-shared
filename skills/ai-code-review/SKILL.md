@@ -1,6 +1,6 @@
 ---
 name: ai-code-review
-description: Reviews AI-generated code for hallucinated APIs/dependencies, security vulnerabilities, logic errors, supply chain risks, and maintainability issues. Use when reviewing code from LLMs, Copilot, Cursor, Claude, Codex, or any AI code generator. Triggers on "review AI code", "check generated code", "audit AI output", "AI代码审查", "AI生成代码审查", "审查AI代码", "代码审查", "安全审查", "简化代码".
+description: Reviews AI-generated code for hallucinated APIs/dependencies, security vulnerabilities, logic errors, supply chain risks, and maintainability issues. Use when reviewing code from LLMs, Copilot, Cursor, Claude, Codex, or any AI code generator. Triggers on "review AI code", "check generated code", "audit AI output", "AI代码审查", "AI生成代码审查", "审查AI代码", "代码审查", "安全审查", "简化代码". 边界：本 skill 提供审查方法论本身；需要 Bugbot / Security Review 子代理入口时走 review、review-bugbot、review-security，不在本 skill 内再开子代理。
 ---
 
 # AI生成代码专项审查技能

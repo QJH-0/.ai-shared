@@ -5,6 +5,7 @@ description: >
   网页操作（导航/填表/截图/数据提取/UI 流程调试）→ Playwright："打开网页"、"填表"、"截图"、"抓取数据"。
   可复跑 Web 测试（E2E/功能验证/需托管被测服务器）→ Webapp Testing："测试这个网页"、"E2E测试"、"验证前端功能"。
   合并自: playwright, webapp-testing
+  边界：搜索、登录态抓取、社交媒体内容抓取（小红书/微博/推特等）归 web-access；本 skill 只做页面操作与可复跑测试，不承接通用联网检索。
 metadata:
   version: "2.4.0"
   category: browser-automation
