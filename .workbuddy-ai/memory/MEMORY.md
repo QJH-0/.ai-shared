@@ -24,3 +24,16 @@
 ## 硬链接改动后必须复核
 
 修改经硬链接分发的文件（`AGENTS.md`、`AI_READ_FIRST.md`）后，用 `stat -c %h <file>` 复核链接数未下降；`AGENTS.md` 应为 **9**。降为 1 说明副本已脱钩，须按 `HARDLINK_INVENTORY.md` §八 重建。
+
+## GitHub 克隆 skill 的本地改动状态（2026-09-24 实测）
+
+`skills/README.md`「更新方法」里写「7 个克隆都 `git pull --ff-only`」是**错的**——7 个克隆里 4 个有本地改动，pull 会失败或覆盖成果：
+
+| 克隆 | 状态 | 说明 |
+|---|---|---|
+| `web-access`、`claude-deep-research-skill`、`humanizer-zh` | ✅ 干净 | 可直接 pull |
+| `superpowers`、`nature-skills` | 新增根 `SKILL.md`（上游无此文件） | 安全，不与 pull 冲突 |
+| `repo-wiki` | **展平**：删掉上游跟踪的 `repo-wiki/SKILL.md`，内容提到根目录 | 上游更新该路径时会冲突 |
+| `fireworks-tech-graph` | **本地功能扩展**：`body` 多行节点，CHANGELOG 自标 `Local extension — 2026-09-23 (not upstream)`，2 文件 +31 行 | **禁止 pull 覆盖**，否则丢失扩展 |
+
+**推论（可复用）**：遇到「第三方克隆 skill 需要修改」时，优先把改动落到**主仓库侧的对端 skill** 上，而不是改克隆——改克隆会让 `git pull` 产生摩擦。`web-access` 的触发边界就是这样处理的（改 `browser-automation`）。

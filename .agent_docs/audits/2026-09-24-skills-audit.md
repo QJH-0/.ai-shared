@@ -158,3 +158,51 @@
 - `claude-deep-research-skill` 的 `name:` 不改，以目录名为准并文档化
 
 两条均已在 `skills/README.md` 记录，下次审查不必重复排查。
+
+---
+
+## 十、待决策清单与推荐
+
+覆盖全部遗留问题。**加粗**为推荐项。
+
+### 10.1 重复与去重
+
+| # | 问题 | 推荐 | 理由 |
+|---|---|---|---|
+| 1 | `fireworks-tech-graph` 内嵌副本（140 文件 / 9.0MB） | **A 不动，登记为预期** | 已确认该副本是**上游跟踪内容**（`skills/fireworks-tech-graph/SKILL.md` 在 HEAD 中）。删除会留下永久脏路径，且与 §10.3 的本地扩展叠加，风险高于 9MB 的收益 |
+| 2 | `create-skill` 与 `skill-creator` 能力子集重叠 | **保留，但改 description 划边界** | 保留可维持 `create-*` 四件套对称性；只需消除抢触发（写明「仅讲 SKILL.md 结构，创建/改进/评测用 skill-creator」） |
+| 3 | `officecli` 基座 ↔ `officecli-docx/xlsx/pptx` | ✅ 已改 description | — |
+| 4 | `review` / `review-bugbot` / `review-security` | **不动** | 已确认 `review` 是斜杠命令路由器（`disable-model-invocation: true`），非重复 |
+
+### 10.2 命名与触发边界
+
+| # | 问题 | 推荐 | 理由 |
+|---|---|---|---|
+| 5 | `claude-deep-research-skill` 目录名 vs `name: deep-research` | **保持现状（已文档化）** | 干净克隆；目录名与所有引用一致，实际不影响加载 |
+| 6 | `web-access` 触发声明过宽 | **保持现状（已由主仓库侧承担边界）** | 干净克隆；`browser-automation` 已写正向路由规则 |
+| 7 | `frontend-design` / `skill-creator` 重名 | ✅ 已文档化 | — |
+
+### 10.3 克隆维护（本轮新发现，风险最高）
+
+| # | 问题 | 推荐 | 理由 |
+|---|---|---|---|
+| 8 | `repo-wiki` 被**展平**：删除了上游跟踪的 `repo-wiki/SKILL.md`，把内容提到根目录 | **文档化 + 修正 README 更新方法** | 上游若更新 `repo-wiki/*`，`git pull` 会冲突或把展平结果改回去 |
+| 9 | `fireworks-tech-graph` 含**本地功能扩展**（`body` 多行节点，CHANGELOG 自标 `Local extension — 2026-09-23 (not upstream)`，改动 2 文件 / +31 行） | **登记为「禁止 pull 覆盖」并标注扩展点** | 这是有意的工作成果，被 `git pull` 覆盖会直接丢失 |
+| 10 | `superpowers` / `nature-skills` 新增根 `SKILL.md` | **不动（安全）** | 已确认上游无根 `SKILL.md`，新增文件不与 pull 冲突 |
+| 11 | `skills/README.md` 的「更新方法」写「7 个克隆都 `git pull --ff-only`」 | **按克隆分类改写** | 该指令对 4 个克隆是错的：干净的 3 个可直接 pull，4 个有本地改动（展平 / 本地扩展）需先备份 |
+
+### 10.4 体积与轻度重叠（建议不动）
+
+| # | 问题 | 推荐 | 理由 |
+|---|---|---|---|
+| 12 | `markitdown/packages/` 24MB 内嵌依赖 | **不动** | 为离线可用而内嵌；改为安装时获取会牺牲离线能力 |
+| 13 | `nature-skills` 78MB | **不动** | 上游合集自带数据 |
+| 14 | 轻度重叠 5 组：`plan-premise-verification`↔`framework-migration-verification`；`doc-coauthoring`↔`awesome-ai-research-writing`↔`humanizer-zh`；`multi-agent`↔`superpowers:dispatching-parallel-agents`；`arxiv-paper-downloader`↔`nature-skills:nature-downloader`；`mermaid-master`↔`fireworks-tech-graph` | **不动** | 域不同，或构成流水线（Mermaid → SVG 重绘）；强合并收益低且破坏上游 |
+| 15 | 9 个 skill 的 description 用双引号包裹（风格不统一） | **不动** | 已验证 YAML 合法，纯风格问题 |
+| 16 | 是否把本次审查方法沉淀为 skill | **不沉淀** | 方法依赖本仓目录约定，复用场景有限；报告与日志已留存 |
+
+### 10.5 执行顺序建议
+
+1. §10.3（克隆维护）—— 风险最高，先做文档修正，避免后续误操作丢代码
+2. §10.1 #2（`create-skill` 划边界）—— 一句话改动
+3. §10.1 #1、§10.2、§10.4 —— 按推荐保持不动
