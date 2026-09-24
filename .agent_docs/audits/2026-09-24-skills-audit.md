@@ -135,3 +135,26 @@
 4. **`officecli` 边界**：属于 description 重写，不影响功能，可最后做。
 
 > 本报告只做识别，**未删除或修改任何文件**。删除动作需用户明确下令后执行，且按 `AGENTS.md`「文件删除处理」先移入 `.trash/`。
+
+---
+
+## 九、处置进度
+
+用户选择「只做零风险项」，已执行（提交 `47a7c6b`）：
+
+| 项 | 状态 |
+|---|---|
+| §四 触发边界 5 组 | ✅ 已改 description：`browser-automation`、`officecli`、`ai-code-review`、`loop`、`code-to-interview-docs` |
+| §五 3（frontend-design 重名） | ✅ 已写入 `skills/README.md`「已知重名与命名不一致」 |
+| §五 4（skill-creator 重名） | ✅ 同上 |
+| §五 1（claude-deep-research-skill 命名） | ⚠️ 仅文档化（以目录名为准）。未改其 `name:`——该 skill 是干净克隆，改文件会让 `git pull --ff-only` 失败 |
+| §五 2（fireworks-tech-graph 重名） | ⏸ 未动，方案 A/B/C 待定 |
+| §三 3.1（`create-skill` 去重） | ⏸ 未动，用户选择保留四件套对称性 |
+| §三 3.2（`officecli` 基座） | ✅ 边界已写入 description（不删） |
+| §五 5、6（markitdown / nature-skills 体积） | ⏸ 非缺陷，不动 |
+
+**执行时的设计取舍**：`web-access` 与 `claude-deep-research-skill` 都是**干净克隆**（`git status` 本地改动 0 项），直接改其 `SKILL.md` 会让后续 `git pull --ff-only` 失败。因此：
+- `web-access` 的过宽触发声明不改，改由**主仓库侧**的 `browser-automation` description 承担边界（正向路由规则，信号更强）
+- `claude-deep-research-skill` 的 `name:` 不改，以目录名为准并文档化
+
+两条均已在 `skills/README.md` 记录，下次审查不必重复排查。
