@@ -28,6 +28,8 @@ agent_created: true
 | 节点文本预算 = `width − 24`；宽度用 `fireworks_geometry.estimate_text_width` 反算 | `render_rect_node` 的 `title_budget` |
 | 边按**契约声明顺序**依次定线，先声明的先占走廊 | `routing_order` = 声明序 |
 | 打分 `score = length + bends×22 + crossings×640 + 端口轴不符×180`，走廊提示只值 −28 | `route_score` |
+| 走廊提示（`corridor_x/y`）只是**打分偏好**：可见性网格的候选线来自「障碍边界 ±10」，渲染器可能选一条紧贴目标节点边界的走廊 | `visibility_grid_route` |
+| 显式 `route_points: [[x, y], ...]` 是**硬约束**：连接被保留、正交性校验、不得压障碍、不得出画布 | `build_orthogonal_route` |
 | 同一 `(节点, 端口)` 上 n 条边会被摊开 `min(18, (span−24)/(n−1))` px | `prepare_arrows` |
 | 标题/副标题画在画布顶部**固定位置**（副标题基线 y=82），且**不在障碍表里** | 见 §四 |
 
@@ -64,6 +66,13 @@ min_label_clearance = 4     min_segment_length = 16
    把标签缩到「concat 注入」这种量级（bounds ≈ 87px），旁路立刻走回上方浅弧。长解释放节点正文里。
 6. **同排高度不等就按中心对齐** —— 一律顶对齐会让水平连线的端口差出半个高度差，几像素的落差就是一条微段
    （`emit_centered` 负责这件事）。注意与第 3 条配合：需要长旁路的行用统一带高，其余行才用中心对齐。
+7. **走廊提示压不住「贴边」时，用 `route_points` 钉死** —— 跨多带的虚线旁路最容易踩：
+   `corridor_y` 只值 −28 分，渲染器在可见性网格上仍可能挑一条紧贴目标节点底边的走廊，
+   于是「走廊 → 端口」那一小截只剩 15.5px（`EDGE_MICRO_SEGMENT:xx=15.5>16.0`）。
+   诊断要点：把 `corridor` 系数从 0.35 扫到 0.85 报错值**一字不变** ⇒ 提示根本没被采纳，别再调系数。
+   修法：给该边加 `route_points=[[lane_x, lane_y]]`（一个点即可），把走廊钉到带间正中；
+   `Figure.edge(**kw)` 会原样透传该字段，不必改 `fwg_layout`。
+   顺带：给节点批量加正文行（如参数量）会让节点变高变宽、走廊相对位置全变，**加完必须重跑两道门**。
 
 ## 四、构图门禁查不到的三类缺陷（必须自己防）
 
@@ -101,18 +110,35 @@ min_label_clearance = 4     min_segment_length = 16
 - `panel_pad_for`：把容器左内边距顶到标题头障碍右侧（顶部进线的容器才需要）。
 - `flow_color`：从渲染器样式表取 flow 色，图例与边色同源。
 - `CONTAINER_TOP_MIN`：容器顶下界。
-- `Figure.edge`：显式写 `color`，并支持 `dashed` / `corridor_x` / `corridor_y`。
+- `Figure.edge`：显式写 `color`，并支持 `dashed` / `corridor_x` / `corridor_y` / `route_points`（`**kw` 透传）。
 - `render_and_check`：渲染 + 5 项 check + 读排版报告，一行拿到 `text=完整/截断` 与各项 ok。
+- `export_png(out_dir, names)`：把渲染出的 SVG 导成 PNG（node + sharp，见 §七）。与 `render_and_check`
+  在同一步调用，保证 SVG/PNG 永远同批；放在共享模块里，多套图的 build 脚本共用一份实现。
 
-## 七、PNG 导出（本机无 cairo，用浏览器通道）
+## 七、PNG 导出（本机无 cairo / 无 Chrome 时）
 
-`fireworks.py export-png` 依赖 cairo；改用 `scripts/svg2png.js`（Puppeteer + 系统 Chrome，2× deviceScaleFactor）：
+`fireworks.py export-png` 只认 cairosvg 或 rsvg-convert，本机两个都缺。两条可用路线：
+
+**A. node + sharp（推荐，已实测）** —— sharp 自带 libvips + resvg，`npm install sharp` 一次即可，
+不需 Chrome、不与 Python 环境耦合：
+
+```js
+// sharp(svgBuffer, {density: 144}).png().toFile(png)
+// sharp 默认把 SVG 的 px 单位当 1:1（density 72），故 144 = @2x。
+// 论文/PPT 插图靠这个像素密度，别图省体积调低（96 会掉到 1.33×）。
+NODE_PATH="<node-workspace>/node_modules" node export_png.js "<目标目录>" [文件名...]
+```
+
+**B. `scripts/svg2png.js`（Puppeteer + 系统 Chrome，2× deviceScaleFactor）** —— 需要 node_modules 里有
+Puppeteer 且本机有 Chrome；本机当前都没有，故未采用：
 
 ```bash
-NODE_PATH="<node-workspace>/node_modules" \
-FIREWORKS_PYTHON="<可用解释器>" \
+NODE_PATH="<node-workspace>/node_modules" FIREWORKS_PYTHON="<可用解释器>" \
 node scripts/svg2png.js "<目标目录的 Windows 路径>"
 ```
 
-两个坑：目录参数必须是 **Windows 风格路径**（Git Bash 的 `/d/...` 会被解析成 `D:\d\...` → ENOENT）；
-必须设 `FIREWORKS_PYTHON`（默认 `python3` 可能不存在）。脚本会处理目录下**所有** `.svg`。
+坑：目录参数必须是 **Windows 风格路径**（Git Bash 的 `/d/...` 会被解析成 `D:\d\...` → ENOENT）；
+走 B 必须设 `FIREWORKS_PYTHON`（默认 `python3` 可能不存在）。
+
+**把导出并进生成脚本**（渲染完顺手导），否则改图后 SVG 更新而 PNG 停在旧版，
+插进论文/PPT 的是过期图 —— 这个错很难自查。参考实现见项目 `模型结构图重绘/spexplus/export_png.js`。

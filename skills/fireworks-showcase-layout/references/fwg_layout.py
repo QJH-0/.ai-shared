@@ -22,7 +22,10 @@
 
 import importlib.util
 import math
+import os
 import pathlib
+import shutil
+import subprocess
 import sys
 
 SKILL_ROOT = pathlib.Path(r"C:\Users\20448\.ai-shared\skills\fireworks-tech-graph")
@@ -469,6 +472,33 @@ def write(fig, out_dir, width, height, legend_xy, footer_text):
     path = pathlib.Path(out_dir) / f"{fig.name}.json"
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
     return path, data
+
+
+def export_png(out_dir, names):
+    """把 out_dir 下的 SVG 导成 PNG（node + sharp，与本目录的 export_png.js 同源）。
+
+    渲染器自带的 `fireworks.py export-png` 只认 cairosvg 或 rsvg-convert，本机两缺；
+    sharp 自带 libvips + resvg，装一次即可用，且不与 Python 环境耦合。
+    NODE_PATH 默认走 managed node workspace，环境变量可覆盖。
+
+    导出必须跟 render 同步跑，否则改图后 SVG 已更新而 PNG 停在旧版，
+    插进论文/PPT 的会是过期图，且这种错很难自查。
+    """
+    node = shutil.which("node")
+    if not node:
+        print("PNG 未导出：找不到 node")
+        return
+    modules = os.environ.get("NODE_PATH") or str(
+        pathlib.Path.home() / ".workbuddy-ai/binaries/node/workspace/node_modules")
+    script = pathlib.Path(__file__).resolve().parent / "export_png.js"
+    proc = subprocess.run([node, str(script), str(out_dir), *[f"{name}.svg" for name in names]],
+                          capture_output=True, text=True, encoding="utf-8",
+                          env={**os.environ, "NODE_PATH": modules})
+    if proc.returncode == 0:
+        for line in proc.stdout.strip().splitlines():
+            print("png:", line)
+    else:
+        print(f"PNG 未导出（export_png.js 失败）：{proc.stderr.strip() or proc.stdout.strip()}")
 
 
 def render_and_check(out_dir, names, python=None):
