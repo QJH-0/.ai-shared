@@ -5,7 +5,12 @@
 ## agents 角色定义：`.md` 是源，`.toml` 是派生副本
 
 - `agents/<name>.md` 是唯一维护源；`agents/<name>.toml`（`name` + `description` + `developer_instructions`）是给 Codex 用的派生副本，**改 md 必须同步 toml**，否则 Codex 侧仍执行旧规则。
-- 无生成脚本，两种既有格式并存，同步时保持各自现状、不要统一：
+- **不要手工同步**，跑脚本（2026-09-24 新增，已验证可字节级复现全部 6 个文件）：
+  ```bash
+  python skills/ai-config-sharing/scripts/sync-agent-toml.py --check   # 只校验，漂移则退出码 1
+  python skills/ai-config-sharing/scripts/sync-agent-toml.py           # 写回
+  ```
+  脚本按原文件引号形式自动识别两种既有格式，**不做统一**：
   - `"""` 形式（analyst / coder / researcher / reviewer / tester）：正文每行末尾追加**字面量** `\r`（反斜杠 + r 两个字符，TOML 解析时还原为 CR），正文里的反斜杠转义为 `\\`；`"` 不转义。
   - `'''` 形式（sre）：正文为真实换行，无 `\r` 标记、无转义。
 - 校验方式：把 toml 正文还原（去字面量 `\r`、`\\`→`\`）后，应与其 md 正文（去 frontmatter、去首尾空行）逐行相等。
