@@ -2,7 +2,8 @@
 name: create-skill
 description: >-
   Create Codex Agent Skills. Use when authoring a new skill or asking about
-  SKILL.md structure.
+  SKILL.md structure. 边界：本 skill 只讲 SKILL.md 的结构、元数据字段与 description 写法；
+  创建 / 修改 / 评测（eval）已有 skill、优化 description 触发率请用 skill-creator。
 ---
 # Creating Skills in Codex
 

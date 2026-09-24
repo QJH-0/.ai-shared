@@ -126,7 +126,7 @@
 |------|------|------|
 | `frontend-design` 重名 | 顶层 `SKILL.md` 是**容器索引**（正文写「This is a skill collection」并列出子技能），`skills/frontend-design/SKILL.md` 才是正文；第三个 `ui-ux-data/` 即 `ui-ux-pro-max` | 保持现状，**加载以顶层为准**；嵌套路径非标准发现路径 |
 | `skill-creator` 重名 | `.system/skill-creator` 与顶层 `skills/skill-creator` 同名 | `.system` 由 Codex 内置、随 Junction 分发且被 `.gitignore` 排除，**不改**；创建 / 改进 / 评测 skill 以顶层为准 |
-| `fireworks-tech-graph` 重名 | 克隆内含上游发布目录 `skills/fireworks-tech-graph/`，与本体重名，重复 140 文件 / 9.0MB | 处置方案未定，见 `.agent_docs/audits/2026-09-24-skills-audit.md` §2.1 |
+| `fireworks-tech-graph` 重名 | 克隆内含上游发布目录 `skills/fireworks-tech-graph/`，与本体重名，重复 140 文件 / 9.0MB | **预期状态，不动**：该副本是上游跟踪内容（在克隆的 HEAD 中），删除会留下永久脏路径；判定依据见 `.agent_docs/audits/2026-09-24-skills-audit.md` §2.1 |
 | `claude-deep-research-skill` 命名不一致 | 目录名与 frontmatter `name: deep-research` 不一致 | **以目录名 `claude-deep-research-skill` 为准**（`agents/analyst.md`、`agents/researcher.md` 均按此引用）；该 skill 是干净克隆，未改 `name:` 以免 `git pull` 冲突 |
 | `web-access` 触发声明过宽 | 其 description 声称「所有联网操作必须通过此 skill 处理」，与 `browser-automation` 重叠 | 边界已在**主仓库侧**的 `browser-automation` description 中写明（搜索 / 登录态抓取 / 社交媒体 → `web-access`）；`web-access` 是干净克隆，未改动以免 `git pull` 冲突 |
 
@@ -160,11 +160,23 @@ C:\Users\20448\.ai-shared\skills\  ← 唯一维护源
 
 ### GitHub 克隆的 Skills（7 个）
 
-```bash
-cd ~/.ai-shared/skills/<skill-name> && git pull --ff-only
-```
+克隆状态分三类，**不能统一用 `git pull --ff-only`**（2026-09-24 实测）：
 
-适用于：`claude-deep-research-skill`、`fireworks-tech-graph`、`humanizer-zh`、`nature-skills`、`repo-wiki`、`superpowers`、`web-access`
+| 类别 | 克隆 | 更新方式 |
+|------|------|----------|
+| 干净 | `claude-deep-research-skill`、`humanizer-zh`、`web-access` | 可直接 `cd ~/.ai-shared/skills/<name> && git pull --ff-only` |
+| 仅新增根 `SKILL.md` | `nature-skills`、`superpowers` | 上游顶层无 `SKILL.md`，新增文件不与 pull 冲突；pull 后确认根 `SKILL.md` 仍在，不在则从子目录重建索引 |
+| **有本地改动，禁止直接 pull** | `repo-wiki`、`fireworks-tech-graph` | 先备份本地改动再 pull；改动内容见下 |
+
+#### 本地改动的具体内容（更新前必读）
+
+- **`repo-wiki`**：已**展平**——删除了上游跟踪的 `repo-wiki/SKILL.md`，把内容提到克隆根目录（让加载器能在 `skills/repo-wiki/SKILL.md` 找到它）。上游若更新 `repo-wiki/*`，`git pull` 会冲突，或把展平结果改回去。
+- **`fireworks-tech-graph`**：含**本地功能扩展**，不是噪声，**被 pull 覆盖会直接丢失**：
+  - 改动文件：`scripts/generate-from-template.py`、`CHANGELOG.md`（2 文件 / +31 行）
+  - 内容：rect 节点新增可选 `body: [line, ...]` 多行字段，每行渲染为独立的 `data-text-role="body"` 文本行（首选 11.5px / 最小 10.5px），标题 / 副标题 / 正文按 `NODE_LINE_HEIGHT = 17` 整块居中；无 `body` 的节点与上游逐字节一致
+  - 动机：架构图源规格常给组件三到六行文字（名称、形状、参数、职责），原 `label` + `sublabel` 两行被迫压缩
+  - CHANGELOG 中自标 `Local extension — 2026-09-23 (not upstream)`
+  - 契约侧布局必须同步 `NODE_LINE_HEIGHT`，否则按 N 行定高的节点会裁掉最后一行基线
 
 > **本机 TLS 注意事项**（2026-09-23 实测）：默认 schannel 后端会因证书吊销服务不可达而报
 > `schannel: failed to receive handshake`。改用 openssl 后端并跳过吊销校验即可正常 clone/pull：
