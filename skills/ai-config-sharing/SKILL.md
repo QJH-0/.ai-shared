@@ -6,8 +6,9 @@ description: >-
   实现单点维护、多工具共享。触发场景："共享 skills"、"统一 AI 配置"、"skills 同步"、
   "Junction 联接"、"AI 工具配置合并"、"hardlink AGENTS.md"、"共享 agents"、
   "有工具在自己目录自建了 skills"、"把自建 skill 同步回 .ai-shared"、
-  "按当前状态更新 skills 列表"、"skill 清单盘点"、"花名册对账"、"清理悬空引用"。
-  适用于 Windows 环境，需 PowerShell 执行。
+  "按当前状态更新 skills 列表"、"skill 清单盘点"、"花名册对账"、"清理悬空引用"、
+  "改 agent 定义"、"agent toml 同步"、"md 与 toml 不一致"。
+  适用于 Windows 环境；链接操作用 PowerShell，agent 定义同步用 Python。
 ---
 
 # AI 编程助手 Skills/Agents 共享配置
@@ -483,6 +484,35 @@ skill 目录走 Junction，**在任意工具目录下编辑 skill 文件，改�
 所以这类改动**不需要「分发」动作，但必须在 `.ai-shared` 提交**才纳入版本管理——
 在工具目录里改完，回到 `.ai-shared` 执行 `git status` 就能看到该文件已变更。
 
+### 4. agents 角色定义：改 `.md` 后必须同步 `.toml`
+
+`agents/<name>.md` 是唯一维护源（人读），`agents/<name>.toml` 是给 Codex 用的**派生副本**
+（`name` + `description` + `developer_instructions`）。`agents/` 走 Junction，md 的改动会立刻分发到
+所有工具目录，**但 toml 不会跟着变**——只改 md 会让 Codex 侧继续执行旧规则。
+
+2026-09-24 实测：analyst / researcher 的 toml 里留着已改名的 `Codex-deep-research-skill`，
+而磁盘与 md 都是 `claude-deep-research-skill`，属悬空引用——正是手工同步漏改造成的。
+
+用脚本消除这个手工步骤：
+
+```bash
+python skills/ai-config-sharing/scripts/sync-agent-toml.py --check   # 只校验，有漂移则退出码 1
+python skills/ai-config-sharing/scripts/sync-agent-toml.py           # 写回
+```
+
+脚本按原文件的引号形式自动识别两种既有格式，**不做统一**：
+
+| 引号形式 | 出现于 | 正文规则 |
+|---|---|---|
+| `"""` | analyst / coder / researcher / reviewer / tester | 每行末尾追加**字面量** `\r`（反斜杠 + r 两个字符，TOML 解析时还原为 CR）；正文里的反斜杠转义为 `\\`；正文中的 `"` 不转义（三引号串内单个 `"` 合法） |
+| `'''` | sre | 正文为真实换行，无 `\r` 标记、无反斜杠转义 |
+
+`name` / `description` 是单行基本字符串，反斜杠与双引号都要转义。校验口径：还原 toml 正文后
+（去字面量 `\r`、`\\` → `\`）应与其 md 正文逐行相等。
+
+> 本机 `core.autocrlf=true`：`git show` 取历史版本得到的是 LF，而工作区 `agents/*.md` 是 CRLF，
+> 按行比对前须先统一换行。
+
 ## 清单盘点：花名册与实测目录对账
 
 ### 为什么必须做
@@ -555,6 +585,7 @@ done
 | `scripts/verify-junctions.ps1` | 验证联接状态、内容一致性、写入穿透 |
 | `scripts/collect-tool-skills.ps1` | **阶段 8**：扫描工具自建 skills（只扫主入口）并回灌到 `.ai-shared`（支持 `-Apply`、`-Name`） |
 | `scripts/fix-catpawai.ps1` | 修复 `.catpawai` 的 `.lnk` → Junction |
+| `scripts/sync-agent-toml.py` | **日常维护 4**：从 `agents/*.md` 重生成派生副本 `agents/*.toml`（`--check` 只校验） |
 
 ### 使用方法
 
@@ -595,6 +626,8 @@ powershell -ExecutionPolicy Bypass -File scripts\verify-junctions.ps1
 
 ### 维护
 - **修改入口**：以后只在 `~/.ai-shared/` 中修改 skills/agents/AGENTS.md 与 `AI_READ_FIRST.md`
+- **改 `agents/*.md` 后跑同步**：`.toml` 是派生副本不会自动跟，改完执行
+  `python skills/ai-config-sharing/scripts/sync-agent-toml.py`（规则见「日常维护 4」）
 - **定期检查自建**：工具重装/更新后可能把 `~\<工具>\skills` 从 Junction 变回真实目录，
   跑 `collect-tool-skills.ps1` 看状态表即可（正常应全部 `SHARED`）。发现 `REAL-DIR` 就回灌 + 重建 Junction
 - **回灌范围**：只收「通用可独立运行」的 skill；插件/连接器市场缓存里的 skill 依赖运行时，不要回灌
