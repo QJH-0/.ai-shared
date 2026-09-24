@@ -101,10 +101,15 @@
 
 skill 花名册的**唯一维护源为 `skills\README.md`**（含名称、说明、来源、待恢复项），本节不再重复列举，只记录与链接治理相关的结论。
 
-- 实测（2026-09-17）：`skills\` 下有 **36 个 skill 目录** + `.system`（空目录），另有 6 个非目录条目（`.gitignore`、`README.md` 与 4 个迁移标记 JSON）
-- 来源分布：GitHub 克隆 6 个（各带独立 `.git`，由 `.gitignore` 排除）；主仓库跟踪 30 个
-- 待恢复：`model-architecture-diagram`（占位文件，`status: NEEDS_RECOVERY`）
-- 复核命令：`find skills -maxdepth 1 -type d | sort`，与 `skills\README.md` 清单逐行核对
+- 实测（2026-09-23）：`skills\` 下有 **57 个 skill 目录** + `.system`（**非空**，含 6 个 Codex 系统 skill），另有 6 个非目录条目（`.gitignore`、`README.md`、3 个迁移标记 JSON，以及由 `skills\.gitignore` 排除的 `_bm_skillid_migration.json`）
+- 来源分布：GitHub 克隆 7 个（各带独立 `.git`，由 `.gitignore` 排除）；主仓库跟踪 50 个
+- 无待恢复项（`model-architecture-diagram` 已确认磁盘上不存在，2026-09-23 从花名册移除）
+- 复核命令：
+  ```bash
+  ls -1 skills | grep -vE '^(README\.md|_bm_skillid_migration\.json)$' | wc -l   # 应为 57
+  find skills -maxdepth 1 -mindepth 1 -type d | wc -l                            # 应为 58（多出 .system）
+  ```
+  花名册按名称字典序排列，可逐行对应第一条命令的输出
 
 ---
 
@@ -135,16 +140,20 @@ skill 花名册的**唯一维护源为 `skills\README.md`**（含名称、说明
 | 2026-08-29 | 创建 .system 目录占位 | 空目录，原始内容未恢复 |
 | 2026-09-14 | 新增 `.workbuddy-ai` 分发目标 | `skills\`、`agents\` 建 Junction；`AGENTS.md`、`AI_READ_FIRST.md` 建 HardLink。原有真实 `skills\`（14 个文件）备份至 `~\.ai-shared-backup-20260914-164652\workbuddy-ai\`。验证：写入穿透 OK、8 个工具 MD5 一致 |
 | 2026-09-17 | 重新盘点 skills 清单 | 实测 36 个 skill 目录；移除 `agent-definition-writing`、`broken-chain-audit`（工作区已删除，用户确认按现状处理）；花名册唯一维护源改为 `skills\README.md`，本节仅保留链接治理结论；同步清理 `agents\sre.md` 与 `skills\kaggle-modularize\SKILL.md` 的悬空 skill 引用 |
+| 2026-09-23 | 新增 `fireworks-tech-graph` | 从 GitHub 克隆（含独立 `.git`），加入 `.gitignore` 嵌套仓库排除项；花名册 GitHub 克隆数 6 → 7 |
+| 2026-09-23 | 花名册全量核对 | 实测 57 个 skill 目录（此前花名册只登记 36 个，另有 21 个用户自建/工具链 skill 未登记）；移除幽灵条目 `model-architecture-diagram`（磁盘上已不存在）；修正 `.system` 说明（原记为「空目录」，实含 6 个系统 skill）；来源分布更新为 GitHub 克隆 7 + 主仓库跟踪 50 |
 
 ---
 
 ## 七、待手动恢复的内容
 
-以下内容无法自动恢复，需要用户手动处理：
+当前**无待手动恢复项**。
 
-1. **`model-architecture-diagram` skill** — 原始 SKILL.md 内容丢失，当前为占位文件。需要用户提供原始来源或备份。
-2. **`.system` 目录** — Codex 内部系统 skill 目录，原始内容丢失，当前为空目录。
-3. **`.disable_to_model_invocation_migration.json`** — 已重建为默认值，可能与原始内容不同。
+历史遗留项已于 2026-09-23 全部结清：
+
+1. ~~**`model-architecture-diagram` skill**~~ — 全盘搜索确认磁盘上已不存在（既无目录也无占位文件），从花名册移除。其用途（从代码生成模型架构图）由 `fireworks-tech-graph` 覆盖，不再单独恢复。
+2. ~~**`.system` 目录**~~ — 原记为「空目录，内容未恢复」，2026-09-23 核对时实际含 6 个 Codex 系统 skill（`imagegen`、`openai-docs`、`plugin-creator`、`review-agent`、`skill-creator`、`skill-installer`）+ `.codex-system-skills.marker`，且已随 Junction 分发到各工具目录。该项不存在待恢复内容。
+3. **`.disable_to_model_invocation_migration.json`** — 仍为 2026-08-29 重建的默认值，与原始内容可能有差异。该文件是 Codex 的迁移标记，缺失时 Codex 会自行重建，不影响功能，保留现状。
 
 ---
 

@@ -205,6 +205,7 @@ $p = Start-Process -FilePath $py -ArgumentList @('<skill路径>\scripts\travel_a
 | 猫猫一直「旅行中」不领 | 猫确实没回来，等下一轮（4 时点兜底） |
 | 猫猫一直「跳过」 | 今日已达派出上限，明天自动恢复 |
 | 中文乱码 | Windows 控制台 GBK 问题；脚本用 UTF-8 写日志，日志本身正常 |
+| 读到的 `wbtravel_out.txt` 内容与日志不符（像是好几天前的结果） | **读错目录**：本机 Git Bash 的 `/tmp` 映射到 `D:\WindowsTemp`（`TEMP=/tmp`），而 `C:\Users\<用户>\AppData\Local\Temp` 下可能残留旧同名文件。统一读 `/tmp/wbtravel_out.txt`（即 `D:\WindowsTemp\`），并用 `ls -l --time-style=full-iso` 核对 mtime 是否为本次运行 |
 | 缺 python3 时 sh 版解析为空 | 提示「请求已提交，缺 python3 无法解析」而非签到失败（服务端可能已成功） |
 
 ## 安全说明与所需权限
