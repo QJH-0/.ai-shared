@@ -1,6 +1,6 @@
 # Skills 目录索引
 
-> 最后更新：2026-09-24 | Skills 总数：**59**（不含 `.system/`，后者另见下文）
+> 最后更新：2026-09-24 | Skills 总数：**40**（不含 `.system/`，后者另见下文）
 >
 > 本文件是 skill 花名册的**唯一维护源**；`HARDLINK_INVENTORY.md` 只保留链接治理信息，不重复列举清单。
 
@@ -14,61 +14,42 @@
 | 2 | `ai-config-sharing` | 环境治理 | 多 AI 工具 skills/agents/AGENTS.md 配置统一管理（Junction + HardLink 单点维护） | 主仓库 |
 | 3 | `ai-fast-learning-loop` | 学术科研 | 十步 AI 学习闭环：五视角 STORM → 矛盾图谱 → 综合简报 → 同行评审 → 资源筛选 → 能力阶梯 → 十次课计划 → 分级考试 → 费曼循环 → 一页速查表 | 主仓库 |
 | 4 | `arxiv-paper-downloader` | 学术科研 | arXiv 论文批量下载，逐篇用首页标题校验并纠正错误 ID | 主仓库 |
-| 5 | `automate` | 工具链 | 创建 Codex 自动化（一次性 / 周期性任务） | 主仓库 |
-| 6 | `awesome-ai-research-writing` | 学术科研 | 中英双语学术写作工具包：起草、翻译、润色、缩写、扩写、逻辑检查 | 主仓库（社区来源已展平） |
-| 7 | `babysit` | 开发与质量 | 保持 PR 可合并：分诊评论、解决明确冲突、循环修复 CI | 主仓库 |
-| 8 | `browser-automation` | 浏览器与联网 | 统一浏览器自动化套件：Playwright 网页操作 / Web 应用可复跑 E2E 测试 | 主仓库（多来源合并） |
-| 9 | `canvas` | 工具链 | 生成与对话并排的实时 React 分析画布（数据密集型独立产物） | 主仓库 |
-| 10 | `claude-deep-research-skill` | 学术科研 | 多源深度研究、引用追踪、证据留存、结构化报告 | GitHub: 199-biotechnologies/claude-deep-research-skill |
-| 11 | `code-to-interview-docs` | 文档与 Office | 按最新代码重写项目 README 与简历面试准备文档，用实测数字替换过时表述 | 主仓库 |
-| 12 | `create-hook` | 工具链 | 创建 Codex hooks：hooks.json 与钩子脚本，自动化 agent 事件行为 | 主仓库 |
-| 13 | `create-rule` | 工具链 | 创建 Codex rules：编码标准、项目约定、按文件类型的规则 | 主仓库 |
-| 14 | `create-skill` | 工具链 | 编写 Codex Agent Skill（SKILL.md 结构与组织方式） | 主仓库 |
-| 15 | `create-subagent` | 工具链 | 创建面向特定任务的子代理（自定义 prompt 与职责） | 主仓库 |
-| 16 | `doc-coauthoring` | 文档与 Office | 文档协作写作工作流：文档、提案、技术规格、决策文档 | 主仓库 |
-| 17 | `feishu-job-import` | 文档与 Office | 秋招投递管理：飞书岗位汇总表 → 自建投递管理表批量补全 / 新建 | 主仓库 |
-| 18 | `fireworks-tech-graph` | 绘图可视化 | 手写 SVG 技术图：几何安全校验（边交叉/碰撞/标签位置）+ PNG 回读 + GIF 动效；12 种风格、14 类 UML；含 showcase 版式补遗 `references/showcase-layout.md` | GitHub: yizhiyanhua-ai/fireworks-tech-graph |
-| 19 | `framework-migration-verification` | 开发与质量 | 迁回框架官方 API 或升级版本前，核实官方 API 在当前版本与调用通道下的真实行为 | 主仓库 |
-| 20 | `frontend-design` | 绘图可视化 | 前端视觉设计指导：设计方向、排版、反模板化默认观感（含 50+ 风格库） | 主仓库 |
-| 21 | `git-branch-diff-merge` | 开发与质量 | 双分支双向合并融合，冲突取新；AI 只读分析，Git 写操作由用户执行 | 主仓库 |
-| 22 | `git-commit` | 开发与质量 | Conventional Commits 规范提交（type/scope/subject） | 主仓库 |
-| 23 | `humanizer-zh` | 学术科研 | 中文去 AI 味写作助手：检测并修复 AI 写作特征模式 | GitHub: op7418/Humanizer-zh |
-| 24 | `kaggle-modularize` | 开发与质量 | 单体 `.ipynb` ↔ Python 模块双向拆分 / 合并 | 主仓库 |
-| 25 | `kaggle-notebook-to-cloud-jupyter` | 开发与质量 | Kaggle notebook 迁移到云 GPU JupyterLab：单源参数化、两级存储、依赖安装 | 主仓库 |
-| 26 | `loop` | 工具链 | 按固定或可变间隔重复执行某个 prompt / skill | 主仓库 |
-| 27 | `markitdown` | 文档与 Office | 多格式文档转 Markdown：PDF / Office / 图片 / 音频 / HTML / CSV / EPUB / ZIP / URL | 主仓库 |
-| 28 | `mermaid-master` | 绘图可视化 | Mermaid 技术文档图表：流程图、架构图、时序图、状态图、ER 图、甘特图 | 主仓库 |
-| 29 | `migrate-to-skills` | 工具链 | 把 rules（`.mdc`）与 slash commands 迁移为 Agent Skills 格式 | 主仓库 |
-| 30 | `morph-ppt` | 文档与 Office | PowerPoint Morph 跨页平滑过渡动画幻灯片 | 主仓库 |
-| 31 | `morph-ppt-3d` | 文档与 Office | 3D Morph PPT：GLB 模型插入 + 电影摄影机 + 模型内容版式 | 主仓库 |
-| 32 | `multi-agent` | 开发与质量 | 多代理任务规划与可审计的子代理任务简报生成 | 主仓库 |
-| 33 | `nature-skills` | 学术科研 | Nature 级学术工作流：写作、引用、绘图、检索、统计、润色、审稿回复 | GitHub: Yuan1z0825/nature-skills |
-| 34 | `officecli` | 文档与 Office | Office 文档 CLI 工具：创建、分析、校对、修改 `.docx` / `.xlsx` / `.pptx` | 主仓库 |
-| 35 | `officecli-academic-paper` | 文档与 Office | 学术论文 `.docx`：APA / Chicago / IEEE / MLA 引用、编号公式、交叉引用 | 主仓库 |
-| 36 | `officecli-data-dashboard` | 文档与 Office | Excel 多元素仪表板：KPI 卡、多图表、sparkline、条件格式 | 主仓库 |
-| 37 | `officecli-docx` | 文档与 Office | Word 文档创建、解析与编辑 | 主仓库 |
-| 38 | `officecli-financial-model` | 文档与 Office | Excel 财务模型：3-statement、DCF、LBO、SaaS 单位经济、敏感性分析 | 主仓库 |
-| 39 | `officecli-pitch-deck` | 文档与 Office | 投资者融资 Pitch Deck（种子轮至 C 轮、可转债、SAFE） | 主仓库 |
-| 40 | `officecli-pptx` | 文档与 Office | PowerPoint 演示文稿创建、解析与编辑 | 主仓库 |
-| 41 | `officecli-word-form` | 文档与 Office | 可填充 Word 表单：Content Controls + 旧式 FormField + MERGEFIELD | 主仓库 |
-| 42 | `officecli-xlsx` | 文档与 Office | Excel 电子表格创建、解析与编辑 | 主仓库 |
-| 43 | `plan-premise-verification` | 开发与质量 | 实施「借鉴型」优化计划前，逐条核实每条措施在本代码库的前提是否成立 | 主仓库 |
-| 44 | `project-handover-docs` | 文档与 Office | 生成结构化交接文档包（对比矩阵 + 资料索引 + 进度待办 + 风险缺口），先用源码/数据实测校正口径再动笔 | 主仓库 |
-| 45 | `repo-wiki` | 文档与 Office | 生成完整多页项目 Wiki（含内置模板，输出语言跟随提问语言） | GitHub: devin2255/repo-wiki-skill |
-| 46 | `resume-tech-interview-decompose` | 文档与 Office | 简历技术点拆解为面试准备文档：速记表、双版本口述稿、深度答案、自评清单 | 主仓库 |
-| 47 | `review` | 开发与质量 | 用 Bugbot 或 Security Review 子代理审查代码改动 | 主仓库 |
-| 48 | `review-bugbot` | 开发与质量 | 用 Bugbot 子代理审查代码改动 | 主仓库 |
-| 49 | `review-security` | 开发与质量 | 用 Security Review 子代理审查代码改动 | 主仓库 |
-| 50 | `sdk` | 工具链 | 基于 Codex SDK（TypeScript `@cursor/sdk` / Python `cursor-sdk`）开发应用与自动化 | 主仓库 |
-| 51 | `shell` | 工具链 | 把 `/shell` 之后的文本当作字面 shell 命令执行 | 主仓库 |
-| 52 | `skill-creator` | 工具链 | 创建、修改、评测与优化 Skills | 主仓库（社区来源已展平） |
-| 53 | `split-to-prs` | 开发与质量 | 把当前工作拆成若干小而可审查的 PR | 主仓库 |
-| 54 | `statusline` | 工具链 | 配置 CLI 自定义状态栏 | 主仓库 |
-| 55 | `superpowers` | 开发与质量 | 开发流程技能库：头脑风暴、系统化调试、TDD、计划编写、代码审查等 | GitHub: obra/superpowers |
-| 56 | `update-cli-config` | 工具链 | 查看与修改 Codex CLI 配置（`~/.cursor/cli-config.json`） | 主仓库 |
-| 57 | `update-cursor-settings` | 工具链 | 修改编辑器用户设置（`settings.json`） | 主仓库 |
-| 58 | `web-access` | 浏览器与联网 | 统一联网操作：搜索、网页抓取、登录后操作、动态渲染页面 | GitHub: eze-is/web-access |
-| 59 | `workbuddy-auto-credits` | 工具链 | WorkBuddy 自动领积分：每日签到 + 派猫猫旅行 | 主仓库 |
+| 5 | `awesome-ai-research-writing` | 学术科研 | 中英双语学术写作工具包：起草、翻译、润色、缩写、扩写、逻辑检查 | 主仓库（社区来源已展平） |
+| 6 | `browser-automation` | 浏览器与联网 | 统一浏览器自动化套件：Playwright 网页操作 / Web 应用可复跑 E2E 测试 | 主仓库（多来源合并） |
+| 7 | `canvas` | 工具链 | 生成与对话并排的实时 React 分析画布（数据密集型独立产物） | 主仓库 |
+| 8 | `claude-deep-research-skill` | 学术科研 | 多源深度研究、引用追踪、证据留存、结构化报告 | GitHub: 199-biotechnologies/claude-deep-research-skill |
+| 9 | `code-to-interview-docs` | 文档与 Office | 按最新代码重写项目 README 与简历面试准备文档，用实测数字替换过时表述 | 主仓库 |
+| 10 | `doc-coauthoring` | 文档与 Office | 文档协作写作工作流：文档、提案、技术规格、决策文档 | 主仓库 |
+| 11 | `feishu-job-import` | 文档与 Office | 秋招投递管理：飞书岗位汇总表 → 自建投递管理表批量补全 / 新建 | 主仓库 |
+| 12 | `fireworks-tech-graph` | 绘图可视化 | 手写 SVG 技术图：几何安全校验（边交叉/碰撞/标签位置）+ PNG 回读 + GIF 动效；12 种风格、14 类 UML；含 showcase 版式补遗 `references/showcase-layout.md` | GitHub: yizhiyanhua-ai/fireworks-tech-graph |
+| 13 | `frontend-design` | 绘图可视化 | 前端视觉设计指导：设计方向、排版、反模板化默认观感（含 50+ 风格库） | 主仓库 |
+| 14 | `git-branch-diff-merge` | 开发与质量 | 双分支双向合并融合，冲突取新；AI 只读分析，Git 写操作由用户执行 | 主仓库 |
+| 15 | `git-commit` | 开发与质量 | Conventional Commits 规范提交（type/scope/subject） | 主仓库 |
+| 16 | `humanizer-zh` | 学术科研 | 中文去 AI 味写作助手：检测并修复 AI 写作特征模式 | GitHub: op7418/Humanizer-zh |
+| 17 | `kaggle-modularize` | 开发与质量 | 单体 `.ipynb` ↔ Python 模块双向拆分 / 合并 | 主仓库 |
+| 18 | `kaggle-notebook-to-cloud-jupyter` | 开发与质量 | Kaggle notebook 迁移到云 GPU JupyterLab：单源参数化、两级存储、依赖安装 | 主仓库 |
+| 19 | `markitdown` | 文档与 Office | 多格式文档转 Markdown：PDF / Office / 图片 / 音频 / HTML / CSV / EPUB / ZIP / URL | 主仓库 |
+| 20 | `mermaid-master` | 绘图可视化 | Mermaid 技术文档图表：流程图、架构图、时序图、状态图、ER 图、甘特图 | 主仓库 |
+| 21 | `migrate-to-skills` | 工具链 | 把 rules（`.mdc`）与 slash commands 迁移为 Agent Skills 格式 | 主仓库 |
+| 22 | `morph-ppt` | 文档与 Office | PowerPoint Morph 跨页平滑过渡动画幻灯片 | 主仓库 |
+| 23 | `morph-ppt-3d` | 文档与 Office | 3D Morph PPT：GLB 模型插入 + 电影摄影机 + 模型内容版式 | 主仓库 |
+| 24 | `multi-agent` | 开发与质量 | 多代理任务规划与可审计的子代理任务简报生成 | 主仓库 |
+| 25 | `nature-skills` | 学术科研 | Nature 级学术工作流：写作、引用、绘图、检索、统计、润色、审稿回复 | GitHub: Yuan1z0825/nature-skills |
+| 26 | `officecli` | 文档与 Office | Office 文档 CLI 工具：创建、分析、校对、修改 `.docx` / `.xlsx` / `.pptx` | 主仓库 |
+| 27 | `officecli-academic-paper` | 文档与 Office | 学术论文 `.docx`：APA / Chicago / IEEE / MLA 引用、编号公式、交叉引用 | 主仓库 |
+| 28 | `officecli-data-dashboard` | 文档与 Office | Excel 多元素仪表板：KPI 卡、多图表、sparkline、条件格式 | 主仓库 |
+| 29 | `officecli-docx` | 文档与 Office | Word 文档创建、解析与编辑 | 主仓库 |
+| 30 | `officecli-financial-model` | 文档与 Office | Excel 财务模型：3-statement、DCF、LBO、SaaS 单位经济、敏感性分析 | 主仓库 |
+| 31 | `officecli-pitch-deck` | 文档与 Office | 投资者融资 Pitch Deck（种子轮至 C 轮、可转债、SAFE） | 主仓库 |
+| 32 | `officecli-pptx` | 文档与 Office | PowerPoint 演示文稿创建、解析与编辑 | 主仓库 |
+| 33 | `officecli-word-form` | 文档与 Office | 可填充 Word 表单：Content Controls + 旧式 FormField + MERGEFIELD | 主仓库 |
+| 34 | `officecli-xlsx` | 文档与 Office | Excel 电子表格创建、解析与编辑 | 主仓库 |
+| 35 | `repo-wiki` | 文档与 Office | 生成完整多页项目 Wiki（含内置模板，输出语言跟随提问语言） | GitHub: devin2255/repo-wiki-skill |
+| 36 | `resume-tech-interview-decompose` | 文档与 Office | 简历技术点拆解为面试准备文档：速记表、双版本口述稿、深度答案、自评清单 | 主仓库 |
+| 37 | `skill-creator` | 工具链 | 创建、修改、评测与优化 Skills | 主仓库（社区来源已展平） |
+| 38 | `superpowers` | 开发与质量 | 开发流程技能库：头脑风暴、系统化调试、TDD、计划编写、代码审查等 | GitHub: obra/superpowers |
+| 39 | `web-access` | 浏览器与联网 | 统一联网操作：搜索、网页抓取、登录后操作、动态渲染页面 | GitHub: eze-is/web-access |
+| 40 | `workbuddy-auto-credits` | 工具链 | WorkBuddy 自动领积分：每日签到 + 派猫猫旅行 | 主仓库 |
 
 ### 来源分类小结
 
@@ -131,7 +112,7 @@
 
 ### 已知功能重叠（保留，未合并）
 
-以下重叠已确认，属**有意保留**：`create-skill` 的能力是 `skill-creator` 的真子集，但保留以维持 `create-hook` / `create-rule` / `create-skill` / `create-subagent` 四件套的对称性；`officecli` 基座与 `officecli-docx/xlsx/pptx` 的触发边界已写入各自 description。完整清单与处置建议见 `.agent_docs/audits/2026-09-24-skills-audit.md`。
+以下重叠已确认，属**有意保留**：`officecli` 基座与 `officecli-docx/xlsx/pptx` 的触发边界已写入各自 description。完整清单与处置建议见 `.agent_docs/audits/2026-09-24-skills-audit.md`。
 
 ## 待恢复项
 
