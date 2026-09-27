@@ -586,6 +586,7 @@ done
 | `scripts/collect-tool-skills.ps1` | **阶段 8**：扫描工具自建 skills（只扫主入口）并回灌到 `.ai-shared`（支持 `-Apply`、`-Name`） |
 | `scripts/fix-catpawai.ps1` | 修复 `.catpawai` 的 `.lnk` → Junction |
 | `scripts/sync-agent-toml.py` | **日常维护 4**：从 `agents/*.md` 重生成派生副本 `agents/*.toml`（`--check` 只校验） |
+| `scripts/sync-mcp-config.py` | **日常维护 5**：从 `.ai-shared/mcp.json` 派生 Codex（`config.toml`）与 Claude（`~/.claude.json`）的 MCP 配置，并校验 6 个硬链接（Windows 下 command 须写 `cmd /c npx`） |
 
 ### 使用方法
 

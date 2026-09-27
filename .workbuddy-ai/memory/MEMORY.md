@@ -16,6 +16,17 @@
 - 校验方式：把 toml 正文还原（去字面量 `\r`、`\\`→`\`）后，应与其 md 正文（去 frontmatter、去首尾空行）逐行相等。
 - 坑：本机 `core.autocrlf=true`，`git show` 取出的历史版本是 LF，而工作区 `agents/*.md` 是 CRLF——按行比对时须先统一换行。
 
+## MCP 配置（2026-09-26 建立）
+
+- 唯一维护源 `C:\Users\20448\.ai-shared\mcp.json`，硬链接分发到 `.cursor` / `.qoder` / `.workbuddy` /
+  `.workbuddy-ai` / `.catpawai` / `.agents`（源 nlink 应为 7）。**改 MCP 只改这一份。**
+- Codex（`config.toml` 的 TOML）与 Claude（`~/.claude.json` 顶层 `mcpServers`）格式不兼容、无法硬链接，
+  由 `skills\ai-config-sharing\scripts\sync-mcp-config.py` 从源派生（`--check` 校验 / 直接跑写回）。
+- **Windows 上 command 必须写 `cmd /c npx`**：`spawn('npx')` 不带 shell 直接 ENOENT（实测）。
+- 本机 PowerShell 工具返回空输出 + exit 1，建硬链接用 Python `os.link()` 代替 `mklink /h`。
+- 换源方式：本地 stdio（现方案，command/args 各家通用）vs 远程 `https://mcp.context7.com/mcp`
+  （官方推荐，但键名各家不统一，无法共用一份 json）。
+
 ## 行尾格式（实测）
 
 - LF：`AGENTS.md`、`agents/standards/*.md`

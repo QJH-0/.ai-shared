@@ -59,6 +59,40 @@
 | `C:\Users\20448\.catpawai\AI_READ_FIRST.md` | HardLink |
 | `C:\Users\20448\.agents\AI_READ_FIRST.md` | HardLink |
 
+### 3. mcp.json
+
+源文件：`C:\Users\20448\.ai-shared\mcp.json`（2026-09-26 新增，当前只登记 context7）
+
+| 硬链接路径 | 链接类型 |
+| --- | --- |
+| `C:\Users\20448\.ai-shared\mcp.json` | 源文件 |
+| `C:\Users\20448\.cursor\mcp.json` | HardLink |
+| `C:\Users\20448\.qoder\mcp.json` | HardLink |
+| `C:\Users\20448\.workbuddy\mcp.json` | HardLink |
+| `C:\Users\20448\.workbuddy-ai\mcp.json` | HardLink |
+| `C:\Users\20448\.catpawai\mcp.json` | HardLink |
+| `C:\Users\20448\.agents\mcp.json` | HardLink |
+
+**为什么 command 写 `cmd /c npx` 而不是 `npx`**：Windows 下 Node 的 `spawn('npx')` 不带 shell
+会直接 ENOENT（实测 `npx.cmd` 不是可执行体，报错 `spawn npx ENOENT`），MCP 客户端起不来服务。
+走 `cmd /c` 包一层后实测可执行（`cmd /c npx --version` → 10.9.7）。同理 `@latest` 交给 npx 解析版本。
+
+**格式不兼容、无法硬链接的两个客户端**由脚本派生，不建链接：
+
+| 客户端 | 配置文件 | 形式 |
+| --- | --- | --- |
+| Codex | `C:\Users\20448\.codex\config.toml` | `[mcp_servers.context7]` 段（TOML） |
+| Claude | `C:\Users\20448\.claude.json` | 顶层 `mcpServers.context7`（与其他用户级配置共存） |
+
+同步脚本（唯一维护源仍是 `mcp.json`）：
+
+```bash
+python skills/ai-config-sharing/scripts/sync-mcp-config.py --check   # 只校验，有漂移则退出码 1
+python skills/ai-config-sharing/scripts/sync-mcp-config.py           # 写回
+```
+
+脚本同时校验 6 个硬链接的内容一致性与源文件链接数（应为 7）。
+
 ---
 
 ## 三、目录联接（Junction）清单
@@ -143,6 +177,7 @@ skill 花名册的**唯一维护源为 `skills\README.md`**（含名称、说明
 | 2026-09-23 | 新增 `fireworks-tech-graph` | 从 GitHub 克隆（含独立 `.git`），加入 `.gitignore` 嵌套仓库排除项；花名册 GitHub 克隆数 6 → 7 |
 | 2026-09-23 | 花名册全量核对 | 实测 57 个 skill 目录（此前花名册只登记 36 个，另有 21 个用户自建/工具链 skill 未登记）；移除幽灵条目 `model-architecture-diagram`（磁盘上已不存在）；修正 `.system` 说明（原记为「空目录」，实含 6 个系统 skill）；来源分布更新为 GitHub 克隆 7 + 主仓库跟踪 50 |
 | 2026-09-24 | 花名册增量核对 | 实测 60 个 skill 目录；补登记 3 个漏登项 `ai-fast-learning-loop`、`fireworks-showcase-layout`、`project-handover-docs`；总数 57 → 60，来源分布更新为 GitHub 克隆 7 + 主仓库跟踪 53 |
+| 2026-09-26 | 新增 mcp.json 硬链接 | 唯一维护源 `.ai-shared\mcp.json`（context7），硬链接分发到 `.cursor` / `.qoder` / `.workbuddy` / `.workbuddy-ai` / `.catpawai` / `.agents`；Codex（TOML）与 Claude（`~/.claude.json`）由 `sync-mcp-config.py` 派生。原 `.qoder\mcp.json` 含 drawio，按用户裁决丢弃，备份在 `.trash\qoder-mcp.json.20260926.bak` |
 
 ---
 
