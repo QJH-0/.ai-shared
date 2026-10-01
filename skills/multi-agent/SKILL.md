@@ -1,7 +1,7 @@
 ---
 name: multi-agent
 description: >-
-  将用户目标收敛为可审计、有边界的子代理任务简报（agent brief）。适用于并行探索、角色化拆分、安全审查、验证交接或明确子代理协作；也适用于编写 Task/子代理提示前整理范围。使用 skill 不等于必须启动子代理——是否委派遵循当前环境与上层规则。Use when the user needs multi-agent planning, sub-agent briefs, parallel exploration splits, review handoffs, or scoped delegation boundaries.
+  将用户目标收敛为可审计、有边界的子代理任务简报（agent brief），并按简报派发子代理执行。适用于并行探索、角色化拆分、安全审查、验证交接或明确子代理协作；也适用于编写 Task/子代理提示前整理范围。默认派发：简报齐备即派子代理干活，只把单步琐碎操作留在主会话——简报是让派发变安全的手段，不是拦住派发的闸门。Use when the user needs multi-agent planning, sub-agent briefs, parallel exploration splits, review handoffs, or scoped delegation boundaries.
 ---
 
 # Multi Agent
@@ -11,7 +11,8 @@ description: >-
 Use this skill to turn a user goal into a **bounded agent brief** that a human or sub-agent can execute without scope creep.
 
 - Output is a brief, not implementation—unless the user explicitly asked you to implement in the same turn.
-- **Do not spawn child agents** just because this skill is active. First produce (or refine) the brief; delegate only when the environment supports it and the brief is complete.
+- **Brief first, then dispatch by default**: produce (or refine) the complete brief, then spawn sub-agents to do the work. Delegation is the normal path, not an exception to justify.
+- **执行可委派，判定不可委派**: running tests/lint/build/scans is delegable; pass/fail and gate judgments stay with the responsible role, based on raw evidence (命令原文、退出码、产物路径、`file:line`), never on a sub-agent summary.
 - One role per brief unless the user explicitly requests multiple roles or parallel tracks.
 - Prefer conservative boundaries: smallest verifiable scope, explicit stop conditions, evidence before summaries.
 
@@ -79,9 +80,10 @@ Stop condition:
 
 When the user needs multiple agents:
 
-1. Split by **disjoint ownership** (directories or modules), not by vague “help with backend.”
+1. Split by **disjoint ownership** (directories or modules, or separate worktrees), not by vague “help with backend.” Disjoint write sets are what make parallel implementation safe — never serialize parallel work just to avoid thinking about ownership.
 2. Give each track its own brief from the template above.
-3. Define integration order (who merges results, who verifies).
+3. Balance load and set timeouts: total wall time ≈ the slowest track, so one heavy track wastes the fan-out.
+4. Define integration order (who merges results, who verifies). The synthesizing side must reconcile conflicts and de-duplicate against an explicit template and quality bar, not “merge everything.”
 
 ## Integration with agent_memory
 
