@@ -1,7 +1,7 @@
 ---
 name: ai-config-sharing
 description: >-
-  统一管理多个 AI 编程助手（Claude、Codex、Cursor、Qoder、WorkBuddy、WorkBuddy AI、CatPaw 等）的
+  统一管理多个 AI 编程助手（Claude、Codex、Cursor、Qoder、WorkBuddy、WorkBuddy AI 等）的
   skills/agents/AGENTS.md 配置。通过 Windows 目录联接（Junction）和硬链接（HardLink）
   实现单点维护、多工具共享。触发场景："共享 skills"、"统一 AI 配置"、"skills 同步"、
   "Junction 联接"、"AI 工具配置合并"、"hardlink AGENTS.md"、"共享 agents"、
@@ -15,7 +15,7 @@ description: >-
 
 ## 背景
 
-用户同时使用多个 AI 编程助手（Claude Code、Codex、Cursor、Qoder、WorkBuddy、WorkBuddy AI、CatPaw 等），
+用户同时使用多个 AI 编程助手（Claude Code、Codex、Cursor、Qoder、WorkBuddy、WorkBuddy AI 等），
 每个工具在 `~/.<工具名>/` 下维护独立的 `skills/`、`agents/` 和 `AGENTS.md`。
 这些文件内容高度重复，导致：
 
@@ -41,8 +41,8 @@ description: >-
 
 ```
 C:\Users\<用户>\.ai-shared\           ← 唯一维护点
-  ├── skills/          (22 个 skill 目录)
-  ├── agents/          (5 个 agent 文件)
+  ├── skills/          (42 个 skill 目录，另有 38 个嵌套子技能)
+  ├── agents/          (6 个 agent 定义 .md + 6 个派生 .toml)
   └── AGENTS.md        (全局规则)
 
 ~/.claude/skills/     ──Junction──→ .ai-shared/skills/
@@ -51,7 +51,7 @@ C:\Users\<用户>\.ai-shared\           ← 唯一维护点
 ~/.codex/skills/      ──Junction──→ .ai-shared/skills/
 ~/.codex/agents/      ──Junction──→ .ai-shared/agents/
 ~/.codex/AGENTS.md    ──HardLink──→ .ai-shared/AGENTS.md
-  ... (cursor, qoder, workbuddy, workbuddy-ai, catpawai, agents 同理)
+  ... (cursor, qoder, workbuddy, workbuddy-ai, agents 同理)
 ```
 
 ## 触发场景
@@ -69,7 +69,7 @@ C:\Users\<用户>\.ai-shared\           ← 唯一维护点
 1. **操作系统**：此方案仅适用于 **Windows**（macOS/Linux 用 symlink）
 2. **工具路径**：确认各工具配置目录存在
    ```powershell
-   foreach ($t in @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai','.agents')) {
+   foreach ($t in @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.agents')) {
        $p = "$env:USERPROFILE\$t"
        Write-Host "$t exists: $(Test-Path $p)"
    }
@@ -91,7 +91,7 @@ C:\Users\<用户>\.ai-shared\           ← 唯一维护点
 
 ```powershell
 # 列出各工具的 skill 名称
-$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai','.agents')
+$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.agents')
 foreach ($t in $tools) {
     $p = "$env:USERPROFILE\$t\skills"
     if (Test-Path $p) {
@@ -170,7 +170,7 @@ $ts = Get-Date -Format 'yyyyMMdd-HHmmss'
 $backup = "$env:USERPROFILE\.ai-shared-backup-$ts"
 New-Item -ItemType Directory -Path $backup -Force | Out-Null
 
-$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai','.agents')
+$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.agents')
 foreach ($t in $tools) {
     $tp = "$env:USERPROFILE\$t"
     $tb = "$backup\$($t.TrimStart('.'))"
@@ -208,7 +208,7 @@ $SharedSkills = "$env:USERPROFILE\.ai-shared\skills"
 $SharedAgents = "$env:USERPROFILE\.ai-shared\agents"
 $SharedAgentsMd = "$env:USERPROFILE\.ai-shared\AGENTS.md"
 
-$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai','.agents')
+$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.agents')
 foreach ($t in $tools) {
     $tp = "$env:USERPROFILE\$t"
     
@@ -243,7 +243,7 @@ foreach ($t in $tools) {
 
 ```powershell
 # 1. 联接验证
-$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai','.agents')
+$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.agents')
 foreach ($t in $tools) {
     $tp = "$env:USERPROFILE\$t"
     $sp = "$tp\skills"; $ap = "$tp\agents"; $mp = "$tp\AGENTS.md"
@@ -286,7 +286,7 @@ Remove-Item $testFile -Force
 # 恢复模式：从备份恢复原始目录
 $backup = "$env:USERPROFILE\.ai-shared-backup-<timestamp>"
 
-$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai','.agents')
+$tools = @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.agents')
 foreach ($t in $tools) {
     $tp = "$env:USERPROFILE\$t"
     $tn = $t.TrimStart('.')
@@ -350,7 +350,7 @@ foreach ($t in $tools) {
 
    ```powershell
    $SharedNote = "$env:USERPROFILE\.ai-shared\AI_READ_FIRST.md"
-   foreach ($t in @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.catpawai','.agents')) {
+   foreach ($t in @('.claude','.codex','.cursor','.qoder','.workbuddy','.workbuddy-ai','.agents')) {
        $tp = "$env:USERPROFILE\$t"
        $target = "$tp\AI_READ_FIRST.md"
        if (-not (Test-Path $target)) {
@@ -452,7 +452,7 @@ find "$HOME" -name "AGENTS.md" -samefile "$HOME/.ai-shared/AGENTS.md" | sort
 AGENTS.md 是硬链接，改源文件即同步。用一个本次新增的独有文案 grep 全部目标目录，命中数应一致：
 
 ```bash
-for d in .claude .codex .cursor .qoder .workbuddy .workbuddy-ai .catpawai .agents; do
+for d in .claude .codex .cursor .qoder .workbuddy .workbuddy-ai .agents; do
   printf "%-13s %s\n" "$d" "$(grep -c '<本次新增的独有文案>' "$HOME/$d/AGENTS.md")"
 done
 ```
@@ -512,6 +512,28 @@ python skills/ai-config-sharing/scripts/sync-agent-toml.py           # 写回
 
 > 本机 `core.autocrlf=true`：`git show` 取历史版本得到的是 LF，而工作区 `agents/*.md` 是 CRLF，
 > 按行比对前须先统一换行。
+
+### 5. MCP 配置：改 `mcp.json` 后必须同步派生端
+
+`.ai-shared/mcp.json` 是唯一维护源，硬链接分发到 5 个目录；Codex（`config.toml` 的 TOML）
+与 Claude（`~/.claude.json` 顶层）格式不兼容、无法硬链接，由脚本派生：
+
+```bash
+python skills/ai-config-sharing/scripts/sync-mcp-config.py --check   # 只校验，有漂移则退出码 1
+python skills/ai-config-sharing/scripts/sync-mcp-config.py           # 写回
+```
+
+同步是**双向**的：源里新增或修改的 server 写入派生端，源里**消失**的也从派生端删除。
+
+**删除范围只覆盖脚本自己写过的 server**，名单记在 `.ai-shared/.mcp-synced.json`
+（`{"servers": [...]}`）。这份名单是「哪些段归脚本管」的唯一依据，**必须保留**：
+丢了不会报错，只是源里删掉的 server 不会再从派生端清理。Codex 自管的
+`[mcp_servers.node_repl]`（含 `.env` 子段）不在名单里，因此不会被误删。
+
+源文件为空（`{}`）或缺失 `mcpServers` 时不报错，视作「没有任何托管 server」。
+
+> **首次接管一台已有派生配置的机器**：若派生端存在脚本此前写入、但源里已经没有的 server，
+> 要先把这些名字手工写进 `.mcp-synced.json` 再跑一次，否则脚本无从得知它们归自己管。
 
 ## 清单盘点：花名册与实测目录对账
 
@@ -584,9 +606,8 @@ done
 | `scripts/merge-share-skills.ps1` | 一键合并+共享（支持 `-DryRun` 预览、`-Restore` 恢复） |
 | `scripts/verify-junctions.ps1` | 验证联接状态、内容一致性、写入穿透 |
 | `scripts/collect-tool-skills.ps1` | **阶段 8**：扫描工具自建 skills（只扫主入口）并回灌到 `.ai-shared`（支持 `-Apply`、`-Name`） |
-| `scripts/fix-catpawai.ps1` | 修复 `.catpawai` 的 `.lnk` → Junction |
 | `scripts/sync-agent-toml.py` | **日常维护 4**：从 `agents/*.md` 重生成派生副本 `agents/*.toml`（`--check` 只校验） |
-| `scripts/sync-mcp-config.py` | **日常维护 5**：从 `.ai-shared/mcp.json` 派生 Codex（`config.toml`）与 Claude（`~/.claude.json`）的 MCP 配置，并校验 6 个硬链接（Windows 下 command 须写 `cmd /c npx`） |
+| `scripts/sync-mcp-config.py` | **日常维护 5**：从 `.ai-shared/mcp.json` 派生 Codex（`config.toml`）与 Claude（`~/.claude.json`）的 MCP 配置；**双向**同步（源里消失的 server 也删），并校验 5 个硬链接（Windows 下 command 须写 `cmd /c npx`） |
 
 ### 使用方法
 

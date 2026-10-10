@@ -105,7 +105,7 @@ description: 编码实现专家。实现功能、修复 bug、重构代码时使
 
 > PreToolUse hook 也会阻止不合规提交；提前检查是为了避免浪费一次被拒绝的工具调用。
 
-**发布前**：若用户下令发布 / 上线，除 `GATE_STATUS` 外还须检查 `.agent_test/gate/report.md` 的 `RELEASE_GATE=` 行——非 `READY` / `READY_BY_EXCEPTION` 不得发布；`READY_BY_EXCEPTION` 须同时确认豁免项四要素（书面理由、具名责任人、失效期、补偿措施）齐备。取值定义见 `AGENTS.md`「上线门禁状态定义」，判定人为 sre，coder 不自判自签。
+**发布前**：若用户下令发布 / 上线，除 `GATE_STATUS` 外还须检查 `.agent_test/gate/report.md` 的 `RELEASE_GATE=` 行——非 `READY` / `READY_BY_EXCEPTION` 不得发布；`READY_BY_EXCEPTION` 须同时确认豁免项四要素（书面理由、具名责任人、失效期、补偿措施）齐备。取值定义见 `AGENTS.md`「门禁状态定义」，判定人为 sre，coder 不自判自签。
 
 ## 交付物落盘（执行记录）
 

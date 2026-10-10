@@ -19,7 +19,15 @@
 ## MCP 配置（2026-09-26 建立）
 
 - 唯一维护源 `C:\Users\20448\.ai-shared\mcp.json`，硬链接分发到 `.cursor` / `.qoder` / `.workbuddy` /
-  `.workbuddy-ai` / `.catpawai` / `.agents`（源 nlink 应为 7）。**改 MCP 只改这一份。**
+  `.workbuddy-ai` / `.agents`（源 nlink 应为 6）。**改 MCP 只改这一份。**
+- **源现为空 `{}`**（context7 已于 2026-10-05 按用户裁决移除，Claude / Codex 派生端已同步清干净）。
+- 同步脚本是**双向**的：源里新增/修改的 server 写入派生端，源里**消失**的也从派生端删除；
+  空源或缺失 `mcpServers` 不报错。删除范围只覆盖脚本自己写过的 server，名单记在
+  `C:\Users\20448\.ai-shared\.mcp-synced.json`（**需入库**，是「哪些段归脚本管」的唯一依据）。
+  所以 Codex 自管的 `[mcp_servers.node_repl]`（含 `.env` 子段）不会被误删——
+  注意它同样带 `startup_timeout_sec = 120`，**不能靠内容特征区分**，必须靠名单。
+- **首次接管已有派生配置的机器**：先把派生端存在、源里已无的 server 名手工写进
+  `.mcp-synced.json` 再跑一次，否则脚本无从得知它们归自己管。
 - Codex（`config.toml` 的 TOML）与 Claude（`~/.claude.json` 顶层 `mcpServers`）格式不兼容、无法硬链接，
   由 `skills\ai-config-sharing\scripts\sync-mcp-config.py` 从源派生（`--check` 校验 / 直接跑写回）。
 - **Windows 上 command 必须写 `cmd /c npx`**：`spawn('npx')` 不带 shell 直接 ENOENT（实测）。
@@ -32,9 +40,26 @@
 - LF：`AGENTS.md`、`agents/standards/*.md`
 - CRLF：`agents/*.md`、`skills/git-branch-diff-merge/SKILL.md`
 
+## 本机网络与 Python 包安装（2026-10-04 实测）
+
+- **PyPI 镜像**：清华源（`pypi.tuna.tsinghua.edu.cn`）**不可用**——`pip index versions` 返回
+  `from versions: none`。阿里云（`mirrors.aliyun.com/pypi/simple/`）与官方 `pypi.org` 均可用，
+  但**大文件实测约 100 KB/s**。
+- **装大包要有耐心**：manim 整棵依赖树约 350 MB，需 20–30 分钟。pip 进度条用 `\r` 回写，
+  **不写进重定向日志**，看起来像卡死——判断进度看 venv 体积（`du -sh <venv>`），不要看日志。
+  加 `--progress-bar off` 可避免日志被 `\r` 污染。
+- **单个大 wheel 卡住时**：`curl -sL -C -` 断点续传到本地，再 `pip install <本地 wheel>`。
+- **隔离 venv**：用 `C:\Users\20448\.workbuddy-ai\binaries\python\envs\default`；
+  `C:\Users\20448\.workbuddy\binaries\python\envs\default` 是 ConvtasnetTwo 的项目环境，**不要污染**。
+- **已装视频工具链**（2026-10-04）：manim 0.21.0、imageio-ffmpeg 0.6.0（内置 ffmpeg v7.1，**无 ffprobe**）、
+  edge-tts。用法见 `skills/explainer-video`。**本机 PATH 无 ffmpeg、无 LaTeX。**
+- **给 Windows 版 Python 传路径必须写 `C:/...`**：Git Bash 的 `/c/Users/...` 会被解释成
+  `C:\c\Users\...` 并报 `can't open file`。
+
 ## 硬链接改动后必须复核
 
-修改经硬链接分发的文件（`AGENTS.md`、`AI_READ_FIRST.md`）后，用 `stat -c %h <file>` 复核链接数未下降；`AGENTS.md` 应为 **9**。降为 1 说明副本已脱钩，须按 `HARDLINK_INVENTORY.md` §八 重建。
+修改经硬链接分发的文件（`AGENTS.md`、`AI_READ_FIRST.md`）后，用 `stat -c %h <file>` 复核链接数未下降；`AGENTS.md` 应为 **8**（源 + 7 个工具目录）。**用户已决定不再保留 CatPaw**（`.catpawai` 已删除，2026-10-04），若日后重新纳入则为 9。降为 1 说明副本已脱钩，须按 `HARDLINK_INVENTORY.md` §八 重建。
+**注意**：原地写入（如 Edit）保留 inode，链接数不变；原子替换（临时文件 + rename）会让链接数掉到 1。改完必须实测。
 
 ## GitHub 克隆 skill 的本地改动状态（2026-09-24 实测）
 
@@ -60,4 +85,4 @@
 - 并行实现方式：靠**写集不重叠**（不同模块 / 独立 worktree）隔离，不是靠串行回避；
   同一文件或共享状态的写入仍必须串行（与「验证铁律」禁止同文件并行编辑一致）。
 - 改角色文件后照旧跑 `sync-agent-toml.py`（md 改完 toml 必须同步），改 `AGENTS.md` 后
-  复核 `stat -c %h AGENTS.md` 仍为 9。
+  复核 `stat -c %h AGENTS.md` 仍为 8（`.catpawai` 已删除，恢复后为 9）。

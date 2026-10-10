@@ -1,13 +1,13 @@
 # 硬链接 / 目录联接清单
 
 > 本文件记录 C:\Users\20448\.ai-shared 作为唯一维护源，向各 AI 工具配置目录分发的所有链接。
-> 更新时间：2026-09-24（重新盘点 skills 清单，花名册移交 `skills\README.md` 维护）
+> 更新时间：2026-10-04（移除 `.catpawai` 分发目标；校正 skills 计数口径为顶层目录）
 
 ---
 
 ## 一、共享目标目录
 
-以下 9 个 AI 工具配置目录共享 `.ai-shared` 的内容：
+以下 8 个 AI 工具配置目录共享 `.ai-shared` 的内容：
 
 | 目录路径 | 对应工具 |
 | --- | --- |
@@ -18,8 +18,9 @@
 | `C:\Users\20448\.qoder` | Qoder |
 | `C:\Users\20448\.workbuddy` | WorkBuddy |
 | `C:\Users\20448\.workbuddy-ai` | WorkBuddy AI（第二个实例） |
-| `C:\Users\20448\.catpawai` | CatPaw AI |
 | `C:\Users\20448\.agents` | 通用 Agent 目录 |
+
+> `.catpawai`（CatPaw AI）已由用户删除，并明确**不再保留**；其硬链接与联接一并移除。若日后重新纳入 CatPaw，按 §八「新增 AI 工具目录」重建。
 
 ---
 
@@ -40,7 +41,6 @@
 | `C:\Users\20448\.qoder\AGENTS.md` | HardLink |
 | `C:\Users\20448\.workbuddy\AGENTS.md` | HardLink |
 | `C:\Users\20448\.workbuddy-ai\AGENTS.md` | HardLink |
-| `C:\Users\20448\.catpawai\AGENTS.md` | HardLink |
 | `C:\Users\20448\.agents\AGENTS.md` | HardLink |
 
 ### 2. AI_READ_FIRST.md
@@ -56,12 +56,11 @@
 | `C:\Users\20448\.qoder\AI_READ_FIRST.md` | HardLink |
 | `C:\Users\20448\.workbuddy\AI_READ_FIRST.md` | HardLink |
 | `C:\Users\20448\.workbuddy-ai\AI_READ_FIRST.md` | HardLink |
-| `C:\Users\20448\.catpawai\AI_READ_FIRST.md` | HardLink |
 | `C:\Users\20448\.agents\AI_READ_FIRST.md` | HardLink |
 
 ### 3. mcp.json
 
-源文件：`C:\Users\20448\.ai-shared\mcp.json`（2026-09-26 新增，当前只登记 context7）
+源文件：`C:\Users\20448\.ai-shared\mcp.json`（2026-09-26 新增；**当前内容为空 `{}`**——context7 已于 2026-10-05 按用户裁决移除）
 
 | 硬链接路径 | 链接类型 |
 | --- | --- |
@@ -70,7 +69,6 @@
 | `C:\Users\20448\.qoder\mcp.json` | HardLink |
 | `C:\Users\20448\.workbuddy\mcp.json` | HardLink |
 | `C:\Users\20448\.workbuddy-ai\mcp.json` | HardLink |
-| `C:\Users\20448\.catpawai\mcp.json` | HardLink |
 | `C:\Users\20448\.agents\mcp.json` | HardLink |
 
 **为什么 command 写 `cmd /c npx` 而不是 `npx`**：Windows 下 Node 的 `spawn('npx')` 不带 shell
@@ -91,7 +89,11 @@ python skills/ai-config-sharing/scripts/sync-mcp-config.py --check   # 只校验
 python skills/ai-config-sharing/scripts/sync-mcp-config.py           # 写回
 ```
 
-脚本同时校验 6 个硬链接的内容一致性与源文件链接数（应为 7）。
+同步是**双向**的：源里新增/修改的 server 写入派生端，源里消失的也删除。删除范围只覆盖
+脚本自己写过的 server，名单记在 `.ai-shared/.mcp-synced.json`（**该文件需入库**，是
+「哪些段归脚本管」的唯一依据）。Codex 自管的 `[mcp_servers.node_repl]` 不在名单内，不会被误删。
+
+脚本同时校验 5 个硬链接的内容一致性与源文件链接数（应为 6）。
 
 ---
 
@@ -111,7 +113,6 @@ python skills/ai-config-sharing/scripts/sync-mcp-config.py           # 写回
 | `C:\Users\20448\.qoder\skills` | Junction → `.ai-shared\skills` |
 | `C:\Users\20448\.workbuddy\skills` | Junction → `.ai-shared\skills` |
 | `C:\Users\20448\.workbuddy-ai\skills` | Junction → `.ai-shared\skills` |
-| `C:\Users\20448\.catpawai\skills` | Junction → `.ai-shared\skills` |
 | `C:\Users\20448\.agents\skills` | Junction → `.ai-shared\skills` |
 
 ### 2. agents\
@@ -126,7 +127,6 @@ python skills/ai-config-sharing/scripts/sync-mcp-config.py           # 写回
 | `C:\Users\20448\.qoder\agents` | Junction → `.ai-shared\agents` |
 | `C:\Users\20448\.workbuddy\agents` | Junction → `.ai-shared\agents` |
 | `C:\Users\20448\.workbuddy-ai\agents` | Junction → `.ai-shared\agents` |
-| `C:\Users\20448\.catpawai\agents` | Junction → `.ai-shared\agents` |
 | `C:\Users\20448\.agents\agents` | Junction → `.ai-shared\agents` |
 
 ---
@@ -135,13 +135,14 @@ python skills/ai-config-sharing/scripts/sync-mcp-config.py           # 写回
 
 skill 花名册的**唯一维护源为 `skills\README.md`**（含名称、说明、来源、待恢复项），本节不再重复列举，只记录与链接治理相关的结论。
 
-- 实测（2026-09-24）：`skills\` 下有 **60 个 skill 目录** + `.system`（**非空**，含 6 个 Codex 系统 skill），另有 6 个非目录条目（`.gitignore`、`README.md`、3 个迁移标记 JSON，以及由 `skills\.gitignore` 排除的 `_bm_skillid_migration.json`）
-- 来源分布：GitHub 克隆 7 个（各带独立 `.git`，由 `.gitignore` 排除）；主仓库跟踪 53 个
+- 实测（2026-10-04）：`skills\` 下有 **42 个 skill 目录** + `.system`（**非空**，含 6 个 Codex 系统 skill），另有 6 个非目录条目（`.gitignore`、`README.md`、3 个迁移标记 JSON，以及由 `skills\.gitignore` 排除的 `_bm_skillid_migration.json`）
+- 来源分布：GitHub 克隆 7 个（各带独立 `.git`，由 `.gitignore` 排除）；主仓库跟踪 35 个
+- **口径校正（2026-10-04）**：此前登记的「60」与本目录 `ls` 实测（40）长期不一致；现统一为**顶层目录**口径，与 `skills\README.md` 花名册逐行对齐。嵌套子技能（`superpowers/skills/*`、`nature-skills/skills/*` 等）不计入。
 - 无待恢复项（`model-architecture-diagram` 已确认磁盘上不存在，2026-09-23 从花名册移除）
 - 复核命令：
   ```bash
-  ls -1 skills | grep -vE '^(README\.md|_bm_skillid_migration\.json)$' | wc -l   # 应为 60
-  find skills -maxdepth 1 -mindepth 1 -type d | wc -l                            # 应为 61（多出 .system）
+  ls -1 skills | grep -vE '^(README\.md|_bm_skillid_migration\.json)$' | wc -l   # 应为 42
+  find skills -maxdepth 1 -mindepth 1 -type d | wc -l                            # 应为 43（多出 .system）
   ```
   花名册按名称字典序排列，可逐行对应第一条命令的输出
 
@@ -178,6 +179,9 @@ skill 花名册的**唯一维护源为 `skills\README.md`**（含名称、说明
 | 2026-09-23 | 花名册全量核对 | 实测 57 个 skill 目录（此前花名册只登记 36 个，另有 21 个用户自建/工具链 skill 未登记）；移除幽灵条目 `model-architecture-diagram`（磁盘上已不存在）；修正 `.system` 说明（原记为「空目录」，实含 6 个系统 skill）；来源分布更新为 GitHub 克隆 7 + 主仓库跟踪 50 |
 | 2026-09-24 | 花名册增量核对 | 实测 60 个 skill 目录；补登记 3 个漏登项 `ai-fast-learning-loop`、`fireworks-showcase-layout`、`project-handover-docs`；总数 57 → 60，来源分布更新为 GitHub 克隆 7 + 主仓库跟踪 53 |
 | 2026-09-26 | 新增 mcp.json 硬链接 | 唯一维护源 `.ai-shared\mcp.json`（context7），硬链接分发到 `.cursor` / `.qoder` / `.workbuddy` / `.workbuddy-ai` / `.catpawai` / `.agents`；Codex（TOML）与 Claude（`~/.claude.json`）由 `sync-mcp-config.py` 派生。原 `.qoder\mcp.json` 含 drawio，按用户裁决丢弃，备份在 `.trash\qoder-mcp.json.20260926.bak` |
+| 2026-10-04 | 移除 `.catpawai` 分发目标 | 用户删除 `.catpawai` 目录并决定**不再保留 CatPaw**，其 `AGENTS.md` / `AI_READ_FIRST.md` / `mcp.json` 硬链接与 `skills` / `agents` 联接一并移除；同时清除 `skills/ai-config-sharing` 内的全部 CatPaw 引用（含删除 `scripts/fix-catpawai.ps1`）。源文件链接数由 9 校正为 **8**（`mcp.json` 由 7 校正为 **6**），清单与项目记忆同步更新 |
+| 2026-10-04 | 新增 2 个 skill 并校正花名册口径 | 新增 `ai-output-readability`（四级表达路由）、`explainer-video`（3b1b 风格讲解视频）；花名册 40 → **42**。同时校正长期不一致的计数口径：此前登记的 60（含嵌套子技能）与 `ls` 实测的 40 并存，现统一为**顶层目录**口径 |
+| 2026-10-05 | 移除 context7 + 修复 MCP 同步脚本 | 源 `mcp.json` 已为空 `{}`，但 Claude（`.claude.json`）与 Codex（`config.toml`）派生端仍残留 context7。按用户裁决移除：脚本改为**双向**同步（源里消失的 server 也从派生端删）+ 容忍空源；新增 `.ai-shared/.mcp-synced.json` 记录脚本写过的 server 名，据此避免误删 Codex 自管的 `[mcp_servers.node_repl]`。改前已备份两个配置到 `.trash/mcp-config-backup-20261005-095048/`；改后 `--check` 通过、重复执行幂等 |
 
 ---
 
@@ -236,7 +240,6 @@ dir /al C:\Users\20448\.cursor
 dir /al C:\Users\20448\.qoder
 dir /al C:\Users\20448\.workbuddy
 dir /al C:\Users\20448\.workbuddy-ai
-dir /al C:\Users\20448\.catpawai
 dir /al C:\Users\20448\.agents
 ```
 

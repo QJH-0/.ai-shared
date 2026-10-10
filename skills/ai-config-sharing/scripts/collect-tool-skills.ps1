@@ -31,7 +31,7 @@
 param(
     [string]$SharedRoot = (Join-Path $env:USERPROFILE '.ai-shared'),
     [switch]$Apply,
-    [string[]]$Tools = @('.claude', '.codex', '.cursor', '.qoder', '.workbuddy', '.workbuddy-ai', '.catpawai', '.agents'),
+    [string[]]$Tools = @('.claude', '.codex', '.cursor', '.qoder', '.workbuddy', '.workbuddy-ai', '.agents'),
     [string[]]$Name = @()
 )
 

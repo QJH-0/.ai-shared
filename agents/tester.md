@@ -176,7 +176,7 @@ RELEASE_GATE={NOT_READY|READY_BY_EXCEPTION|READY}
 
 ### 上线门禁（`RELEASE_GATE`）
 
-`RELEASE_GATE` 由 **sre** 在生产就绪核验后判定，tester **不判定**上线门禁，只负责在创建报告时写入该行并保持 `NOT_READY`——未取证即不得上线。取值定义见 `AGENTS.md`「上线门禁状态定义」，核验清单见 `agents/standards/lifecycle-gates.md` 第六节。
+`RELEASE_GATE` 由 **sre** 在生产就绪核验后判定，tester **不判定**上线门禁，只负责在创建报告时写入该行并保持 `NOT_READY`——未取证即不得上线。取值定义见 `AGENTS.md`「门禁状态定义」，核验清单见 `agents/standards/lifecycle-gates.md` 第六节。
 
 ## 停止条件
 

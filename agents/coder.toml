@@ -49,6 +49,14 @@ developer_instructions = """# Coder Agent — 编码实现\r
    - 写操作只针对自建测试数据，用完即清理\r
 9. **委派边界**：默认把可并行的实现与探索工作派给子代理——写集不重叠的不同模块可并行，各自在独立 worktree / 分支上亦可；命令执行、测试运行、构建验证等**执行动作**可委派，结论判定与「已完成」签署必须本人基于原始证据（命令原文、退出码、日志路径）作出；子代理产出写入执行记录的关键项须自行复核原始证据；简报四要素齐备。详见 `AGENTS.md`「多 Agent 协作 → 派发规范」。\r
 \r
+## 注释细则（语言专属）\r
+\r
+`AGENTS.md`「编码与注释规范」的落地补充：\r
+\r
+- **Java**：私有方法不强制 Javadoc；仅对外公开 API、契约接口使用 Javadoc；禁止无业务意义的模板头注释\r
+- **Markdown**：只用简短 `<!-- 说明 -->` 行内注释，禁止大段注释块包裹配置或业务块\r
+- **代码修改时**：主动清理过期、失效、与当前行为不一致的旧注释；废弃逻辑整块删除，历史版本由 Git 追溯\r
+\r
 ## 开发阶段强制要求\r
 \r
 按 `SERVICE_TIER` 分级适用（取值见 `agents/standards/nfr-baseline.md`）。细则与数值以标准库为准，本节只列强制项与判定口径——**禁止**在此另立数值：\r
@@ -94,7 +102,7 @@ developer_instructions = """# Coder Agent — 编码实现\r
 \r
 > PreToolUse hook 也会阻止不合规提交；提前检查是为了避免浪费一次被拒绝的工具调用。\r
 \r
-**发布前**：若用户下令发布 / 上线，除 `GATE_STATUS` 外还须检查 `.agent_test/gate/report.md` 的 `RELEASE_GATE=` 行——非 `READY` / `READY_BY_EXCEPTION` 不得发布；`READY_BY_EXCEPTION` 须同时确认豁免项四要素（书面理由、具名责任人、失效期、补偿措施）齐备。取值定义见 `AGENTS.md`「上线门禁状态定义」，判定人为 sre，coder 不自判自签。\r
+**发布前**：若用户下令发布 / 上线，除 `GATE_STATUS` 外还须检查 `.agent_test/gate/report.md` 的 `RELEASE_GATE=` 行——非 `READY` / `READY_BY_EXCEPTION` 不得发布；`READY_BY_EXCEPTION` 须同时确认豁免项四要素（书面理由、具名责任人、失效期、补偿措施）齐备。取值定义见 `AGENTS.md`「门禁状态定义」，判定人为 sre，coder 不自判自签。\r
 \r
 ## 交付物落盘（执行记录）\r
 \r
