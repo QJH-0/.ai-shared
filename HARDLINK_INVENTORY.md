@@ -135,16 +135,18 @@ python skills/ai-config-sharing/scripts/sync-mcp-config.py           # 写回
 
 skill 花名册的**唯一维护源为 `skills\README.md`**（含名称、说明、来源、待恢复项），本节不再重复列举，只记录与链接治理相关的结论。
 
-- 实测（2026-10-04）：`skills\` 下有 **42 个 skill 目录** + `.system`（**非空**，含 6 个 Codex 系统 skill），另有 6 个非目录条目（`.gitignore`、`README.md`、3 个迁移标记 JSON，以及由 `skills\.gitignore` 排除的 `_bm_skillid_migration.json`）
-- 来源分布：GitHub 克隆 7 个（各带独立 `.git`，由 `.gitignore` 排除）；主仓库跟踪 35 个
-- **口径校正（2026-10-04）**：此前登记的「60」与本目录 `ls` 实测（40）长期不一致；现统一为**顶层目录**口径，与 `skills\README.md` 花名册逐行对齐。嵌套子技能（`superpowers/skills/*`、`nature-skills/skills/*` 等）不计入。
+- 实测（2026-10-12）：`skills\` 下有 **28 个 skill 目录** + `.system`（**非空**，含 6 个 Codex 系统 skill），另有 6 个非目录条目（`.gitignore`、`README.md`、3 个迁移标记 JSON，以及由 `skills\.gitignore` 排除的 `_bm_skillid_migration.json`）
+- **口径校正（2026-10-12，已对账）**：此前登记的 42（2026-10-04）为历史值；实测顶层 **28**，`skills\README.md` 花名册已重建为 28 行，两处一致。多出的 17 行系**用户手动删除**的 skill（非丢失），明细见 `skills\README.md`「对账记录」
+- 来源分布（2026-10-12 实测）：保留独立 `.git` 的克隆 **7 个**（`claude-deep-research-skill`、`fireworks-tech-graph`、`humanizer-zh`、`nature-skills`、`repo-wiki`、`superpowers`、`web-access`）；其余 21 个（含本次新增 `archify`，未保留 `.git`）归主仓库跟踪
+- **口径校正（2026-10-04）**：此前登记的「60」与本目录 `ls` 实测（40）长期不一致；现统一为**顶层目录**口径。嵌套子技能（`superpowers/skills/*`、`nature-skills/skills/*` 等）不计入。
+- **对账已收口（2026-10-12）**：花名册 28 行与实测 28 个目录逐行一致（新增 `archify`，补登 `find-skills`、`grilling`）。删除 skill 后必须同批删花名册行，否则会再次出现「表比磁盘多」的静默腐烂
 - 无待恢复项（`model-architecture-diagram` 已确认磁盘上不存在，2026-09-23 从花名册移除）
 - 复核命令：
   ```bash
-  ls -1 skills | grep -vE '^(README\.md|_bm_skillid_migration\.json)$' | wc -l   # 应为 42
-  find skills -maxdepth 1 -mindepth 1 -type d | wc -l                            # 应为 43（多出 .system）
+  ls -1 skills | grep -vE '^(README\.md|_bm_skillid_migration\.json)$' | wc -l   # 顶层 skill 目录，2026-10-12 实测 28
+  find skills -maxdepth 1 -mindepth 1 -type d | wc -l                            # 2026-10-12 实测 29（多出 .system）
   ```
-  花名册按名称字典序排列，可逐行对应第一条命令的输出
+  花名册按名称字典序排列，可逐行对应第一条命令的输出（2026-10-12 已对账）
 
 ---
 
@@ -182,6 +184,10 @@ skill 花名册的**唯一维护源为 `skills\README.md`**（含名称、说明
 | 2026-10-04 | 移除 `.catpawai` 分发目标 | 用户删除 `.catpawai` 目录并决定**不再保留 CatPaw**，其 `AGENTS.md` / `AI_READ_FIRST.md` / `mcp.json` 硬链接与 `skills` / `agents` 联接一并移除；同时清除 `skills/ai-config-sharing` 内的全部 CatPaw 引用（含删除 `scripts/fix-catpawai.ps1`）。源文件链接数由 9 校正为 **8**（`mcp.json` 由 7 校正为 **6**），清单与项目记忆同步更新 |
 | 2026-10-04 | 新增 2 个 skill 并校正花名册口径 | 新增 `ai-output-readability`（四级表达路由）、`explainer-video`（3b1b 风格讲解视频）；花名册 40 → **42**。同时校正长期不一致的计数口径：此前登记的 60（含嵌套子技能）与 `ls` 实测的 40 并存，现统一为**顶层目录**口径 |
 | 2026-10-05 | 移除 context7 + 修复 MCP 同步脚本 | 源 `mcp.json` 已为空 `{}`，但 Claude（`.claude.json`）与 Codex（`config.toml`）派生端仍残留 context7。按用户裁决移除：脚本改为**双向**同步（源里消失的 server 也从派生端删）+ 容忍空源；新增 `.ai-shared/.mcp-synced.json` 记录脚本写过的 server 名，据此避免误删 Codex 自管的 `[mcp_servers.node_repl]`。改前已备份两个配置到 `.trash/mcp-config-backup-20261005-095048/`；改后 `--check` 通过、重复执行幂等 |
+| 2026-10-12 | 新增 `archify` 并替换 `project-chain-atlas` | 按用户要求从 GitHub 克隆 `tt-a1i/archify`（v3.0.1，MIT；官方 Skills CLI `npx -y skills add tt-a1i/archify --list --full-depth` 确认源内仅一个名为 `archify` 的技能）替换 `project-chain-atlas`。整仓克隆 86.3MB，其中技能包 `archify/archify/` 10.1MB **展平**提升为 `skills\archify\`（`SKILL.md` 落到发现路径顶层），克隆整仓与 `project-chain-atlas` 分别归档至 `.trash\archify-repo-clone-20261012-153826\`、`.trash\project-chain-atlas-20261012-153832\`（未删除，待用户处置）。因未保留 `.git`，来源归类为主仓库跟踪。悬空引用：全仓 grep `project-chain-atlas` 仅命中其自身文件，无外部引用需清理。验证：`node bin/archify.mjs --help` 正常（Node v24.16，browser-check 依赖的本机 Chrome 存在）；7 个工具目录下 `skills\archify\SKILL.md` 可见、`project-chain-atlas` 已消失。同批发现花名册与实测目录长期不一致（42 行 vs 28 目录）；用户随后确认那 17 行系其**手动删除**，当日完成对账收口（见下一行） |
+| 2026-10-12 | 花名册对账收口 | 用户确认「登记了但磁盘不存在」的 17 个 skill 系其**手动删除**（非丢失）。据此重建 `skills\README.md`：删除 17 行历史登记（`canvas`、`code-to-interview-docs`、`feishu-job-import`、`migrate-to-skills`、`morph-ppt`、`morph-ppt-3d`、`officecli` 及 8 个变体、`resume-tech-interview-decompose`、顶层 `skill-creator`）、补登 `find-skills` 与 `grilling`、并重排编号 1–28；同步修正 §四计数与复核命令注释。验证：三步对账 `Compare-Object` 无输出（磁盘 28 = 花名册 28），编号 1..28 连续；全仓 grep 17 个已删名字仅命中本 README 自身的登记行（`agents/*.md` 路由表未引用）。同时修正「已知重名」中 `skill-creator` 的处置（现存仅 `.system/skill-creator`）与「已知功能重叠」（移除 `officecli` 段落，新增 `archify` / `fireworks-tech-graph` / `mermaid-master` 的绘图边界） |
+| 2026-10-12 | archify 本地扩展：一次到位契约 | 针对首次出图只产出浅层总览、需三轮追加对话才达预期深度的问题，在 skill 包内新增 `references/one-pass-completeness.md`（范围触发、默认视图集、8 项覆盖清单、实测容量上限、引用先核验、环境与证据卫生），并给 `SKILL.md`（第 1/3 步 + 新小节 + Setup 预检）、`references/authoring-defaults.md`（overview = 完整运行时表面且交付视图集；禁止把真实组件降级塞进卡片）、`references/repository-authoring.md`（系统级请求的范围含后台/存储/横切；写入前核验引用）打上 `[local extension 2026-10-12]` 补丁。全部改动与重新套用方式记录在 `skills\archify\LOCAL_CHANGES.md`。该包无独立 `.git`（已展平、主仓库跟踪），故不与 `git pull` 冲突；但上游刷新会覆盖，需按 LOCAL_CHANGES 重新套用 |
+| 2026-10-12 | 提交 skills 重组并清理过期报告 | 上述改动（新增 `archify` 与 `grilling`、删除 17 个用户手动移除的 skill 及被替换的 `project-chain-atlas`、`skills\README.md` 花名册对账至 28 行、本文件计数与时间线同步）一次提交入库。同批清理 `.agent_docs\` 两个过期报告（`audits\2026-09-24-skills-audit.md`、`impl\2026-10-11-agent-rules-simplification.md`）：按第 4 节流程先从 `HEAD` 归档至 `.trash\agent_docs-20261012\`，再随本次提交删除 |
 
 ---
 
