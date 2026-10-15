@@ -1,15 +1,15 @@
 # Skills 目录索引
 
-> 最后更新：2026-10-12（花名册对账完成） | Skills 总数：**28**（顶层 skill 目录，不含 `.system/`）
+> 最后更新：2026-10-14（上游克隆更新 + 嵌套计数修正） | Skills 总数：**28**（顶层 skill 目录，不含 `.system/`）
 >
 > 计数口径：只统计 `skills\` 的**顶层目录**（**28**），与 `ls skills/` 逐行对应。
 >
-> 另有 **38 个嵌套子技能**（`nature-skills` 20、`superpowers` 14、`frontend-design` 2、`browser-automation` 2）**不计入本表**——全目录 `SKILL.md` 合计 **66** 个。历史上出现过的「60」「80」等数字均因混用口径所致，现统一按顶层目录计数。
+> 另有 **42 个嵌套子技能**（`nature-skills` 23、`superpowers` 15、`frontend-design` 2、`browser-automation` 2）**不计入本表**——全目录 `SKILL.md` 合计 **70** 个。历史上出现过的「60」「80」等数字均因混用口径所致，现统一按顶层目录计数。
 >
 > ```bash
 > ls -1 skills | grep -vE '^(README\.md|_bm_skillid_migration\.json)$' | wc -l              # 顶层，应为 28
-> find skills -name SKILL.md -not -path 'skills/.system/*' | wc -l                        # 全部，应为 66
-> find skills -name SKILL.md -not -path 'skills/.system/*' | grep -vcE '^skills/[^/]+/SKILL\.md$'  # 嵌套，应为 38
+> find skills -name SKILL.md -not -path 'skills/.system/*' | wc -l                        # 全部，应为 70
+> find skills -name SKILL.md -not -path 'skills/.system/*' | grep -vcE '^skills/[^/]+/SKILL\.md$'  # 嵌套，应为 42
 > ```
 >
 > 本文件是 skill 花名册的**唯一维护源**；`HARDLINK_INVENTORY.md` 只保留链接治理信息，不重复列举清单。
@@ -25,23 +25,23 @@
 | 2 | `ai-config-sharing` | 环境治理 | 多 AI 工具 skills/agents/AGENTS.md 配置统一管理（Junction + HardLink 单点维护） | 主仓库 |
 | 3 | `ai-fast-learning-loop` | 学术科研 | 十步 AI 学习闭环：五视角 STORM → 矛盾图谱 → 综合简报 → 同行评审 → 资源筛选 → 能力阶梯 → 十次课计划 → 分级考试 → 费曼循环 → 一页速查表 | 主仓库 |
 | 4 | `ai-output-readability` | 输出表达 | AI 输出可读性四级路由：规范文本（ASD-STE100）→ 图表 → 交互网页 → 讲解视频；含触发条件、提示词模板与反模式 | 主仓库 |
-| 5 | `archify` | 绘图可视化 | 架构 / 工作流 / 时序 / 数据流 / 生命周期图：类型化 JSON IR → 可探索单文件 HTML（内联 SVG、深浅主题、可选追踪动效、PNG/JPEG/WebP/SVG/WebM 导出），`finalize` 含真实 Chrome browser-check；可读仓库取证 | 主仓库（来源 GitHub: tt-a1i/archify v3.0.1，已展平） |
+| 5 | `archify` | 绘图可视化 | 架构 / 工作流 / 时序 / 数据流 / 生命周期图：类型化 JSON IR → 可探索单文件 HTML（内联 SVG、深浅主题、可选追踪动效、PNG/JPEG/WebP/SVG/WebM 导出），`finalize` 含真实 Chrome browser-check；可读仓库取证 | GitHub: tt-a1i/archify v3.1.0（83k★，已展平 + 本地扩展） |
 | 6 | `arxiv-paper-downloader` | 学术科研 | arXiv 论文批量下载，逐篇用首页标题校验并纠正错误 ID | 主仓库 |
-| 7 | `awesome-ai-research-writing` | 学术科研 | 中英双语学术写作工具包：起草、翻译、润色、缩写、扩写、逻辑检查 | 主仓库（社区来源已展平） |
-| 8 | `browser-automation` | 浏览器与联网 | 统一浏览器自动化套件：Playwright 网页操作 / Web 应用可复跑 E2E 测试 | 主仓库（多来源合并） |
+| 7 | `awesome-ai-research-writing` | 学术科研 | 中英双语学术写作工具包：起草、翻译、润色、缩写、扩写、逻辑检查 | GitHub: zengrong233/awesome-ai-research-writing-skill（76★，已展平） |
+| 8 | `browser-automation` | 浏览器与联网 | 统一浏览器自动化套件：Playwright 网页操作 / Web 应用可复跑 E2E 测试 | 主仓库（多来源合并：`playwright/` 来自 microsoft/playwright-cli 14k★ 并本地改写为 `npx playwright cli`；`webapp-testing/` 来自 anthropics/skills） |
 | 9 | `claude-deep-research-skill` | 学术科研 | 多源深度研究、引用追踪、证据留存、结构化报告 | GitHub: 199-biotechnologies/claude-deep-research-skill |
-| 10 | `doc-coauthoring` | 文档与 Office | 文档协作写作工作流：文档、提案、技术规格、决策文档 | 主仓库 |
+| 10 | `doc-coauthoring` | 文档与 Office | 文档协作写作工作流：文档、提案、技术规格、决策文档 | GitHub: anthropics/skills（181k★，已展平） |
 | 11 | `explainer-video` | 输出表达 | 3b1b 风格讲解视频：脚本 → 程序化动画 → TTS 配音 → 合成 MP4 | 主仓库 |
-| 12 | `find-skills` | 工具链 | 场景驱动 + 关键词双模式的技能发现：官方内置 / 本地已安装 / SkillHub / 虾评 / GitHub / ClawHub 六层联合搜索并推荐，支持一键安装（取代官方原 `find-skills` 插件） | 主仓库（SkillsHub 安装，frontmatter `slug: guipi-find-skills`） |
+| 12 | `find-skills` | 工具链 | 场景驱动 + 关键词双模式的技能发现：官方内置 / 本地已安装 / SkillHub / 虾评 / GitHub / ClawHub 六层联合搜索并推荐，支持一键安装（取代官方原 `find-skills` 插件） | 主仓库（SkillsHub 安装；上游 GitHub: guipi888/find-skills，0★，本地为增强版，见「上游更新记录」） |
 | 13 | `fireworks-tech-graph` | 绘图可视化 | 手写 SVG 技术图：几何安全校验（边交叉/碰撞/标签位置）+ PNG 回读 + GIF 动效；12 种风格、14 类 UML；含 showcase 版式补遗 `references/showcase-layout.md` | GitHub: yizhiyanhua-ai/fireworks-tech-graph |
-| 14 | `frontend-design` | 绘图可视化 | 前端视觉设计指导：设计方向、排版、反模板化默认观感（含 50+ 风格库） | 主仓库 |
+| 14 | `frontend-design` | 绘图可视化 | 前端视觉设计指导：设计方向、排版、反模板化默认观感（含 50+ 风格库） | GitHub: anthropics/skills（181k★，正文）+ 本地 `ui-ux-data/` 设计数据库合并 |
 | 15 | `git-branch-diff-merge` | 开发与质量 | 双分支双向合并融合，冲突取新；AI 只读分析，Git 写操作由用户执行 | 主仓库 |
 | 16 | `git-commit` | 开发与质量 | Conventional Commits 规范提交（type/scope/subject） | 主仓库 |
 | 17 | `grilling` | 开发与质量 | 用设计树 + 分轮提问把计划 / 决策拷问到没有未决假设：每轮列出当前可问的全部问题并给出推荐答案，事实自行查证、决策交用户裁决 | 主仓库 |
 | 18 | `humanizer-zh` | 学术科研 | 中文去 AI 味写作助手：检测并修复 AI 写作特征模式 | GitHub: op7418/Humanizer-zh |
 | 19 | `kaggle-modularize` | 开发与质量 | 单体 `.ipynb` ↔ Python 模块双向拆分 / 合并 | 主仓库 |
 | 20 | `kaggle-notebook-to-cloud-jupyter` | 开发与质量 | Kaggle notebook 迁移到云 GPU JupyterLab：单源参数化、两级存储、依赖安装 | 主仓库 |
-| 21 | `markitdown` | 文档与 Office | 多格式文档转 Markdown：PDF / Office / 图片 / 音频 / HTML / CSV / EPUB / ZIP / URL | 主仓库 |
+| 21 | `markitdown` | 文档与 Office | 多格式文档转 Markdown：PDF / Office / 图片 / 音频 / HTML / CSV / EPUB / ZIP / URL | GitHub: microsoft/markitdown（190k★，v0.1.8 展平 + 本地 SKILL.md） |
 | 22 | `mermaid-master` | 绘图可视化 | Mermaid 技术文档图表：流程图、架构图、时序图、状态图、ER 图、甘特图 | 主仓库 |
 | 23 | `multi-agent` | 开发与质量 | 多代理任务规划与可审计的子代理任务简报生成 | 主仓库 |
 | 24 | `nature-skills` | 学术科研 | Nature 级学术工作流：写作、引用、绘图、检索、统计、润色、审稿回复 | GitHub: Yuan1z0825/nature-skills |
@@ -55,7 +55,7 @@
 | 来源 | 数量 | 说明 |
 |------|------|------|
 | GitHub 克隆 | 7 | 各自保留独立 `.git`，由主仓库 `.gitignore` 排除，整体不入库 |
-| 主仓库跟踪 | 21 | 由 `.ai-shared` 主仓库直接版本管理（含已展平的社区 / SkillsHub 来源） |
+| 主仓库跟踪 | 21 | 由 `.ai-shared` 主仓库直接版本管理。其中 6 个有已核实的上游仓库但**未保留 `.git`**（展平 / 合并安装）：`markitdown`、`frontend-design`、`doc-coauthoring`、`awesome-ai-research-writing`、`find-skills`，以及 `browser-automation` 的两个子技能（`playwright/`、`webapp-testing/`）；更新方式见「上游更新记录（2026-10-15）」 |
 
 ### 类别分布
 
@@ -83,6 +83,42 @@
 - **同批发现**：`fireworks-tech-graph` 克隆内被上游跟踪的嵌套副本（`skills/fireworks-tech-graph/`，140 文件）在本地工作区**已被删除且未提交**，本表旧文「重复 140 文件 / 9.0MB」已失效，按现状改写（见「已知重名」）。另：本表此前引用的 `.agent_docs/audits/2026-09-24-skills-audit.md` 在磁盘上不存在，属悬空引用，本次一并清除。
 
 欠账成因：手动删除 skill 后未同批更新本表，而本表此前长期只增不删。**此后删除 skill 必须同批删行**；批量核对走 `ai-config-sharing` 的「清单盘点：花名册与实测目录对账」三步法。
+
+## 上游更新记录（2026-10-14）
+
+对 7 个 GitHub 克隆逐个人工 `git fetch` 比对后，按三类处置：
+
+| Skill | 结果 | 说明 |
+|-------|------|------|
+| `humanizer-zh` | 91f3d39 → f4518a8（+1） | 干净克隆，直接 `pull --ff-only` |
+| `web-access` | 33eef84 → d173a75（+26） | 干净克隆，直接 `pull --ff-only`；上游打 tag v2.6.0 |
+| `nature-skills` | bd4e415 → 19be8d4（+100） | 本地仅新增根 `SKILL.md`（未跟踪），与 incoming 无交集，ff 安全；上游新增子技能 `nature-paper-trans`、`nature-paper-xray`、`nature-social-science`，已补登根索引 |
+| `superpowers` | b36e082 → bb92a77（+3） | 同上；上游发版 v7.0.0（rebuilt brainstorming、Antigravity manifest、Windows hook fixes），新增子技能 `diagnosing-superpowers`，已补登根索引 |
+| `claude-deep-research-skill` | 已是最新（f2f2c0f） | 无操作 |
+| `repo-wiki` | 已是最新（c9adbfc） | 展平改动（删 `repo-wiki/*`、根目录重建）原样保留，上游无新提交故无冲突 |
+| `fireworks-tech-graph` | 已是最新（31fea36） | 本地功能扩展（`body` 多行字段 + showcase 版式）与嵌套副本删除原样保留，上游无新提交故无冲突 |
+
+pull 前后均确认：四个更新克隆的本地未提交改动（根 `SKILL.md`）未被覆盖，`repo-wiki` / `fireworks-tech-graph` 未执行 pull。本机 TLS 仍需 `http.sslBackend=openssl` + `GIT_SSL_NO_VERIFY=1`。
+
+## 上游更新记录（2026-10-15，无 `.git` 的 skills）
+
+对 21 个非克隆 skill 逐个做上游取证（本地 URL/署名文件 → GitHub 仓库核实 → 星数与活跃度 → 内容 diff），只从**规范高星仓库**更新，避免认错来源：
+
+| Skill | 上游（星数） | 结果 |
+|-------|-------------|------|
+| `markitdown` | microsoft/markitdown（190k★） | **已更新** 0.1.6b2 → v0.1.8：同步 98 个变更文件 + 20 个新文件；本地新增的根 `SKILL.md` 保留（上游无此文件）；`compileall` 通过 |
+| `frontend-design` | anthropics/skills（181k★） | **已更新**正文到上游 2026-09-03 版（#1713「avoid generic design defaults」）；本地合并的 `ui-ux-data/` 数据库小节已重新追加到正文末尾 |
+| `archify` | tt-a1i/archify（83k★） | **已更新** v3.0.1 → v3.1.0（用户要求不全量下载）：下载 v3.1.0 release zip（展平 skill 包），SHA256 比对后只复制 65 个变更 + 51 个新增文件；4 处本地扩展补丁已在 v3.1.0 上重新套用（`LOCAL_CHANGES.md` 同步改基线）；删除被新版取代的孤儿 `renderers/lifecycle/grid-routing.mjs`；`doctor` 全绿（含新增 erd/class/tree/timeline/waterfall 五种渲染器）；`test/` 与 `generate-*.mjs` 为本地保留的开发件，未动 |
+| `doc-coauthoring` | anthropics/skills（181k★） | 已是最新（与上游逐字节一致） |
+| `webapp-testing`（`browser-automation/` 内） | anthropics/skills（181k★） | 已是最新（一致） |
+| `awesome-ai-research-writing` | zengrong233/awesome-ai-research-writing-skill（76★） | 已是最新（仅 `.openskills.json` 为本地元数据） |
+| `find-skills` | guipi888/find-skills（0★） | **不更新**：上游 master 与本地同为 v1.7.0，但本地是 SkillsHub 安装 + 实测增强版（score 判读表、fallback 来源、客户端检测）；上游 master 反而更简且新增了引流广告段。从上游覆盖会丢本地内容 |
+| `playwright`（`browser-automation/` 内） | microsoft/playwright-cli（14k★） | **不更新**：本地是刻意改写版——目标为 Playwright 内置 `npx playwright cli`（≥1.62）+ 包装脚本，上游 SKILL.md 面向独立的 `playwright-cli` 包，覆盖即成退化 |
+| `mermaid-master` | — | **无有效上游**：GitHub 无同名高星仓库（唯一同名仓库 0 星且无关），按主仓库 skill 维护 |
+
+其余非克隆 skill（`ai-code-review`、`ai-config-sharing`、`ai-fast-learning-loop`、`ai-output-readability`、`arxiv-paper-downloader`、`explainer-video`、`git-branch-diff-merge`、`git-commit`、`grilling`、`kaggle-modularize`、`kaggle-notebook-to-cloud-jupyter`、`multi-agent`、`workbuddy-auto-credits`）经 GitHub 搜索未找到可确认的高星上游，按主仓库 skill 维护。
+
+**方法备注**：`archify` 的「精准更新」模式（release zip + 哈希比对 + 补丁重放）可作为其他「已展平 + 有本地补丁」skill 的更新范式；`test/` 等开发件不同步是已知限制。
 
 ## 内部系统目录（`.system/`）
 
