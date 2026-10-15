@@ -87,9 +87,9 @@ When the user needs multiple agents:
 
 ## Integration with agent_memory
 
-- Read `agent_memory/context.md`, `progress.md`, `backlog.md` before drafting briefs for non-trivial work.
-- After delegation or phase completion, update `progress.md`; record newly found risks as `type=risk` entries in `backlog.md`, each carrying a named owner and an expiry.
-- Each information type has exactly one home file — other files link to it instead of copying content (see `AGENTS.md`「项目上下文管理」).
+- 非简单任务起草简报前，读取已有的 `agent_memory/context.md` 与 `agent_memory/work.md`；没有记录时先查项目资料，不为单次简单任务强制建文件。
+- 委派后更新相关任务状态；接续读取、事实核验与收尾更新按 AGENTS.md 第六节执行。需跟踪的风险在 `work.md` 注明责任人与处理期限。
+- 文件职责与拆分规则统一遵循 `AGENTS.md`「项目上下文与记录」，不重复维护详细报告。
 
 ## Example (minimal)
 
