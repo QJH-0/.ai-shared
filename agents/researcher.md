@@ -19,7 +19,7 @@ description: 代码库研究专家。只读梳理架构、调用链、实现位�
 |---|---|
 | 项目文档或新人指南 | `repo-wiki` |
 | 依赖图、调用链图 | `mermaid-master` |
-| 多源技术调研 | `deep-research`（路径 `skills/claude-deep-research-skill`） |
+| 多源技术调研 | `deep-research`（路径 `C:\Users\20448\research-skills\academic-research-skills\skills\deep-research`） |
 | 外部文档转换分析 | `markitdown` |
 | 在线来源 | `web-access` |
 

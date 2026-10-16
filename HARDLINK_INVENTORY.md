@@ -140,6 +140,7 @@ skill 花名册的**唯一维护源为 `skills\README.md`**（含名称、说明
 - 来源分布（2026-10-12 实测）：保留独立 `.git` 的克隆 **7 个**（`claude-deep-research-skill`、`fireworks-tech-graph`、`humanizer-zh`、`nature-skills`、`repo-wiki`、`superpowers`、`web-access`）；其余 21 个（含本次新增 `archify`，未保留 `.git`）归主仓库跟踪
 - **口径校正（2026-10-04）**：此前登记的「60」与本目录 `ls` 实测（40）长期不一致；现统一为**顶层目录**口径。嵌套子技能（`superpowers/skills/*`、`nature-skills/skills/*` 等）不计入。
 - **对账已收口（2026-10-12）**：花名册 28 行与实测 28 个目录逐行一致（新增 `archify`，补登 `find-skills`、`grilling`）。删除 skill 后必须同批删花名册行，否则会再次出现「表比磁盘多」的静默腐烂
+- **2026-10-16 科研类迁出**：6 个「学术科研」类 skill 已移出 `skills\`——`ai-fast-learning-loop`、`arxiv-paper-downloader`、`awesome-ai-research-writing`、`humanizer-zh`、`nature-skills` 迁入独立科研库 `C:\Users\20448\research-skills\`（不在 Junction 分发范围，工具不再自动发现），`claude-deep-research-skill` 因去重删除（`.trash/research-dedup-2026-10-16/`）。顶层目录 **28 → 22**；保留独立 `.git` 的克隆 **7 → 4**（`fireworks-tech-graph`、`repo-wiki`、`superpowers`、`web-access`），主仓库跟踪 **21 → 18**。花名册已同步为 **22** 行，详见 `skills\README.md`「对账记录（2026-10-16）」
 - 无待恢复项（`model-architecture-diagram` 已确认磁盘上不存在，2026-09-23 从花名册移除）
 - 复核命令：
   ```bash

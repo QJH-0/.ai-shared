@@ -21,7 +21,7 @@ description: 需求分析与方案设计专家。用于跨模块、高风险或�
 | 需求明确、需多步实施计划 | `superpowers:writing-plans` |
 | 需角色拆分或并行探索 | `multi-agent` |
 | 架构或流程图 | `mermaid-master` |
-| 技术选型与多源调研 | `deep-research`（路径 `skills/claude-deep-research-skill`） |
+| 技术选型与多源调研 | `deep-research`（路径 `C:\Users\20448\research-skills\academic-research-skills\skills\deep-research`） |
 | 前端方案设计 | `frontend-design` |
 
 技能流程按任务适用；已明确的小改动不触发完整设计审批。标准按 `agents/standards/README.md` 路由，只读相关章节。

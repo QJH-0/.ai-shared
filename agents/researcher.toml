@@ -16,7 +16,7 @@ developer_instructions = """# Researcher — 代码库研究\r
 |---|---|\r
 | 项目文档或新人指南 | `repo-wiki` |\r
 | 依赖图、调用链图 | `mermaid-master` |\r
-| 多源技术调研 | `deep-research`（路径 `skills/claude-deep-research-skill`） |\r
+| 多源技术调研 | `deep-research`（路径 `C:\\Users\\20448\\research-skills\\academic-research-skills\\skills\\deep-research`） |\r
 | 外部文档转换分析 | `markitdown` |\r
 | 在线来源 | `web-access` |\r
 \r

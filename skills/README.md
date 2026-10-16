@@ -1,15 +1,17 @@
 # Skills 目录索引
 
-> 最后更新：2026-10-14（上游克隆更新 + 嵌套计数修正） | Skills 总数：**28**（顶层 skill 目录，不含 `.system/`）
+> 最后更新：2026-10-16（科研类 skill 迁出到独立科研库 + 去重） | Skills 总数：**22**（顶层 skill 目录，不含 `.system/`）
 >
-> 计数口径：只统计 `skills\` 的**顶层目录**（**28**），与 `ls skills/` 逐行对应。
+> 计数口径：只统计 `skills\` 的**顶层目录**（**22**），与 `ls skills/` 逐行对应。
 >
-> 另有 **42 个嵌套子技能**（`nature-skills` 23、`superpowers` 15、`frontend-design` 2、`browser-automation` 2）**不计入本表**——全目录 `SKILL.md` 合计 **70** 个。历史上出现过的「60」「80」等数字均因混用口径所致，现统一按顶层目录计数。
+> 另有 **19 个嵌套子技能**（`superpowers` 15、`frontend-design` 2、`browser-automation` 2）**不计入本表**——全目录 `SKILL.md` 合计 **41** 个。历史上出现过的「60」「80」等数字均因混用口径所致，现统一按顶层目录计数。
+>
+> **2026-10-16 变更**：6 个「学术科研」类 skill（`ai-fast-learning-loop`、`arxiv-paper-downloader`、`awesome-ai-research-writing`、`claude-deep-research-skill`、`humanizer-zh`、`nature-skills`）已移出本目录，归集到独立科研库 `C:\Users\20448\research-skills\`（不在本 Junction 分发范围内，工具不再自动发现）；其中 `claude-deep-research-skill` 因被更强的 `academic-research-skills/deep-research` 替代而删除（备份于 `.trash/research-dedup-2026-10-16/`）。本目录不再有「学术科研」类别。
 >
 > ```bash
-> ls -1 skills | grep -vE '^(README\.md|_bm_skillid_migration\.json)$' | wc -l              # 顶层，应为 28
-> find skills -name SKILL.md -not -path 'skills/.system/*' | wc -l                        # 全部，应为 70
-> find skills -name SKILL.md -not -path 'skills/.system/*' | grep -vcE '^skills/[^/]+/SKILL\.md$'  # 嵌套，应为 42
+> ls -1 skills | grep -vE '^(README\.md|_bm_skillid_migration\.json)$' | wc -l              # 顶层，应为 22
+> find skills -name SKILL.md -not -path 'skills/.system/*' | wc -l                        # 全部，应为 41
+> find skills -name SKILL.md -not -path 'skills/.system/*' | grep -vcE '^skills/[^/]+/SKILL\.md$'  # 嵌套，应为 19
 > ```
 >
 > 本文件是 skill 花名册的**唯一维护源**；`HARDLINK_INVENTORY.md` 只保留链接治理信息，不重复列举清单。
@@ -23,52 +25,47 @@
 |---|-------|------|------|------|
 | 1 | `ai-code-review` | 开发与质量 | AI 生成代码审查：幻觉 API/依赖、安全漏洞、逻辑错误、供应链风险、可维护性 | 主仓库 |
 | 2 | `ai-config-sharing` | 环境治理 | 多 AI 工具 skills/agents/AGENTS.md 配置统一管理（Junction + HardLink 单点维护） | 主仓库 |
-| 3 | `ai-fast-learning-loop` | 学术科研 | 十步 AI 学习闭环：五视角 STORM → 矛盾图谱 → 综合简报 → 同行评审 → 资源筛选 → 能力阶梯 → 十次课计划 → 分级考试 → 费曼循环 → 一页速查表 | 主仓库 |
-| 4 | `ai-output-readability` | 输出表达 | AI 输出可读性四级路由：规范文本（ASD-STE100）→ 图表 → 交互网页 → 讲解视频；含触发条件、提示词模板与反模式 | 主仓库 |
-| 5 | `archify` | 绘图可视化 | 架构 / 工作流 / 时序 / 数据流 / 生命周期图：类型化 JSON IR → 可探索单文件 HTML（内联 SVG、深浅主题、可选追踪动效、PNG/JPEG/WebP/SVG/WebM 导出），`finalize` 含真实 Chrome browser-check；可读仓库取证 | GitHub: tt-a1i/archify v3.1.0（83k★，已展平 + 本地扩展） |
-| 6 | `arxiv-paper-downloader` | 学术科研 | arXiv 论文批量下载，逐篇用首页标题校验并纠正错误 ID | 主仓库 |
-| 7 | `awesome-ai-research-writing` | 学术科研 | 中英双语学术写作工具包：起草、翻译、润色、缩写、扩写、逻辑检查 | GitHub: zengrong233/awesome-ai-research-writing-skill（76★，已展平） |
-| 8 | `browser-automation` | 浏览器与联网 | 统一浏览器自动化套件：Playwright 网页操作 / Web 应用可复跑 E2E 测试 | 主仓库（多来源合并：`playwright/` 来自 microsoft/playwright-cli 14k★ 并本地改写为 `npx playwright cli`；`webapp-testing/` 来自 anthropics/skills） |
-| 9 | `claude-deep-research-skill` | 学术科研 | 多源深度研究、引用追踪、证据留存、结构化报告 | GitHub: 199-biotechnologies/claude-deep-research-skill |
-| 10 | `doc-coauthoring` | 文档与 Office | 文档协作写作工作流：文档、提案、技术规格、决策文档 | GitHub: anthropics/skills（181k★，已展平） |
-| 11 | `explainer-video` | 输出表达 | 3b1b 风格讲解视频：脚本 → 程序化动画 → TTS 配音 → 合成 MP4 | 主仓库 |
-| 12 | `find-skills` | 工具链 | 场景驱动 + 关键词双模式的技能发现：官方内置 / 本地已安装 / SkillHub / 虾评 / GitHub / ClawHub 六层联合搜索并推荐，支持一键安装（取代官方原 `find-skills` 插件） | 主仓库（SkillsHub 安装；上游 GitHub: guipi888/find-skills，0★，本地为增强版，见「上游更新记录」） |
-| 13 | `fireworks-tech-graph` | 绘图可视化 | 手写 SVG 技术图：几何安全校验（边交叉/碰撞/标签位置）+ PNG 回读 + GIF 动效；12 种风格、14 类 UML；含 showcase 版式补遗 `references/showcase-layout.md` | GitHub: yizhiyanhua-ai/fireworks-tech-graph |
-| 14 | `frontend-design` | 绘图可视化 | 前端视觉设计指导：设计方向、排版、反模板化默认观感（含 50+ 风格库） | GitHub: anthropics/skills（181k★，正文）+ 本地 `ui-ux-data/` 设计数据库合并 |
-| 15 | `git-branch-diff-merge` | 开发与质量 | 双分支双向合并融合，冲突取新；AI 只读分析，Git 写操作由用户执行 | 主仓库 |
-| 16 | `git-commit` | 开发与质量 | Conventional Commits 规范提交（type/scope/subject） | 主仓库 |
-| 17 | `grilling` | 开发与质量 | 用设计树 + 分轮提问把计划 / 决策拷问到没有未决假设：每轮列出当前可问的全部问题并给出推荐答案，事实自行查证、决策交用户裁决 | 主仓库 |
-| 18 | `humanizer-zh` | 学术科研 | 中文去 AI 味写作助手：检测并修复 AI 写作特征模式 | GitHub: op7418/Humanizer-zh |
-| 19 | `kaggle-modularize` | 开发与质量 | 单体 `.ipynb` ↔ Python 模块双向拆分 / 合并 | 主仓库 |
-| 20 | `kaggle-notebook-to-cloud-jupyter` | 开发与质量 | Kaggle notebook 迁移到云 GPU JupyterLab：单源参数化、两级存储、依赖安装 | 主仓库 |
-| 21 | `markitdown` | 文档与 Office | 多格式文档转 Markdown：PDF / Office / 图片 / 音频 / HTML / CSV / EPUB / ZIP / URL | GitHub: microsoft/markitdown（190k★，v0.1.8 展平 + 本地 SKILL.md） |
-| 22 | `mermaid-master` | 绘图可视化 | Mermaid 技术文档图表：流程图、架构图、时序图、状态图、ER 图、甘特图 | 主仓库 |
-| 23 | `multi-agent` | 开发与质量 | 多代理任务规划与可审计的子代理任务简报生成 | 主仓库 |
-| 24 | `nature-skills` | 学术科研 | Nature 级学术工作流：写作、引用、绘图、检索、统计、润色、审稿回复 | GitHub: Yuan1z0825/nature-skills |
-| 25 | `repo-wiki` | 文档与 Office | 生成完整多页项目 Wiki（含内置模板，输出语言跟随提问语言） | GitHub: devin2255/repo-wiki-skill |
-| 26 | `superpowers` | 开发与质量 | 开发流程技能库：头脑风暴、系统化调试、TDD、计划编写、代码审查等 | GitHub: obra/superpowers |
-| 27 | `web-access` | 浏览器与联网 | 统一联网操作：搜索、网页抓取、登录后操作、动态渲染页面 | GitHub: eze-is/web-access |
-| 28 | `workbuddy-auto-credits` | 工具链 | WorkBuddy 自动领积分：每日签到 + 派猫猫旅行 | 主仓库 |
+| 3 | `ai-output-readability` | 输出表达 | AI 输出可读性四级路由：规范文本（ASD-STE100）→ 图表 → 交互网页 → 讲解视频；含触发条件、提示词模板与反模式 | 主仓库 |
+| 4 | `archify` | 绘图可视化 | 架构 / 工作流 / 时序 / 数据流 / 生命周期图：类型化 JSON IR → 可探索单文件 HTML（内联 SVG、深浅主题、可选追踪动效、PNG/JPEG/WebP/SVG/WebM 导出），`finalize` 含真实 Chrome browser-check；可读仓库取证 | GitHub: tt-a1i/archify v3.1.0（83k★，已展平 + 本地扩展） |
+| 5 | `browser-automation` | 浏览器与联网 | 统一浏览器自动化套件：Playwright 网页操作 / Web 应用可复跑 E2E 测试 | 主仓库（多来源合并：`playwright/` 来自 microsoft/playwright-cli 14k★ 并本地改写为 `npx playwright cli`；`webapp-testing/` 来自 anthropics/skills） |
+| 6 | `doc-coauthoring` | 文档与 Office | 文档协作写作工作流：文档、提案、技术规格、决策文档 | GitHub: anthropics/skills（181k★，已展平） |
+| 7 | `explainer-video` | 输出表达 | 3b1b 风格讲解视频：脚本 → 程序化动画 → TTS 配音 → 合成 MP4 | 主仓库 |
+| 8 | `find-skills` | 工具链 | 场景驱动 + 关键词双模式的技能发现：官方内置 / 本地已安装 / SkillHub / 虾评 / GitHub / ClawHub 六层联合搜索并推荐，支持一键安装（取代官方原 `find-skills` 插件） | 主仓库（SkillsHub 安装；上游 GitHub: guipi888/find-skills，0★，本地为增强版，见「上游更新记录」） |
+| 9 | `fireworks-tech-graph` | 绘图可视化 | 手写 SVG 技术图：几何安全校验（边交叉/碰撞/标签位置）+ PNG 回读 + GIF 动效；12 种风格、14 类 UML；含 showcase 版式补遗 `references/showcase-layout.md` | GitHub: yizhiyanhua-ai/fireworks-tech-graph |
+| 10 | `frontend-design` | 绘图可视化 | 前端视觉设计指导：设计方向、排版、反模板化默认观感（含 50+ 风格库） | GitHub: anthropics/skills（181k★，正文）+ 本地 `ui-ux-data/` 设计数据库合并 |
+| 11 | `git-branch-diff-merge` | 开发与质量 | 双分支双向合并融合，冲突取新；AI 只读分析，Git 写操作由用户执行 | 主仓库 |
+| 12 | `git-commit` | 开发与质量 | Conventional Commits 规范提交（type/scope/subject） | 主仓库 |
+| 13 | `grilling` | 开发与质量 | 用设计树 + 分轮提问把计划 / 决策拷问到没有未决假设：每轮列出当前可问的全部问题并给出推荐答案，事实自行查证、决策交用户裁决 | 主仓库 |
+| 14 | `kaggle-modularize` | 开发与质量 | 单体 `.ipynb` ↔ Python 模块双向拆分 / 合并 | 主仓库 |
+| 15 | `kaggle-notebook-to-cloud-jupyter` | 开发与质量 | Kaggle notebook 迁移到云 GPU JupyterLab：单源参数化、两级存储、依赖安装 | 主仓库 |
+| 16 | `markitdown` | 文档与 Office | 多格式文档转 Markdown：PDF / Office / 图片 / 音频 / HTML / CSV / EPUB / ZIP / URL | GitHub: microsoft/markitdown（190k★，v0.1.8 展平 + 本地 SKILL.md） |
+| 17 | `mermaid-master` | 绘图可视化 | Mermaid 技术文档图表：流程图、架构图、时序图、状态图、ER 图、甘特图 | 主仓库 |
+| 18 | `multi-agent` | 开发与质量 | 多代理任务规划与可审计的子代理任务简报生成 | 主仓库 |
+| 19 | `repo-wiki` | 文档与 Office | 生成完整多页项目 Wiki（含内置模板，输出语言跟随提问语言） | GitHub: devin2255/repo-wiki-skill |
+| 20 | `superpowers` | 开发与质量 | 开发流程技能库：头脑风暴、系统化调试、TDD、计划编写、代码审查等 | GitHub: obra/superpowers |
+| 21 | `web-access` | 浏览器与联网 | 统一联网操作：搜索、网页抓取、登录后操作、动态渲染页面 | GitHub: eze-is/web-access |
+| 22 | `workbuddy-auto-credits` | 工具链 | WorkBuddy 自动领积分：每日签到 + 派猫猫旅行 | 主仓库 |
 
 ### 来源分类小结
 
 | 来源 | 数量 | 说明 |
 |------|------|------|
-| GitHub 克隆 | 7 | 各自保留独立 `.git`，由主仓库 `.gitignore` 排除，整体不入库 |
-| 主仓库跟踪 | 21 | 由 `.ai-shared` 主仓库直接版本管理。其中 6 个有已核实的上游仓库但**未保留 `.git`**（展平 / 合并安装）：`markitdown`、`frontend-design`、`doc-coauthoring`、`awesome-ai-research-writing`、`find-skills`，以及 `browser-automation` 的两个子技能（`playwright/`、`webapp-testing/`）；更新方式见「上游更新记录（2026-10-15）」 |
+| GitHub 克隆 | 4 | 各自保留独立 `.git`，由主仓库 `.gitignore` 排除，整体不入库（`fireworks-tech-graph`、`repo-wiki`、`superpowers`、`web-access`） |
+| 主仓库跟踪 | 18 | 由 `.ai-shared` 主仓库直接版本管理。其中 5 个有已核实的上游仓库但**未保留 `.git`**（展平 / 合并安装）：`markitdown`、`frontend-design`、`doc-coauthoring`、`find-skills`，以及 `browser-automation` 的两个子技能（`playwright/`、`webapp-testing/`）；更新方式见「上游更新记录（2026-10-15）」 |
 
 ### 类别分布
 
 | 类别 | 数量 |
 |------|------|
 | 开发与质量 | 8 |
-| 学术科研 | 6 |
 | 绘图可视化 | 4 |
 | 文档与 Office | 3 |
 | 工具链 | 2 |
 | 浏览器与联网 | 2 |
 | 输出表达 | 2 |
 | 环境治理 | 1 |
+
+> 「学术科研」类（原 6 个）已于 2026-10-16 全部迁出到独立科研库 `C:\Users\20448\research-skills\`。
 
 ## 对账记录（2026-10-12 完成）
 
@@ -83,6 +80,15 @@
 - **同批发现**：`fireworks-tech-graph` 克隆内被上游跟踪的嵌套副本（`skills/fireworks-tech-graph/`，140 文件）在本地工作区**已被删除且未提交**，本表旧文「重复 140 文件 / 9.0MB」已失效，按现状改写（见「已知重名」）。另：本表此前引用的 `.agent_docs/audits/2026-09-24-skills-audit.md` 在磁盘上不存在，属悬空引用，本次一并清除。
 
 欠账成因：手动删除 skill 后未同批更新本表，而本表此前长期只增不删。**此后删除 skill 必须同批删行**；批量核对走 `ai-config-sharing` 的「清单盘点：花名册与实测目录对账」三步法。
+
+## 对账记录（2026-10-16，科研类 skill 迁出）
+
+结果：花名册 **22** 行 = 磁盘 **22** 个顶层 skill 目录；复核命令命中预期值。
+
+- **迁出 6 个「学术科研」类 skill** 到独立科研库 `C:\Users\20448\research-skills\`（用户裁决：新建独立库、不破坏 Junction，工具不再自动发现）：`ai-fast-learning-loop`、`arxiv-paper-downloader`、`awesome-ai-research-writing`、`humanizer-zh`、`nature-skills`。
+- **`claude-deep-research-skill` 属去重删除**（未随迁）：与科研库内 `academic-research-skills/deep-research`（13-agent / 8 模式 / 含系统综述与元分析）功能重复且方法更弱，已移入 `.trash/research-dedup-2026-10-16/`。
+- **悬空引用同步**：`agents/analyst.md`、`agents/analyst.toml`、`agents/researcher.md`、`agents/researcher.toml` 中 `deep-research` 的路由已改指科研库路径（绝对路径）。`skills/ai-config-sharing` 内的历史注释按原样保留。
+- 复核命令：`ls -1 skills | grep -vE '^(README\.md|_bm_skillid_migration\.json)$' | wc -l` 应为 **22**。
 
 ## 上游更新记录（2026-10-14）
 
@@ -157,7 +163,7 @@ pull 前后均确认：四个更新克隆的本地未提交改动（根 `SKILL.m
 | `frontend-design` 重名 | 顶层 `SKILL.md` 是**容器索引**（正文写「This is a skill collection」并列出子技能），`skills/frontend-design/SKILL.md` 才是正文；第三个 `ui-ux-data/` 即 `ui-ux-pro-max` | 保持现状，**加载以顶层为准**；嵌套路径非标准发现路径 |
 | `skill-creator` | 顶层 `skills/skill-creator` 已于 2026-10-12 随用户手动删除一并移除登记；现存仅 `.system/skill-creator` | 创建 / 改进 / 评测 skill 走 `.system/skill-creator`（Codex 内置，随 Junction 分发且被 `.gitignore` 排除，**不改**） |
 | `fireworks-tech-graph` 克隆内的上游发布副本 | 上游 HEAD 跟踪嵌套目录 `skills/fireworks-tech-graph/`（140 文件）；本地工作区**已删除**该副本（未提交，`git status` 显示 140 个 `D`） | **保持删除**：它是上游发布包，与本体重名且不是发现路径（加载只认顶层 `skills/fireworks-tech-graph/SKILL.md`）。`git pull` 会把它恢复，属预期——恢复后按需再删，不影响加载 |
-| `claude-deep-research-skill` 命名不一致 | 目录名与 frontmatter `name: deep-research` 不一致 | **以目录名 `claude-deep-research-skill` 为准**（`agents/analyst.md`、`agents/researcher.md` 均按此引用）；该 skill 是干净克隆，未改 `name:` 以免 `git pull` 冲突 |
+| ~~`claude-deep-research-skill` 命名不一致~~ | 该 skill 已于 2026-10-16 去重删除并迁出本目录 | 不再适用（备份于 `.trash/research-dedup-2026-10-16/`）；现由科研库 `academic-research-skills/deep-research` 承接 |
 | `web-access` 触发声明过宽 | 其 description 声称「所有联网操作必须通过此 skill 处理」，与 `browser-automation` 重叠 | 边界已在**主仓库侧**的 `browser-automation` description 中写明（搜索 / 登录态抓取 / 社交媒体 → `web-access`）；`web-access` 是干净克隆，未改动以免 `git pull` 冲突 |
 
 ### 已知功能重叠（保留，未合并）
@@ -191,15 +197,17 @@ C:\Users\20448\.ai-shared\skills\  ← 唯一维护源
 
 ## 更新方法
 
-### GitHub 克隆的 Skills（7 个）
+### GitHub 克隆的 Skills（4 个）
 
 克隆状态分三类，**不能统一用 `git pull --ff-only`**（2026-09-24 实测）：
 
 | 类别 | 克隆 | 更新方式 |
 |------|------|----------|
-| 干净 | `claude-deep-research-skill`、`humanizer-zh`、`web-access` | 可直接 `cd ~/.ai-shared/skills/<name> && git pull --ff-only` |
-| 仅新增根 `SKILL.md` | `nature-skills`、`superpowers` | 上游顶层无 `SKILL.md`，新增文件不与 pull 冲突；pull 后确认根 `SKILL.md` 仍在，不在则从子目录重建索引 |
+| 干净 | `web-access` | 可直接 `cd ~/.ai-shared/skills/<name> && git pull --ff-only` |
+| 仅新增根 `SKILL.md` | `superpowers` | 上游顶层无 `SKILL.md`，新增文件不与 pull 冲突；pull 后确认根 `SKILL.md` 仍在，不在则从子目录重建索引 |
 | **有本地改动，禁止直接 pull** | `repo-wiki`、`fireworks-tech-graph` | 先备份本地改动再 pull；改动内容见下 |
+
+> 原克隆 `claude-deep-research-skill`、`humanizer-zh`、`nature-skills` 已于 2026-10-16 迁出本目录：`claude-deep-research-skill` 按去重删除；`humanizer-zh`、`nature-skills` 移入科研库 `C:\Users\20448\research-skills\`，更新方法随迁。
 
 #### 本地改动的具体内容（更新前必读）
 
@@ -224,7 +232,7 @@ C:\Users\20448\.ai-shared\skills\  ← 唯一维护源
 > 若 `git clone` 完全不通，退路是下载 tarball（`codeload.github.com` 可达，用 `curl -L --ssl-no-revoke`），
 > 但那样会丢失独立 `.git`，后续无法 `git pull`。
 
-### 主仓库跟踪的 Skills（21 个）
+### 主仓库跟踪的 Skills（18 个）
 
 无外部更新源，直接修改即可；改动经 Junction 同步到所有工具目录，并由主仓库统一版本管理。
 

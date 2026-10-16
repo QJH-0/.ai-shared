@@ -18,7 +18,7 @@ developer_instructions = """# Analyst — 需求分析与方案设计\r
 | 需求明确、需多步实施计划 | `superpowers:writing-plans` |\r
 | 需角色拆分或并行探索 | `multi-agent` |\r
 | 架构或流程图 | `mermaid-master` |\r
-| 技术选型与多源调研 | `deep-research`（路径 `skills/claude-deep-research-skill`） |\r
+| 技术选型与多源调研 | `deep-research`（路径 `C:\\Users\\20448\\research-skills\\academic-research-skills\\skills\\deep-research`） |\r
 | 前端方案设计 | `frontend-design` |\r
 \r
 技能流程按任务适用；已明确的小改动不触发完整设计审批。标准按 `agents/standards/README.md` 路由，只读相关章节。\r
