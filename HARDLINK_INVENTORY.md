@@ -141,6 +141,7 @@ skill 花名册的**唯一维护源为 `skills\README.md`**（含名称、说明
 - **口径校正（2026-10-04）**：此前登记的「60」与本目录 `ls` 实测（40）长期不一致；现统一为**顶层目录**口径。嵌套子技能（`superpowers/skills/*`、`nature-skills/skills/*` 等）不计入。
 - **对账已收口（2026-10-12）**：花名册 28 行与实测 28 个目录逐行一致（新增 `archify`，补登 `find-skills`、`grilling`）。删除 skill 后必须同批删花名册行，否则会再次出现「表比磁盘多」的静默腐烂
 - **2026-10-16 科研类迁出**：6 个「学术科研」类 skill 已移出 `skills\`——`ai-fast-learning-loop`、`arxiv-paper-downloader`、`awesome-ai-research-writing`、`humanizer-zh`、`nature-skills` 迁入独立科研库 `C:\Users\20448\research-skills\`（不在 Junction 分发范围，工具不再自动发现），`claude-deep-research-skill` 因去重删除（`.trash/research-dedup-2026-10-16/`）。顶层目录 **28 → 22**；保留独立 `.git` 的克隆 **7 → 4**（`fireworks-tech-graph`、`repo-wiki`、`superpowers`、`web-access`），主仓库跟踪 **21 → 18**。花名册已同步为 **22** 行，详见 `skills\README.md`「对账记录（2026-10-16）」
+- **2026-10-17 新增 `anatomy`**：从 GitHub 克隆 `wheresryan22/anatomy`（MIT，约 13.7k★，保留独立 `.git` 未展平，已在 `.gitignore` 加 `skills/anatomy/` 排除项）。顶层目录 **22 → 23**；保留独立 `.git` 的克隆 **4 → 5**（新增 `anatomy`），主仓库跟踪 **18** 不变。花名册已同步为 **23** 行，详见 `skills\README.md`「对账记录（2026-10-17）」
 - 无待恢复项（`model-architecture-diagram` 已确认磁盘上不存在，2026-09-23 从花名册移除）
 - 复核命令：
   ```bash
@@ -189,6 +190,7 @@ skill 花名册的**唯一维护源为 `skills\README.md`**（含名称、说明
 | 2026-10-12 | 花名册对账收口 | 用户确认「登记了但磁盘不存在」的 17 个 skill 系其**手动删除**（非丢失）。据此重建 `skills\README.md`：删除 17 行历史登记（`canvas`、`code-to-interview-docs`、`feishu-job-import`、`migrate-to-skills`、`morph-ppt`、`morph-ppt-3d`、`officecli` 及 8 个变体、`resume-tech-interview-decompose`、顶层 `skill-creator`）、补登 `find-skills` 与 `grilling`、并重排编号 1–28；同步修正 §四计数与复核命令注释。验证：三步对账 `Compare-Object` 无输出（磁盘 28 = 花名册 28），编号 1..28 连续；全仓 grep 17 个已删名字仅命中本 README 自身的登记行（`agents/*.md` 路由表未引用）。同时修正「已知重名」中 `skill-creator` 的处置（现存仅 `.system/skill-creator`）与「已知功能重叠」（移除 `officecli` 段落，新增 `archify` / `fireworks-tech-graph` / `mermaid-master` 的绘图边界） |
 | 2026-10-12 | archify 本地扩展：一次到位契约 | 针对首次出图只产出浅层总览、需三轮追加对话才达预期深度的问题，在 skill 包内新增 `references/one-pass-completeness.md`（范围触发、默认视图集、8 项覆盖清单、实测容量上限、引用先核验、环境与证据卫生），并给 `SKILL.md`（第 1/3 步 + 新小节 + Setup 预检）、`references/authoring-defaults.md`（overview = 完整运行时表面且交付视图集；禁止把真实组件降级塞进卡片）、`references/repository-authoring.md`（系统级请求的范围含后台/存储/横切；写入前核验引用）打上 `[local extension 2026-10-12]` 补丁。全部改动与重新套用方式记录在 `skills\archify\LOCAL_CHANGES.md`。该包无独立 `.git`（已展平、主仓库跟踪），故不与 `git pull` 冲突；但上游刷新会覆盖，需按 LOCAL_CHANGES 重新套用 |
 | 2026-10-12 | 提交 skills 重组并清理过期报告 | 上述改动（新增 `archify` 与 `grilling`、删除 17 个用户手动移除的 skill 及被替换的 `project-chain-atlas`、`skills\README.md` 花名册对账至 28 行、本文件计数与时间线同步）一次提交入库。同批清理 `.agent_docs\` 两个过期报告（`audits\2026-09-24-skills-audit.md`、`impl\2026-10-11-agent-rules-simplification.md`）：按第 4 节流程先从 `HEAD` 归档至 `.trash\agent_docs-20261012\`，再随本次提交删除 |
+| 2026-10-17 | 新增 `anatomy` | 按用户要求从 GitHub 克隆 `wheresryan22/anatomy`（Agent Skill：把技术概念画成可交互等距机械装置图；MIT，约 13.7k★），置于 `skills\anatomy\`，保留独立 `.git` 并在 `.gitignore` 加排除项；花名册 22 → 23、独立克隆 4 → 5。经 Junction 对全部 7 个工具目录立即可见，无需分发动作；`agents\*.md` 路由表无绘图类引用，无需同步 |
 
 ---
 
